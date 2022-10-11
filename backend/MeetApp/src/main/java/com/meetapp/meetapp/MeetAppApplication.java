@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MeetAppApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MeetAppApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MeetAppApplication.class, args);
+    }
 
 }
