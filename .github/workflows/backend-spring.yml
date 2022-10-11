@@ -33,7 +33,7 @@ jobs:
       # Runs a single command using the runners shell
       - name: Gradle build
         run: |
-          cd backend/meetapp
+          cd backend/MeetApp
           ./gradlew compileJava
   test:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
 
       - name: Gradle build
         run: |
-          cd backend/meetapp
+          cd backend/MeetApp
           ./gradlew test
       - name: Upload test report
         if: always()
