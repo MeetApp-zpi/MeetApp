@@ -31,7 +31,7 @@ jobs:
     - name: Test Svelte libraries
       run: |
         cd frontend
-        npm test -- --coverage
+        npm run test-cov
     
     - name: Build the Svelte app
       run: |
