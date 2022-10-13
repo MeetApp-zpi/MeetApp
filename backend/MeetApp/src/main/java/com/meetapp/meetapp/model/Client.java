@@ -29,6 +29,10 @@ public class Client {
     @Column(nullable = false)
     private Boolean isDeleted;
 
+    @JsonIgnore
+    @ManyToMany(targetEntity = Category.class, mappedBy = "clients")
+    Set<Category> interests; // TODO add endpoints etc
+
     public Client(String email, String firstName, String lastName) {
         id = 0;
         this.email = email;

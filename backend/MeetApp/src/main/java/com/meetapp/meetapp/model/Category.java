@@ -17,6 +17,11 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "CategoryId"), inverseJoinColumns = @JoinColumn(name = "ClientId"))
+    Set<Client> clients;
+
     public Category(String name) {
         id = 0;
         this.name = name;
