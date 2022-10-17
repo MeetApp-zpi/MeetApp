@@ -26,5 +26,8 @@
         {
             "path": "./tsconfig.node.json"
         }
+    ],
+    "exclude": [
+        "./.routify/routes.js"
     ]
 }
