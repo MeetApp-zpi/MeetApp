@@ -33,6 +33,16 @@ public class Client {
     @ManyToMany(targetEntity = Category.class, mappedBy = "clients")
     Set<Category> interests; // TODO add endpoints etc
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name="ClientMeeting", joinColumns = @JoinColumn(name="ClientId"), inverseJoinColumns = @JoinColumn(name="MeetingId"))
+    Set<Meeting> meetings;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name="ClientEvents", joinColumns = @JoinColumn(name="ClientId"), inverseJoinColumns = @JoinColumn(name="EventId"))
+    Set<Event> events;
+
     public Client(String email, String firstName, String lastName) {
         id = 0;
         this.email = email;

@@ -12,8 +12,8 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Meeting extends Post {
-    @Column(length = 1000)
+public class Event extends Post {
+    @Column(length = 3000)
     private String description;
 
     private Integer personQuota;
@@ -21,9 +21,15 @@ public class Meeting extends Post {
     private Integer enrolled;
 
     @Basic
-    private Instant meetingDate;
+    private Instant startDate;
+
+    @Basic
+    private Instant endDate;
+
+    @Column(length = 500) //TODO: discuss the max length
+    private String schedule;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = Client.class, mappedBy = "meetings")
+    @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;
 }

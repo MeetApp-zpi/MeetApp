@@ -23,7 +23,7 @@ public class Post {
     private Location location;
 
     private String title;
-    //TODO: description might be of different length for events/meetings/announcements
+    //TODO: description might be of different length for events/meetings/announcements, discuss it
 
     @Basic
     private Instant creationDate;
