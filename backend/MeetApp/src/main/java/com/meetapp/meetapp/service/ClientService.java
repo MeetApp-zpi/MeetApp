@@ -26,9 +26,6 @@ public class ClientService {
     // TODO: imo we should probably change all user fields to "Deleted" or sth,
     // dunno if it's required by RODO or any other law but wouldn't hurt
     public Client deleteClientAccount(Integer clientId) {
-        // findById returns Optional and maybe it automatically unpacks it with .get()?
-        // If the value wasn't there this line should throw exception handled in a controller
-        // (I think it should work that way...)
         Client clientToDelete = clientRepository.findClientById(clientId);
         clientToDelete.setIsDeleted(true);
         return clientRepository.save(clientToDelete);
