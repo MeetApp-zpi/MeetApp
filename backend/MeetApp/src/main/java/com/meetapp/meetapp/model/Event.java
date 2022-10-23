@@ -32,4 +32,10 @@ public class Event extends Post {
     @JsonIgnore
     @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;
+
+    public Event() {
+        setIsActive(true);
+        setEnrolled(0);
+        setCreationDate(Instant.now());
+    }
 }
