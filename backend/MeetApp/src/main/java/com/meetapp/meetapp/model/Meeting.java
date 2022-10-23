@@ -26,4 +26,9 @@ public class Meeting extends Post {
     @JsonIgnore
     @ManyToMany(targetEntity = Client.class, mappedBy = "meetings")
     Set<Client> enrollees;
+
+    public Meeting() {
+        enrolled = 0;
+        setIsActive(true);
+    }
 }

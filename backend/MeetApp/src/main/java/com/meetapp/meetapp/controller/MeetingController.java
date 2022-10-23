@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.model.Meeting;
+import com.meetapp.meetapp.model.MeetingDTO;
 import com.meetapp.meetapp.service.MeetingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,12 +42,12 @@ public class MeetingController {
     }
 
     @PostMapping("/meetings")
-    public Meeting createMeeting(@RequestBody Meeting newMeeting) {
+    public Meeting createMeeting(@RequestBody MeetingDTO newMeeting) {
         return meetingService.createMeeting(newMeeting);
     }
 
     @PutMapping("/meetings/{meetingId}")
-    public Meeting updateMeeting(@PathVariable Integer meetingId, @RequestBody Meeting updatedMeeting) {
+    public Meeting updateMeeting(@PathVariable Integer meetingId, @RequestBody MeetingDTO updatedMeeting) {
         return meetingService.updateMeeting(meetingId, updatedMeeting);
     }
 
