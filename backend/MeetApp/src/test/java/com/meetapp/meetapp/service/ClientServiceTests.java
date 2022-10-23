@@ -30,7 +30,7 @@ public class ClientServiceTests {
         Mockito.when(this.clientRepo.findClientById(0)).thenThrow(NoSuchElementException.class);
 
         Assertions.assertThrows(NoSuchElementException.class, () -> {
-            this.clientService.deleteClientAccount(0);
+            this.clientService.deleteClientAccount(0, "");
         });
     }
 
@@ -44,7 +44,7 @@ public class ClientServiceTests {
         Client expectedClient = new Client("a@gmail.com", "Jan", "Test");
         expectedClient.setIsDeleted(true);
 
-        Assertions.assertEquals(expectedClient, this.clientService.deleteClientAccount(1));
+        Assertions.assertEquals(expectedClient, this.clientService.deleteClientAccount(1, ""));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class ClientServiceTests {
         Mockito.when(this.clientRepo.existsByEmail("test@gmail.com")).thenReturn(true);
 
         IllegalArgumentException msg = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            this.clientService.createClientAccount(newClient);
+            this.clientService.createClientAccount("");
         });
 
         Assertions.assertTrue(msg.getMessage().contains("User with this e-mail address already exists"));
@@ -103,6 +103,6 @@ public class ClientServiceTests {
         Mockito.when(this.clientRepo.existsByEmail("test@gmail.com")).thenReturn(false);
         Mockito.when(this.clientRepo.save(newClient)).thenReturn(newClient);
 
-        Assertions.assertEquals(newClient, this.clientService.createClientAccount(newClient));
+        Assertions.assertEquals(newClient, this.clientService.createClientAccount(""));
     }
 }

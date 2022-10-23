@@ -29,12 +29,12 @@ public class ClientController {
     }
 
     @PostMapping("/users")
-    public Client createAccount(@RequestBody Client newClient) {
-        return clientService.createClientAccount(newClient);
+    public Client createAccount(@RequestBody String token) {
+        return clientService.createClientAccount(token);
     }
 
     @DeleteMapping("/users/{user_id}")
-    public Client deleteAccount(@PathVariable Integer user_id) {
-        return clientService.deleteClientAccount(user_id);
+    public Client deleteAccount(@PathVariable Integer user_id, @RequestBody String token) {
+        return clientService.deleteClientAccount(user_id, token);
     }
 }

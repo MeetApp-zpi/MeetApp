@@ -13,7 +13,10 @@ public class ClientService {
         this.clientRepository = clientRepository;
     }
 
-    public Client createClientAccount(Client newClient) {
+    public Client createClientAccount(String token) {
+        // TODO: CONVERT TOKEN HERE
+        Client newClient = new Client();
+
         validateClient(newClient);
 
         if (clientRepository.existsByEmail(newClient.getEmail())) {
@@ -25,7 +28,8 @@ public class ClientService {
 
     // TODO: imo we should probably change all user fields to "Deleted" or sth,
     // dunno if it's required by RODO or any other law but wouldn't hurt
-    public Client deleteClientAccount(Integer clientId) {
+    public Client deleteClientAccount(Integer clientId, String token) {
+        // TODO: CONVERT TOKEN HERE
         Client clientToDelete = clientRepository.findClientById(clientId);
         clientToDelete.setIsDeleted(true);
         return clientRepository.save(clientToDelete);
