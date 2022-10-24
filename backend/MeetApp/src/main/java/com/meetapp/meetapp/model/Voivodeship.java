@@ -11,6 +11,6 @@ public class Voivodeship {
     @SequenceGenerator(name = "voivodeship_generator", sequenceName = "voivodeship_sequence", allocationSize = 1)
     private Integer id;
 
-    @Column(nullable = false, length = 32)
+    @Column(nullable = false, unique = true, length = 32)
     private String name;
 }
