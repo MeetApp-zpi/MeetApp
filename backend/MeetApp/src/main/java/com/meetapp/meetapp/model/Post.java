@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
@@ -14,27 +15,30 @@ public class Post {
     @SequenceGenerator(name = "city_generator", sequenceName = "city_sequence", allocationSize = 1)
     private Integer id;
 
+    @NotNull
     @JoinColumn(nullable = false)
     @ManyToOne(optional = false)
     private Client author;
 
+    @NotNull
     @JoinColumn(nullable = false)
     @ManyToOne(optional = false)
     private Location location;
 
-    private String title;
-    //TODO: description might be of different length for events/meetings/announcements, discuss it
-
+    @NotNull
     @Basic
+    @Column(nullable = false)
     private Instant creationDate;
 
+    @NotNull
+    @Column(nullable = false)
     private Boolean isActive;
 
-    public Post(String title, Client author, Location location) {
-        this.title = title;
+    public Post(Client author, Location location) {
         this.author = author;
         this.location = location;
     }
+
     public Post() {
         id = 0;
     }
