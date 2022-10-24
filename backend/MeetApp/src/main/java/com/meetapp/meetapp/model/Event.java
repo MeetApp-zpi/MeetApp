@@ -5,6 +5,7 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,9 +16,11 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Event extends Post {
+    @NotNull
     @Column(nullable = false, unique = true, length = 100)
     private String title;
 
+    @NotNull
     @Column(nullable = false, length = 10_000)
     private String description;
 
@@ -25,10 +28,12 @@ public class Event extends Post {
 
     private Integer enrolled;
 
+    @NotNull
     @Basic
     @Column(nullable = false)
     private Instant startDate;
 
+    @NotNull
     @Basic
     @Column(nullable = false)
     private Instant endDate;

@@ -2,6 +2,7 @@ package com.meetapp.meetapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Set;
@@ -14,6 +15,7 @@ public class Category {
     @SequenceGenerator(name = "category_generator", sequenceName = "category_sequence", allocationSize = 1)
     private Integer id;
 
+    @NotNull
     @Column(nullable = false, unique = true, length = 30)
     private String name;
 

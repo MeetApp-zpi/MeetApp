@@ -2,6 +2,7 @@ package com.meetapp.meetapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Set;
@@ -14,19 +15,24 @@ public class Client {
     @SequenceGenerator(name = "client_generator", sequenceName = "client_sequence", allocationSize = 1)
     private Integer id;
 
+    @NotNull
     @Column(nullable = false, unique = true, length = 320)
     private String email;
 
+    @NotNull
     @Column(nullable = false, length = 255)
     private String firstName;
 
+    @NotNull
     @Column(nullable = false, length = 255)
     private String lastName;
 
+    @NotNull
     @Lob
     @Column(nullable = false)
     private Byte[] profilePicture;
 
+    @NotNull
     @Column(nullable = false)
     private Boolean isDeleted;
 

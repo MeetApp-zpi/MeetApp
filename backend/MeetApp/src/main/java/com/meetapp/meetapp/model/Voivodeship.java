@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -11,6 +12,7 @@ public class Voivodeship {
     @SequenceGenerator(name = "voivodeship_generator", sequenceName = "voivodeship_sequence", allocationSize = 1)
     private Integer id;
 
+    @NotNull
     @Column(nullable = false, unique = true, length = 32)
     private String name;
 }
