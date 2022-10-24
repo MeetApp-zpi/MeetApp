@@ -14,7 +14,7 @@ public class Category {
     @SequenceGenerator(name = "category_generator", sequenceName = "category_sequence", allocationSize = 1)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 30)
     private String name;
 
     @JsonIgnore

@@ -22,19 +22,16 @@ public class Post {
     @ManyToOne(optional = false)
     private Location location;
 
-    private String title;
-    //TODO: description might be of different length for events/meetings/announcements, discuss it
-
     @Basic
     private Instant creationDate;
 
     private Boolean isActive;
 
-    public Post(String title, Client author, Location location) {
-        this.title = title;
+    public Post(Client author, Location location) {
         this.author = author;
         this.location = location;
     }
+
     public Post() {
         id = 0;
     }

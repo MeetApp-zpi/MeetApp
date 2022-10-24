@@ -10,6 +10,7 @@ public class Voivodeship {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "voivodeship_generator")
     @SequenceGenerator(name = "voivodeship_generator", sequenceName = "voivodeship_sequence", allocationSize = 1)
     private Integer id;
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 32)
     private String name;
 }

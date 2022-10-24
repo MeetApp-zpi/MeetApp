@@ -6,14 +6,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Event extends Post {
-    @Column(length = 3000)
+    @Column(length = 100)
+    private String title;
+
+    @Column(length = 10_000)
     private String description;
 
     private Integer personQuota;
@@ -26,7 +31,7 @@ public class Event extends Post {
     @Basic
     private Instant endDate;
 
-    @Column(length = 500) //TODO: discuss the max length
+    @Column(length = 5_000)
     private String schedule;
 
     @JsonIgnore

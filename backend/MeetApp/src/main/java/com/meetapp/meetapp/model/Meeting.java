@@ -6,14 +6,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Meeting extends Post {
-    @Column(length = 1000)
+    @Column(length = 50)
+    private String title;
+
+    @Column(length = 250)
     private String description;
 
     private Integer personQuota;

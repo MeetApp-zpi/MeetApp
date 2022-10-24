@@ -14,16 +14,17 @@ public class Client {
     @SequenceGenerator(name = "client_generator", sequenceName = "client_sequence", allocationSize = 1)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length = 320)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String lastName;
 
     @Lob
+    @Column(nullable = false)
     private Byte[] profilePicture;
 
     @Column(nullable = false)
