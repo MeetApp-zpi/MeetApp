@@ -17,4 +17,6 @@ public class Voivodeship {
     @Size(min = 1, max = 32)
     @Column(nullable = false, unique = true, length = 32)
     private String name;
+
+    public Voivodeship() { id = 0; }
 }

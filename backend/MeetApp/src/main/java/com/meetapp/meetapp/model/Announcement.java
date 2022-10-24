@@ -20,4 +20,14 @@ public class Announcement extends Post {
     @Size(min = 1, max = 200)
     @Column(nullable = false, length = 200)
     private String description;
+
+    public Announcement(Client author, Location location, String title, String description) {
+        super(author, location);
+
+        this.title = title;
+        this.description = description;
+    }
+
+    public Announcement() {
+    }
 }

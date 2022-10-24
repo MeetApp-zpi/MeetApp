@@ -15,6 +15,10 @@ public class City {
 
     @NotNull
     @Size(min = 1, max = 50)
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
+
+    public City() {
+        id = 0;
+    }
 }

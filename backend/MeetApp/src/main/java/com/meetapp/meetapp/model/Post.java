@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -28,18 +28,22 @@ public class Post {
     @NotNull
     @Basic
     @Column(nullable = false)
-    private Instant creationDate;
+    private LocalDate creationDate;
 
     @NotNull
     @Column(nullable = false)
     private Boolean isActive;
 
     public Post(Client author, Location location) {
+        this();
+
         this.author = author;
         this.location = location;
     }
 
     public Post() {
         id = 0;
+        creationDate = LocalDate.now();
+        isActive = true;
     }
 }
