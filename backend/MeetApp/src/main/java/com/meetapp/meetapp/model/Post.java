@@ -35,14 +35,15 @@ public class Post {
     private Boolean isActive;
 
     public Post(Client author, Location location) {
-        this.id = 0;
+        this();
+
         this.author = author;
         this.location = location;
-        this.creationDate = LocalDate.now();
-        this.isActive = true;
     }
 
     public Post() {
         id = 0;
+        creationDate = LocalDate.now();
+        isActive = true;
     }
 }

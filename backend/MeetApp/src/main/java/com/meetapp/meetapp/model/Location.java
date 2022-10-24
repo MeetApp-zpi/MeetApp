@@ -29,4 +29,8 @@ public class Location {
     @NotNull
     @Column(name = "latitude", nullable = false)
     private Double latitude;
+
+    public Location() {
+        id = 0;
+    }
 }

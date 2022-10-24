@@ -8,8 +8,10 @@ import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 
+import lombok.val;
+
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @Service
 public class AnnouncementService {
@@ -21,42 +23,48 @@ public class AnnouncementService {
         this.locationRepository = locationRepository;
     }
 
-    public Set<Announcement> retrieveAnnouncements() {
-        return (Set<Announcement>) announcementRepository.findAll();
+    public List<Announcement> retrieveAnnouncements() {
+        return announcementRepository.findAll();
     }
 
     public Announcement retrieveAnnouncement(Integer announcementId) {
-        var retrievedAnnouncement = announcementRepository.findById(announcementId);
-
-        return retrievedAnnouncement.orElseThrow(() ->
-                new NoSuchElementException("An announcement with id: " + announcementId + " does not exist.")
-        );
+        return findAnnouncementOrThrow(announcementId);
     }
 
-    public Announcement createAnnouncement(AnnouncementDTO newAnnouncementDTO) {
+    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement) {
         // TODO: Convert token
-        Location foundLoc = locationRepository.findLocationById(newAnnouncementDTO.getLocationId());
-        Announcement newAnnouncement = new Announcement();
-        newAnnouncement.setAuthor(new Client()); // FIXME
-        newAnnouncement.setLocation(foundLoc);
-        newAnnouncement.setDescription(newAnnouncementDTO.getDescription());
-        newAnnouncement.setTitle(newAnnouncementDTO.getTitle());
 
-        return newAnnouncement;
+        val foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
+
+        // FIXME new Client()
+        Announcement announcementToSave =
+                new Announcement(new Client(), foundLocation, newAnnouncement.getDescription(),
+                        newAnnouncement.getTitle());
+
+        return announcementRepository.save(announcementToSave);
     }
 
     public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement) {
-        Location foundLoc = locationRepository.findLocationById(updatedAnnouncement.getLocationId());
-        Announcement existingAnnouncement = announcementRepository.findAnnouncementById(announcementId);
-        // Should we update creation date? probably not
-        existingAnnouncement.setIsActive(true);
-        existingAnnouncement.setLocation(foundLoc);
-        existingAnnouncement.setTitle(updatedAnnouncement.getTitle());
-        existingAnnouncement.setDescription(updatedAnnouncement.getDescription());
-        return existingAnnouncement;
+        Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());
+        Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
+
+        foundAnnouncement.setLocation(foundLocation);
+        foundAnnouncement.setTitle(updatedAnnouncement.getTitle());
+        foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
+        return announcementRepository.save(foundAnnouncement);
     }
 
     public void deleteAnnouncement(Integer announcementId) {
         announcementRepository.deleteById(announcementId);
+    }
+
+    Announcement findAnnouncementOrThrow(Integer announcementId) {
+        return announcementRepository.findById(announcementId).orElseThrow(
+                () -> new NoSuchElementException("An announcement with id: " + announcementId + " does not exist."));
+    }
+
+    Location findLocationOrThrow(Integer locationId) {
+        return locationRepository.findById(locationId).orElseThrow(
+                () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
     }
 }

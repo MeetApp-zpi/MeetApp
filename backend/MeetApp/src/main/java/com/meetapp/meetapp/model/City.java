@@ -17,4 +17,8 @@ public class City {
     @Size(min = 1, max = 50)
     @Column(nullable = false, length = 50)
     private String name;
+
+    public City() {
+        id = 0;
+    }
 }

@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.Instant;
-
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -23,8 +21,13 @@ public class Announcement extends Post {
     @Column(nullable = false, length = 200)
     private String description;
 
+    public Announcement(Client author, Location location, String title, String description) {
+        super(author, location);
+
+        this.title = title;
+        this.description = description;
+    }
+
     public Announcement() {
-        setIsActive(true);
-        setCreationDate(Instant.now());
     }
 }
