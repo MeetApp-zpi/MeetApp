@@ -1,7 +1,8 @@
 package com.meetapp.meetapp.service;
 
 import com.meetapp.meetapp.model.Announcement;
-import com.meetapp.meetapp.model.AnnouncementDTO;
+import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
@@ -31,10 +32,12 @@ public class AnnouncementService {
         // TODO: Convert token
         Location foundLoc = locationRepository.findLocationById(newAnnouncementDTO.getLocationId());
         Announcement newAnnouncement = new Announcement();
-        newAnnouncement.setAuthor();
+        newAnnouncement.setAuthor(new Client()); // FIXME
         newAnnouncement.setLocation(foundLoc);
         newAnnouncement.setDescription(newAnnouncementDTO.getDesc());
         newAnnouncement.setTitle(newAnnouncementDTO.getTitle());
+
+        return newAnnouncement;
     }
 
     public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement) {

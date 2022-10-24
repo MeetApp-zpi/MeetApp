@@ -1,10 +1,12 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.model.Announcement;
-import com.meetapp.meetapp.model.AnnouncementDTO;
+import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.service.AnnouncementService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class AnnouncementController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArg(IllegalArgumentException e) {
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
+    public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
@@ -42,7 +44,7 @@ public class AnnouncementController {
     }
 
     @PostMapping("/announcements")
-    public Announcement createAnnouncement(@RequestBody AnnouncementDTO newAnnouncement) {
+    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement) {
         return announcementService.createAnnouncement(newAnnouncement);
     }
 
