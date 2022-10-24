@@ -8,6 +8,7 @@ import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -25,7 +26,11 @@ public class AnnouncementService {
     }
 
     public Announcement retrieveAnnouncement(Integer announcementId) {
-        return announcementRepository.findAnnouncementById(announcementId);
+        var retrievedAnnouncement = announcementRepository.findById(announcementId);
+
+        return retrievedAnnouncement.orElseThrow(() ->
+                new NoSuchElementException("An announcement with id: " + announcementId + " does not exist.")
+        );
     }
 
     public Announcement createAnnouncement(AnnouncementDTO newAnnouncementDTO) {
