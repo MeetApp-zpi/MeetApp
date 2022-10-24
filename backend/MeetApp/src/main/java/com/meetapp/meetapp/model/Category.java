@@ -3,6 +3,7 @@ package com.meetapp.meetapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Set;
@@ -16,6 +17,7 @@ public class Category {
     private Integer id;
 
     @NotNull
+    @Size(min = 1, max = 30)
     @Column(nullable = false, unique = true, length = 30)
     private String name;
 

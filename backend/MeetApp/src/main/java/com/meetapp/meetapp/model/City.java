@@ -2,6 +2,7 @@ package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -13,6 +14,7 @@ public class City {
     private Integer id;
 
     @NotNull
+    @Size(min = 1, max = 50)
     @Column(nullable = false, length = 50)
     private String name;
 }

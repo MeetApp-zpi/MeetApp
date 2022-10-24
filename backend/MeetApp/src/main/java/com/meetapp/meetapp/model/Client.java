@@ -2,7 +2,9 @@ package com.meetapp.meetapp.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Set;
@@ -16,14 +18,18 @@ public class Client {
     private Integer id;
 
     @NotNull
+    @Size(min = 1, max = 320)
+    @Email
     @Column(nullable = false, unique = true, length = 320)
     private String email;
 
     @NotNull
+    @Size(min = 1, max = 255)
     @Column(nullable = false, length = 255)
     private String firstName;
 
     @NotNull
+    @Size(min = 1, max = 255)
     @Column(nullable = false, length = 255)
     private String lastName;
 

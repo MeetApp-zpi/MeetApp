@@ -2,6 +2,7 @@ package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Entity
@@ -13,6 +14,7 @@ public class Voivodeship {
     private Integer id;
 
     @NotNull
+    @Size(min = 1, max = 32)
     @Column(nullable = false, unique = true, length = 32)
     private String name;
 }
