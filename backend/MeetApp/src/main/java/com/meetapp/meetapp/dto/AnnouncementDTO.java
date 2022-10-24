@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 public class AnnouncementDTO {
     @NotNull
-    private String token;
+    private String webToken;
 
     private Integer locationId;
 
@@ -19,7 +19,7 @@ public class AnnouncementDTO {
 
     @NotNull
     @Size(min = 1, max = 200)
-    private String desc;
+    private String description;
 
-    private Set<Integer> categories;
+    private Set<Integer> categoryIds;
 }

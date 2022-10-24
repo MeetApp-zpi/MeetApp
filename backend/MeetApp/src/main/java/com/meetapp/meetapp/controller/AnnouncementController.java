@@ -33,8 +33,8 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements")
-    public Set<Announcement> getAnnouncements(@RequestParam(required = false) List<String> category,
-                                              @RequestParam(required = false) String location) {
+    public Set<Announcement> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
+                                              @RequestParam(required = false) Integer locationId) {
         return announcementService.retrieveAnnouncements();
     }
 
@@ -49,7 +49,7 @@ public class AnnouncementController {
     }
 
     @PutMapping("/announcements/{announcementId}")
-    public Announcement updateAnnouncement(@PathVariable Integer announcementId, @RequestBody AnnouncementDTO updatedAnnouncement) {
+    public Announcement updateAnnouncement(@PathVariable Integer announcementId, @Valid @RequestBody AnnouncementDTO updatedAnnouncement) {
         return announcementService.updateAnnouncement(announcementId, updatedAnnouncement);
     }
 

@@ -34,7 +34,7 @@ public class AnnouncementService {
         Announcement newAnnouncement = new Announcement();
         newAnnouncement.setAuthor(new Client()); // FIXME
         newAnnouncement.setLocation(foundLoc);
-        newAnnouncement.setDescription(newAnnouncementDTO.getDesc());
+        newAnnouncement.setDescription(newAnnouncementDTO.getDescription());
         newAnnouncement.setTitle(newAnnouncementDTO.getTitle());
 
         return newAnnouncement;
@@ -47,7 +47,7 @@ public class AnnouncementService {
         existingAnnouncement.setIsActive(true);
         existingAnnouncement.setLocation(foundLoc);
         existingAnnouncement.setTitle(updatedAnnouncement.getTitle());
-        existingAnnouncement.setDescription(updatedAnnouncement.getDesc());
+        existingAnnouncement.setDescription(updatedAnnouncement.getDescription());
         return existingAnnouncement;
     }
 
