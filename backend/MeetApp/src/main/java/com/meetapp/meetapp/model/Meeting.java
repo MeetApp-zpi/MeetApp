@@ -15,10 +15,10 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Meeting extends Post {
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(length = 250)
+    @Column(nullable = false, length = 250)
     private String description;
 
     private Integer personQuota;

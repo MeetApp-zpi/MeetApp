@@ -23,8 +23,10 @@ public class Post {
     private Location location;
 
     @Basic
+    @Column(nullable = false)
     private Instant creationDate;
 
+    @Column(nullable = false)
     private Boolean isActive;
 
     public Post(Client author, Location location) {

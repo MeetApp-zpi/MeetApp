@@ -15,10 +15,10 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Event extends Post {
-    @Column(length = 100)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(length = 10_000)
+    @Column(nullable = false, length = 10_000)
     private String description;
 
     private Integer personQuota;
@@ -26,12 +26,14 @@ public class Event extends Post {
     private Integer enrolled;
 
     @Basic
+    @Column(nullable = false)
     private Instant startDate;
 
     @Basic
+    @Column(nullable = false)
     private Instant endDate;
 
-    @Column(length = 5_000)
+    @Column(nullable = true, length = 5_000)
     private String schedule;
 
     @JsonIgnore

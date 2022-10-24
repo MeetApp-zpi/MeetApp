@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class Announcement extends Post {
-    @Column(length = 50)
+    @Column(nullable = false, length = 50)
     private String title;
 
-    @Column(length = 200)
+    @Column(nullable = false, length = 200)
     private String description;
 }
