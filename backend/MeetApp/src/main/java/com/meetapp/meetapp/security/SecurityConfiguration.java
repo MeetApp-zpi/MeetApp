@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
-@Configuration
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
@@ -23,6 +23,7 @@ public class SecurityConfiguration {
                 .oauth2Login()
                     .defaultSuccessUrl("/loginSuccess", true)
                 .and()
+                .cors().disable()
                 .csrf().disable();
 
         return http.build();

@@ -3,6 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.service.AnnouncementService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ public class AnnouncementController {
     @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/testSession")
+    public String returnSess(HttpSession session) {
+        return session.getId();
     }
 
     @GetMapping("/announcements")
