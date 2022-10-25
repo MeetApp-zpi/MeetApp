@@ -6,6 +6,7 @@ import com.meetapp.meetapp.service.AnnouncementService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,8 @@ public class AnnouncementController {
 
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
-    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement) {
+    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement,
+                                           OAuth2AuthenticationToken authToken) {
         return announcementService.createAnnouncement(newAnnouncement);
     }
 

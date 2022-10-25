@@ -17,10 +17,13 @@ import java.util.NoSuchElementException;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final LocationRepository locationRepository;
+    private final OAuthService oAuthService;
 
-    public AnnouncementService(AnnouncementRepository announcementRepository, LocationRepository locationRepository) {
+    public AnnouncementService(AnnouncementRepository announcementRepository, LocationRepository locationRepository,
+                               OAuthService oAuthService) {
         this.announcementRepository = announcementRepository;
         this.locationRepository = locationRepository;
+        this.oAuthService = oAuthService;
     }
 
     public List<Announcement> retrieveAnnouncements() {
@@ -32,13 +35,11 @@ public class AnnouncementService {
     }
 
     public Announcement createAnnouncement(AnnouncementDTO newAnnouncement) {
-        // TODO: Convert token
-
+        val foundClient = oAuthService.createFromToken(newAnnouncement.getWebToken());
         val foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
 
-        // FIXME new Client()
         Announcement announcementToSave =
-                new Announcement(new Client(), foundLocation, newAnnouncement.getDescription(),
+                new Announcement(foundClient, foundLocation, newAnnouncement.getDescription(),
                         newAnnouncement.getTitle());
 
         return announcementRepository.save(announcementToSave);
