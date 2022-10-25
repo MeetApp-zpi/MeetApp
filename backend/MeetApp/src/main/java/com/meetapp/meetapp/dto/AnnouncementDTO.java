@@ -12,6 +12,7 @@ public class AnnouncementDTO {
     @NotNull
     private String webToken;
 
+    @NotNull
     private Integer locationId;
 
     @NotNull
