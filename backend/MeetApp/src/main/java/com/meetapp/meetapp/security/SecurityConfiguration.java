@@ -9,19 +9,19 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(a -> a.antMatchers("/", "/assets/*", "/login")
-                    .permitAll().anyRequest().authenticated())
+        http.authorizeRequests().anyRequest().permitAll().and()
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                 ))
                 .oauth2Login()
-                    .defaultSuccessUrl("/loginSuccess", true)
+                    .loginPage("/login")
                 .and()
                 .cors().disable()
                 .csrf().disable();
