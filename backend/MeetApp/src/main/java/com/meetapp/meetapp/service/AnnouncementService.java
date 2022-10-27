@@ -5,7 +5,11 @@ import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
+import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
+import com.meetapp.meetapp.security.SessionManager;
+import jakarta.servlet.http.HttpSession;
+import org.apache.http.auth.AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import lombok.val;
@@ -17,13 +21,13 @@ import java.util.NoSuchElementException;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final LocationRepository locationRepository;
-    private final OAuthService oAuthService;
+    private final ClientRepository clientRepository;
 
     public AnnouncementService(AnnouncementRepository announcementRepository, LocationRepository locationRepository,
-                               OAuthService oAuthService) {
+                               ClientRepository clientRepository) {
         this.announcementRepository = announcementRepository;
         this.locationRepository = locationRepository;
-        this.oAuthService = oAuthService;
+        this.clientRepository = clientRepository;
     }
 
     public List<Announcement> retrieveAnnouncements() {
@@ -34,8 +38,9 @@ public class AnnouncementService {
         return findAnnouncementOrThrow(announcementId);
     }
 
-    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement) {
-        val foundClient = oAuthService.createFromToken(newAnnouncement.getWebToken());
+    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession sess) throws AuthenticationException {
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        val foundClient = findClientOrThrow(email);
         val foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
 
         Announcement announcementToSave =
@@ -67,5 +72,10 @@ public class AnnouncementService {
     Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
+    }
+
+    Client findClientOrThrow(String email) {
+        return clientRepository.findClientByEmail(email).orElseThrow(
+                () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
     }
 }

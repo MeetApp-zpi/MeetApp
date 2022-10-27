@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.hibernate.annotations.Type;
 
 import java.util.Set;
 
@@ -34,7 +35,6 @@ public class Client {
     private String lastName;
 
     @NotNull
-    @Lob
     @Column(nullable = false)
     private Byte[] profilePicture;
 
