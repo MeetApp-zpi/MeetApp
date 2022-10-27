@@ -1,7 +1,7 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
@@ -9,10 +9,7 @@ import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
-import org.apache.http.auth.AuthenticationException;
 import org.springframework.stereotype.Service;
-
-import lombok.val;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -38,10 +35,10 @@ public class AnnouncementService {
         return findAnnouncementOrThrow(announcementId);
     }
 
-    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession sess) throws AuthenticationException {
+    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession sess) {
         String email = SessionManager.retrieveEmailOrThrow(sess);
-        val foundClient = findClientOrThrow(email);
-        val foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
+        Client foundClient = findClientOrThrow(email);
+        Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
 
         Announcement announcementToSave =
                 new Announcement(foundClient, foundLocation, newAnnouncement.getDescription(),
@@ -50,31 +47,43 @@ public class AnnouncementService {
         return announcementRepository.save(announcementToSave);
     }
 
-    public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement) {
+    public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement, HttpSession sess) {
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());
         Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
 
-        foundAnnouncement.setLocation(foundLocation);
-        foundAnnouncement.setTitle(updatedAnnouncement.getTitle());
-        foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
-        return announcementRepository.save(foundAnnouncement);
+        if (foundAnnouncement.getAuthor().equals(supposedAuthor)) {
+            foundAnnouncement.setLocation(foundLocation);
+            foundAnnouncement.setTitle(updatedAnnouncement.getTitle());
+            foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
+            return announcementRepository.save(foundAnnouncement);
+        } else {
+            throw new SecurityException("Announcement with id: " + announcementId + " does not belong to the user with id: " + supposedAuthor.getId());
+        }
     }
 
-    public void deleteAnnouncement(Integer announcementId) {
-        announcementRepository.deleteById(announcementId);
+    public void deleteAnnouncement(Integer announcementId, HttpSession sess) {
+        Announcement announcementToDelete = findAnnouncementOrThrow(announcementId);
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        Client supposedAuthor = findClientOrThrow(email);
+
+        if (announcementToDelete.getAuthor().equals(supposedAuthor)) {
+            announcementRepository.deleteById(announcementId);
+        }
     }
 
-    Announcement findAnnouncementOrThrow(Integer announcementId) {
+    public Announcement findAnnouncementOrThrow(Integer announcementId) {
         return announcementRepository.findById(announcementId).orElseThrow(
                 () -> new NoSuchElementException("An announcement with id: " + announcementId + " does not exist."));
     }
 
-    Location findLocationOrThrow(Integer locationId) {
+    public Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
     }
 
-    Client findClientOrThrow(String email) {
+    public Client findClientOrThrow(String email) {
         return clientRepository.findClientByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
     }
