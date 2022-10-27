@@ -1,9 +1,11 @@
 package com.meetapp.meetapp.service;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 
+import com.meetapp.meetapp.model.Client;
 import lombok.val;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,15 @@ public class JwtValidator {
         GoogleIdTokenVerifier jwtTokenVerifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .build();
 
-        val googleToken = jwtTokenVerifier.verify(token);
+        GoogleIdToken googleToken = jwtTokenVerifier.verify(token);
         return googleToken != null;
+    }
+
+    public static String retrieveClientFromToken(String token) throws GeneralSecurityException, IOException {
+        GoogleIdTokenVerifier jwtTokenVerifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+                .build();
+
+        GoogleIdToken googleIdToken = jwtTokenVerifier.verify(token);
+        return googleIdToken.getPayload().getEmail();
     }
 }

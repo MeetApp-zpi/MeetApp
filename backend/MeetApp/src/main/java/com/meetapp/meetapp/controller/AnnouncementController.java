@@ -1,8 +1,7 @@
 package com.meetapp.meetapp.controller;
 
-import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
-import com.meetapp.meetapp.security.SessionManager;
+import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.service.AnnouncementService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -38,11 +37,6 @@ public class AnnouncementController {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleUnauthorized(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
-    }
-
-    @GetMapping("/testSession")
-    public boolean returnSess(HttpSession session) {
-        return SessionManager.isAuthenticated(session);
     }
 
     @GetMapping("/announcements")

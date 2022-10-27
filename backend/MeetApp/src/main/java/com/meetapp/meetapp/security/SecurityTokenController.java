@@ -9,8 +9,8 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUserAuthority;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -18,20 +18,21 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@Controller
-public class SecurityUser {
+@RestController
+public class SecurityTokenController {
 
-    @GetMapping("/verifyTokenBearer")
+    @GetMapping("/api/verifyTokenBearer")
     public String verifyTokenBearer(HttpSession sess, HttpServletRequest request) throws GeneralSecurityException, IOException {
         String cookie = request.getHeader("Authorization");
         String onlyToken = cookie.split(" ")[1];
         if (JwtValidator.verify(onlyToken)) {
             SecurityContextImpl cont = new SecurityContextImpl();
             HashMap<String, Object> claims = new HashMap<>();
+            String email = JwtValidator.retrieveClientFromToken(onlyToken);
             claims.put("sub", "42342");
-            claims.put("given_name", "Jan");
-            claims.put("family_name", "Testowicz");
-            claims.put("email", "jan.testowicz@gmail.com");
+            claims.put("given_name", "XXXX");
+            claims.put("family_name", "YYYY");
+            claims.put("email", email);
             OidcIdToken oidcIdToken = new OidcIdToken(onlyToken, Instant.now(), Instant.MAX, claims);
             OidcUserAuthority oidcUserAuthority = new OidcUserAuthority(oidcIdToken);
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
