@@ -1,15 +1,16 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
-import com.meetapp.meetapp.model.EventDTO;
 import com.meetapp.meetapp.service.EventService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -25,14 +26,14 @@ public class EventController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
     public ResponseEntity<String> handleIllegalArg(IllegalArgumentException e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/events")
-    public Set<Event> getEvents(@RequestParam(required = false) List<String> category,
-                                @RequestParam(required = false) String location) {
+    public List<Event> getEvents(@RequestParam(required = false) List<String> categoryIds,
+                                 @RequestParam(required = false) String locationId) {
         return eventService.retrieveEvents();
     }
 
@@ -42,12 +43,13 @@ public class EventController {
     }
 
     @PostMapping("/events")
-    public Event createEvent(@RequestBody EventDTO newEvent) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Event createEvent(@Valid @RequestBody EventDTO newEvent) {
         return eventService.createEvent(newEvent);
     }
 
     @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @RequestBody EventDTO updatedEvent) {
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent) {
         return eventService.updateEvent(eventId, updatedEvent);
     }
 

@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LocationRepository extends CrudRepository<Location, Integer> {
-    Location findLocationById(Integer locationId);
 }
