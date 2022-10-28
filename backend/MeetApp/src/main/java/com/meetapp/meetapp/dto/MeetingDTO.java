@@ -26,7 +26,7 @@ public class MeetingDTO {
 
     private Integer personQuota;
 
-    @NotNull
+    @NotEmpty
     @Basic
     private String meetingDate;
 }

@@ -35,17 +35,8 @@ public class MeetingService {
         // TODO: CONVERT TOKEN TO AUTHOR
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
-        Meeting meetingToSave;
-
-        if (newMeeting.getPersonQuota() != null) {
-            meetingToSave =
-                    new Meeting(new Client(), foundLocation, newMeeting.getDescription(),
-                            newMeeting.getTitle(), castedDate, newMeeting.getPersonQuota());
-        } else {
-            meetingToSave =
-                    new Meeting(new Client(), foundLocation, newMeeting.getDescription(),
-                            newMeeting.getTitle(), castedDate);
-        }
+        Meeting meetingToSave = new Meeting(new Client(), foundLocation, newMeeting.getDescription(),
+                newMeeting.getTitle(), castedDate, newMeeting.getPersonQuota());
 
         return meetingRepository.save(meetingToSave);
     }
@@ -56,7 +47,6 @@ public class MeetingService {
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
         Instant parsedDate = parseDateOrThrow(updatedMeeting.getMeetingDate());
 
-        foundMeeting.setAuthor(new Client());
         foundMeeting.setTitle(updatedMeeting.getTitle());
         foundMeeting.setMeetingDate(parsedDate);
         foundMeeting.setPersonQuota(updatedMeeting.getPersonQuota());
