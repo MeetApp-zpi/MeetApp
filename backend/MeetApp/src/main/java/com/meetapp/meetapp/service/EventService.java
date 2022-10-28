@@ -4,8 +4,11 @@ import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.EventRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
+import com.meetapp.meetapp.security.SessionManager;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,10 +20,12 @@ import java.util.NoSuchElementException;
 public class EventService {
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
+    private final ClientRepository clientRepository;
 
-    public EventService(EventRepository eventRepository, LocationRepository locationRepository) {
+    public EventService(EventRepository eventRepository, LocationRepository locationRepository, ClientRepository clientRepository) {
         this.eventRepository = eventRepository;
         this.locationRepository = locationRepository;
+        this.clientRepository = clientRepository;
     }
 
     public List<Event> retrieveEvents() {
@@ -31,38 +36,51 @@ public class EventService {
         return findEventOrThrow(eventId);
     }
 
-    public Event createEvent(EventDTO newEvent) {
+    public Event createEvent(EventDTO newEvent, HttpSession sess) {
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
 
-        Event eventToSave = new Event(new Client(), foundLocation, newEvent.getTitle(), newEvent.getDescription(),
+        Event eventToSave = new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(),
                 startDate, endDate, newEvent.getPersonQuota(), newEvent.getSchedule());
 
         return eventRepository.save(eventToSave);
     }
 
-    public Event updateEvent(Integer eventId, EventDTO updatedEvent) {
+    public Event updateEvent(Integer eventId, EventDTO updatedEvent, HttpSession sess) {
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedEvent.getLocationId());
         Instant startDate = parseDateOrThrow(updatedEvent.getStartDate());
         Instant endDate = parseDateOrThrow(updatedEvent.getEndDate());
-
         Event foundEvent = findEventOrThrow(eventId);
 
-        foundEvent.setDescription(updatedEvent.getDescription());
-        foundEvent.setTitle(updatedEvent.getTitle());
-        foundEvent.setSchedule(updatedEvent.getSchedule());
-        foundEvent.setEndDate(endDate);
-        foundEvent.setStartDate(startDate);
-        foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
-        foundEvent.setLocation(foundLocation);
-        foundEvent.setIsActive(true);
+        if (foundEvent.getAuthor().equals(supposedAuthor)) {
+            foundEvent.setDescription(updatedEvent.getDescription());
+            foundEvent.setTitle(updatedEvent.getTitle());
+            foundEvent.setSchedule(updatedEvent.getSchedule());
+            foundEvent.setEndDate(endDate);
+            foundEvent.setStartDate(startDate);
+            foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
+            foundEvent.setLocation(foundLocation);
+            foundEvent.setIsActive(true);
 
-        return eventRepository.save(foundEvent);
+            return eventRepository.save(foundEvent);
+        } else {
+            throw new SecurityException("Event with id: " + eventId + " does not belong to the user with id: " + supposedAuthor.getId());
+        }
     }
 
-    public void deleteEvent(Integer eventId) {
-        eventRepository.deleteById(eventId);
+    public void deleteEvent(Integer eventId, HttpSession sess) {
+        Event eventToDelete = findEventOrThrow(eventId);
+        String email = SessionManager.retrieveEmailOrThrow(sess);
+        Client supposedAuthor = findClientOrThrow(email);
+
+        if (eventToDelete.getAuthor().equals(supposedAuthor)) {
+            eventRepository.deleteById(eventId);
+        }
     }
 
     public Event findEventOrThrow(Integer eventId) {
@@ -73,6 +91,11 @@ public class EventService {
     public Location findLocationOrThrow(Integer locationId) {
         return locationRepository.findById(locationId).orElseThrow(
                 () -> new NoSuchElementException("A location with id: " + locationId + " does not exist."));
+    }
+
+    public Client findClientOrThrow(String email) {
+        return clientRepository.findClientByEmail(email).orElseThrow(
+                () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
     }
 
     public Instant parseDateOrThrow(String dateString) {
