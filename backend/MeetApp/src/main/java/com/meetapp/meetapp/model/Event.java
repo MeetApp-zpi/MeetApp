@@ -24,7 +24,7 @@ public class Event extends Post {
     private String title;
 
     @NotNull
-    @Size(min = 1, max = 10_000)
+    @Size(min = 10, max = 10_000)
     @Column(nullable = false, length = 10_000)
     private String description;
 
@@ -39,13 +39,13 @@ public class Event extends Post {
     private Instant startDate;
 
     @NotNull
-    @Basic
     @Future
+    @Basic
     @Column(nullable = false)
     private Instant endDate;
 
-    @Size(min = 0, max = 5_000)
-    @Column(length = 5_000)
+    @Size(min = 1, max = 5_000) // null elements are considered valid
+    @Column(nullable = true, length = 5_000)
     private String schedule;
 
     @JsonIgnore
