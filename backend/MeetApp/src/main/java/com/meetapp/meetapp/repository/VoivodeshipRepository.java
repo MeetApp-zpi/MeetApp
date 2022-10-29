@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface VoivodeshipRepository extends JpaRepository<Voivodeship, Integer> {
-    Optional<City> findByName(String name);
+    Optional<Voivodeship> findByName(String name);
 }
