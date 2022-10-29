@@ -22,15 +22,10 @@ jobs:
           cd config
           docker-compose -f "docker-compose.yml" up -d --build
       
-      - name: Setup environment variables
-        run: |
-          export POSTGRES_USERNAME=postgres
-          export POSTGRES_PASSWORD=postgres
-
       - name: Setup Spring Boot App
         run: |
           cd backend/MeetApp
-          ./gradlew bootRun
+          POSTGRES_USERNAME=postgres POSTGRES_PASSWORD=postgres ./gradlew bootRun
 
       - name: Install Newman Reporter HTMLExtra
         run: npm install -g newman-reporter-htmlextra
