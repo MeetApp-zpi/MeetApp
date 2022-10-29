@@ -31,6 +31,7 @@ public class SampleDataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        locationRepository.saveAll(getLocations());
     }
 
     private List<Location> getLocations() {
@@ -53,9 +54,10 @@ public class SampleDataLoader implements ApplicationRunner {
     }
 
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {
-        val city = cityRepository.findByName(cityName).orElse(cityRepository.save(new City(cityName)));
+        val city = cityRepository.findByName(cityName).orElseGet(() -> cityRepository.save(new City(cityName)));
+        val voixd = voivodeshipRepository.findByName(voivodeshipName);
         val voivodeship = voivodeshipRepository.findByName(voivodeshipName)
-                .orElse(voivodeshipRepository.save(new Voivodeship(voivodeshipName)));
+                .orElseGet(() -> voivodeshipRepository.save(new Voivodeship(voivodeshipName)));
 
         return new Location(city, voivodeship, latitude, longitude);
     }
