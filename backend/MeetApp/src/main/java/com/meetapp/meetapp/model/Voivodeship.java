@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import lombok.val;
 
 @Entity
 @Data
@@ -18,5 +19,13 @@ public class Voivodeship {
     @Column(nullable = false, unique = true, length = 32)
     private String name;
 
-    public Voivodeship() { id = 0; }
+    public Voivodeship() {
+        id = 0;
+    }
+
+    public Voivodeship(String name) {
+        super();
+
+        this.name = name;
+    }
 }
