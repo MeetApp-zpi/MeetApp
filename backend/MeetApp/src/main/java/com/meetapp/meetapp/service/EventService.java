@@ -37,7 +37,7 @@ public class EventService {
     }
 
     public Event createEvent(EventDTO newEvent, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
@@ -50,7 +50,7 @@ public class EventService {
     }
 
     public Event updateEvent(Integer eventId, EventDTO updatedEvent, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedEvent.getLocationId());
         Instant startDate = parseDateOrThrow(updatedEvent.getStartDate());
@@ -75,7 +75,7 @@ public class EventService {
 
     public void deleteEvent(Integer eventId, HttpSession sess) {
         Event eventToDelete = findEventOrThrow(eventId);
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
 
         if (eventToDelete.getAuthor().equals(supposedAuthor)) {

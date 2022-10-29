@@ -17,7 +17,7 @@ public class SessionManager {
         return context.getAuthentication().isAuthenticated();
     }
 
-    public static Optional<String> retrieveEmail(HttpSession sess) {
+    public static Optional<String> retrieveAttribute(HttpSession sess, String attribute) {
         Boolean isAuthenticated = isAuthenticated(sess);
 
         if (!isAuthenticated) {
@@ -26,10 +26,10 @@ public class SessionManager {
 
         SecurityContextImpl context = (SecurityContextImpl) sess.getAttribute("SPRING_SECURITY_CONTEXT");
         DefaultOidcUser userObj = (DefaultOidcUser) context.getAuthentication().getPrincipal();
-        return Optional.ofNullable(userObj.getEmail());
+        return Optional.ofNullable(userObj.getAttribute(attribute));
     }
 
-    public static String retrieveEmailOrThrow(HttpSession sess) {
-        return retrieveEmail(sess).orElseThrow(() -> new SecurityException("User is not authenticated"));
+    public static String retrieveAttributeOrThrow(HttpSession sess, String attribute) {
+        return retrieveAttribute(sess, attribute).orElseThrow(() -> new SecurityException("User is not authenticated"));
     }
 }

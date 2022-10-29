@@ -36,7 +36,7 @@ public class AnnouncementService {
     }
 
     public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
 
@@ -48,7 +48,7 @@ public class AnnouncementService {
     }
 
     public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());
         Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
@@ -65,7 +65,7 @@ public class AnnouncementService {
 
     public void deleteAnnouncement(Integer announcementId, HttpSession sess) {
         Announcement announcementToDelete = findAnnouncementOrThrow(announcementId);
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
 
         if (announcementToDelete.getAuthor().equals(supposedAuthor)) {

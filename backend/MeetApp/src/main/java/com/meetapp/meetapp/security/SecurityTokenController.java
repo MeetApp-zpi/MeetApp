@@ -30,9 +30,10 @@ public class SecurityTokenController {
             HashMap<String, Object> claims = new HashMap<>();
             String email = JwtValidator.retrieveClientFromToken(onlyToken);
             claims.put("sub", "42342");
-            claims.put("given_name", "XXXX");
-            claims.put("family_name", "YYYY");
+            claims.put("given_name", "Jan");
+            claims.put("family_name", "Testowicz");
             claims.put("email", email);
+            claims.put("picture", "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/testing-logo-design-template-ce84480d61b3db9a8e1522a99875832f_screen.jpg?ts=1615794516");
             OidcIdToken oidcIdToken = new OidcIdToken(onlyToken, Instant.now(), Instant.MAX, claims);
             OidcUserAuthority oidcUserAuthority = new OidcUserAuthority(oidcIdToken);
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();

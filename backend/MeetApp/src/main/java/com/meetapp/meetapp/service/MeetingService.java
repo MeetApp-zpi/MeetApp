@@ -37,7 +37,7 @@ public class MeetingService {
     }
 
     public Meeting createMeeting(MeetingDTO newMeeting, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
         Client foundClient = findClientOrThrow(email);
@@ -49,7 +49,7 @@ public class MeetingService {
     }
 
     public Meeting updateMeeting(Integer meetingId, MeetingDTO updatedMeeting, HttpSession sess) {
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
@@ -69,7 +69,7 @@ public class MeetingService {
 
     public void deleteMeeting(Integer meetingId, HttpSession sess) {
         Meeting meetingToDelete = findMeetingOrThrow(meetingId);
-        String email = SessionManager.retrieveEmailOrThrow(sess);
+        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
         Client supposedAuthor = findClientOrThrow(email);
 
         if (meetingToDelete.getAuthor().equals(supposedAuthor)) {
