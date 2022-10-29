@@ -1,8 +1,10 @@
 package com.meetapp.meetapp.configuration;
 
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.City;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.model.Voivodeship;
+import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.CityRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.repository.VoivodeshipRepository;
@@ -18,20 +20,23 @@ import java.util.List;
 @ConditionalOnProperty(name = "useSampleData", havingValue = "true")
 @Component
 public class SampleDataLoader implements ApplicationRunner {
-    private CityRepository cityRepository;
-    private VoivodeshipRepository voivodeshipRepository;
-    private LocationRepository locationRepository;
+    private final CityRepository cityRepository;
+    private final VoivodeshipRepository voivodeshipRepository;
+    private final LocationRepository locationRepository;
+    private final CategoryRepository categoryRepository;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
-                            LocationRepository locationRepository) {
+                            LocationRepository locationRepository, CategoryRepository categoryRepository) {
         this.cityRepository = cityRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.locationRepository = locationRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) {
         locationRepository.saveAll(getLocations());
+        categoryRepository.saveAll(getCategories());
     }
 
     private List<Location> getLocations() {
@@ -53,9 +58,15 @@ public class SampleDataLoader implements ApplicationRunner {
                 newLocation("Rzeszów", "podkarpackie", 50.11339, 21.99975));
     }
 
+    private List<Category> getCategories() {
+        return Arrays.asList(new Category("Sport"), new Category("Gry"), new Category("Informatyka"),
+                new Category("Polityka"), new Category("Motoryzacja"), new Category("Muzyka"),
+                new Category("Nauka"), new Category("Środowisko"), new Category("Hobby"), new Category("Dla dzieci"),
+                new Category("Podróże"));
+    }
+
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {
         val city = cityRepository.findByName(cityName).orElseGet(() -> cityRepository.save(new City(cityName)));
-        val voixd = voivodeshipRepository.findByName(voivodeshipName);
         val voivodeship = voivodeshipRepository.findByName(voivodeshipName)
                 .orElseGet(() -> voivodeshipRepository.save(new Voivodeship(voivodeshipName)));
 
