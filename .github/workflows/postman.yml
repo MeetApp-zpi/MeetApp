@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  newman:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -27,9 +27,6 @@ jobs:
           cd backend/MeetApp
           POSTGRES_USERNAME=postgres POSTGRES_PASSWORD=postgres ./gradlew bootRun &
 
-      - name: Install Newman Reporter HTMLExtra
-        run: sleep 30 && npm install -g newman-reporter-htmlextra
-
       - name: Install Postman CLI
         run: |
           curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
@@ -37,7 +34,7 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
       - name: Run API tests
         run: |
-          postman collection run "16600135-213d4a64-ab9b-4338-8dd3-c9d0540b1e21"
+          postman collection run "16600135-213d4a64-ab9b-4338-8dd3-c9d0540b1e21" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
 
       - name: Stop containers
         if: always()
