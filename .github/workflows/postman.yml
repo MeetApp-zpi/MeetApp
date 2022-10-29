@@ -34,7 +34,7 @@ jobs:
         run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
       - name: Run API tests
         run: |
-          postman collection run "16600135-f9020286-f9d7-42c1-977d-10187ed91673" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
+          postman collection run "16600135-77ace63b-9d4d-4976-a869-e395ba3cbda5" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
 
       - name: Stop containers
         if: always()
