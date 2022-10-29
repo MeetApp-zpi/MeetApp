@@ -25,7 +25,7 @@ jobs:
       - name: Setup Spring Boot App
         run: |
           cd backend/MeetApp
-          POSTGRES_USERNAME=postgres POSTGRES_PASSWORD=postgres ./gradlew bootRun &
+          POSTGRES_USERNAME=postgres POSTGRES_PASSWORD=postgres nohup ./gradlew bootRun &
 
       - name: Install Newman Reporter HTMLExtra
         run: sleep 10 && npm install -g newman-reporter-htmlextra
