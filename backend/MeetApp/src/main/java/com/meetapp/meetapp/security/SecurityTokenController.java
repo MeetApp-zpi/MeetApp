@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class SecurityTokenController {
 
     @GetMapping("/api/verifyTokenBearer")
-    public String verifyTokenBearer(HttpSession sess, HttpServletRequest request) throws GeneralSecurityException, IOException {
+    public String verifyTokenBearer(HttpSession session, HttpServletRequest request) throws GeneralSecurityException, IOException {
         String cookie = request.getHeader("Authorization");
         String onlyToken = cookie.split(" ")[1];
         if (JwtValidator.verify(onlyToken)) {
@@ -42,7 +42,7 @@ public class SecurityTokenController {
             OAuth2AuthenticationToken oAuthToken = new OAuth2AuthenticationToken(defaultUser, authorities, "google");
             oAuthToken.setAuthenticated(true);
             cont.setAuthentication(oAuthToken);
-            sess.setAttribute("SPRING_SECURITY_CONTEXT", cont);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", cont);
         }
         return "";
     }

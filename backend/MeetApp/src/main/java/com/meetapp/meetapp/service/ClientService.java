@@ -25,11 +25,11 @@ public class ClientService {
     }
 
     public Client createClientAccount(HttpSession session) {
-        String email = SessionManager.retrieveAttributeOrThrow(session, "email");
-        String givenName = SessionManager.retrieveAttributeOrThrow(session, "given_name");
-        String familyName = SessionManager.retrieveAttributeOrThrow(session, "family_name");
+        String email = SessionManager.retrieveEmailOrThrow(session);
+        String givenName = SessionManager.retrieveGivenNameOrThrow(session);
+        String familyName = SessionManager.retrieveFamilyNameOrThrow(session);
 
-        String pictureUrl = SessionManager.retrieveAttributeOrThrow(session, "picture");
+        String pictureUrl = SessionManager.retrievePictureOrThrow(session);
         Byte[] picture = downloadPictureOrThrow(pictureUrl);
 
         if (clientRepository.existsByEmail(email)) {
@@ -40,7 +40,7 @@ public class ClientService {
     }
 
     public Client deleteClientAccount(Integer clientId, HttpSession session) {
-        String authenticatedEmail = SessionManager.retrieveAttributeOrThrow(session, "email");
+        String authenticatedEmail = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(clientId);
 
         if (Objects.equals(foundClient.getEmail(), authenticatedEmail)) {

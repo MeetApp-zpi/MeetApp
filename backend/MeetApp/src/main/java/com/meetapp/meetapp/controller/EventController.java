@@ -50,18 +50,18 @@ public class EventController {
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession sess) {
-        return eventService.createEvent(newEvent, sess);
+    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession session) {
+        return eventService.createEvent(newEvent, session);
     }
 
     @PutMapping("/events/{eventId}")
     public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent,
-                               HttpSession sess) {
-        return eventService.updateEvent(eventId, updatedEvent, sess);
+                               HttpSession session) {
+        return eventService.updateEvent(eventId, updatedEvent, session);
     }
 
     @DeleteMapping("/events/{eventId}")
-    public void deleteMeeting(@PathVariable Integer eventId, HttpSession sess) {
-        eventService.deleteEvent(eventId, sess);
+    public void deleteMeeting(@PathVariable Integer eventId, HttpSession session) {
+        eventService.deleteEvent(eventId, session);
     }
 }

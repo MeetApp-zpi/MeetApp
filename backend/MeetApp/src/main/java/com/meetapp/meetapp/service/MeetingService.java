@@ -36,8 +36,8 @@ public class MeetingService {
         return findMeetingOrThrow(meetingId);
     }
 
-    public Meeting createMeeting(MeetingDTO newMeeting, HttpSession sess) {
-        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
+    public Meeting createMeeting(MeetingDTO newMeeting, HttpSession session) {
+        String email = SessionManager.retrieveEmailOrThrow(session);
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
         Client foundClient = findClientOrThrow(email);
@@ -48,8 +48,8 @@ public class MeetingService {
         return meetingRepository.save(meetingToSave);
     }
 
-    public Meeting updateMeeting(Integer meetingId, MeetingDTO updatedMeeting, HttpSession sess) {
-        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
+    public Meeting updateMeeting(Integer meetingId, MeetingDTO updatedMeeting, HttpSession session) {
+        String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
@@ -67,9 +67,9 @@ public class MeetingService {
         }
     }
 
-    public void deleteMeeting(Integer meetingId, HttpSession sess) {
+    public void deleteMeeting(Integer meetingId, HttpSession session) {
         Meeting meetingToDelete = findMeetingOrThrow(meetingId);
-        String email = SessionManager.retrieveAttributeOrThrow(sess, "email");
+        String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
 
         if (meetingToDelete.getAuthor().equals(supposedAuthor)) {

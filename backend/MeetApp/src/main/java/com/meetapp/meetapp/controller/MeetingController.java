@@ -50,18 +50,18 @@ public class MeetingController {
 
     @PostMapping("/meetings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting, HttpSession sess) {
-        return meetingService.createMeeting(newMeeting, sess);
+    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting, HttpSession session) {
+        return meetingService.createMeeting(newMeeting, session);
     }
 
     @PutMapping("/meetings/{meetingId}")
     public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingDTO updatedMeeting,
-                                 HttpSession sess) {
-        return meetingService.updateMeeting(meetingId, updatedMeeting, sess);
+                                 HttpSession session) {
+        return meetingService.updateMeeting(meetingId, updatedMeeting, session);
     }
 
     @DeleteMapping("/meetings/{meetingId}")
-    public void deleteMeeting(@PathVariable Integer meetingId, HttpSession sess) {
-        meetingService.deleteMeeting(meetingId, sess);
+    public void deleteMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        meetingService.deleteMeeting(meetingId, session);
     }
 }
