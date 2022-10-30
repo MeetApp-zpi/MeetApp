@@ -3,31 +3,29 @@
 @tailwind utilities;
 
 :root {
-  --white: #FFFFFB;
-  --olive: #768753;
-  --gray: #BEBEBE;
-  --grass: #A2B47B;
-  --cocoa: #38302E;
-  --orange: #E5A443;
-  --pine: #4D6753;
-
-  --a: #a2b47b33;
-  --b: #a2b47b80;
-  --c: #7687534d;
-  --d: #4d675340;
-  --e: #4d67531a;
+    --white: #FFFFFB;
+    --pickle: #768753;
+    --gray: #BEBEBE;
+    --grass: #A2B47B;
+    --cocoa: #38302E;
+    --orange: #E5A443;
+    --pine: #4D6753;
+    --laurel: #cad1c9;
+    --tea: #d0d9ba;
+    --snow-drift: #edefea;
+    --olive: #ccd2bf;
+    --tusk: #e5e9da;
+    --taupe: #5f5956;
+    --green-mist: #ecf0e1;
+    --sage: #91a190;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  min-height: 100vh;
-}
-
-.test {
-  background-color: var(--a);
+    min-height: 100vh;
 }
