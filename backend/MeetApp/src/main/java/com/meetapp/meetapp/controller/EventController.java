@@ -3,6 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.service.EventService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class EventController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<String> handleUnauthorized(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @GetMapping("/events")
     public List<Event> getEvents(@RequestParam(required = false) List<String> categoryIds,
                                  @RequestParam(required = false) String locationId) {
@@ -44,17 +50,18 @@ public class EventController {
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventDTO newEvent) {
-        return eventService.createEvent(newEvent);
+    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession session) {
+        return eventService.createEvent(newEvent, session);
     }
 
     @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent) {
-        return eventService.updateEvent(eventId, updatedEvent);
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent,
+                               HttpSession session) {
+        return eventService.updateEvent(eventId, updatedEvent, session);
     }
 
     @DeleteMapping("/events/{eventId}")
-    public void deleteMeeting(@PathVariable Integer eventId) {
-        eventService.deleteEvent(eventId);
+    public void deleteMeeting(@PathVariable Integer eventId, HttpSession session) {
+        eventService.deleteEvent(eventId, session);
     }
 }

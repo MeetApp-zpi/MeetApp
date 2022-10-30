@@ -34,7 +34,6 @@ public class Client {
     private String lastName;
 
     @NotNull
-    @Lob
     @Column(nullable = false)
     private Byte[] profilePicture;
 
@@ -48,13 +47,19 @@ public class Client {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name="ClientMeeting", joinColumns = @JoinColumn(name="ClientId"), inverseJoinColumns = @JoinColumn(name="MeetingId"))
+    @JoinTable(name = "ClientMeeting", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "MeetingId"))
     Set<Meeting> meetings;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name="ClientEvents", joinColumns = @JoinColumn(name="ClientId"), inverseJoinColumns = @JoinColumn(name="EventId"))
+    @JoinTable(name = "ClientEvents", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "EventId"))
     Set<Event> events;
+
+    public Client(String email, String firstName, String lastName, Byte[] profilePicture) {
+        this(email, firstName, lastName);
+
+        this.profilePicture = profilePicture;
+    }
 
     public Client(String email, String firstName, String lastName) {
         id = 0;
