@@ -7,8 +7,8 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import java.util.Optional;
 
 public class SessionManager {
-    public static Boolean isAuthenticated(HttpSession sess) {
-        SecurityContextImpl context = (SecurityContextImpl) sess.getAttribute("SPRING_SECURITY_CONTEXT");
+    public static Boolean isAuthenticated(HttpSession session) {
+        SecurityContextImpl context = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
 
         if (context == null) {
             return false;
@@ -17,19 +17,31 @@ public class SessionManager {
         return context.getAuthentication().isAuthenticated();
     }
 
-    public static Optional<String> retrieveEmail(HttpSession sess) {
-        Boolean isAuthenticated = isAuthenticated(sess);
+    private static Optional<String> retrieveAttribute(HttpSession session, String attribute) {
+        Boolean isAuthenticated = isAuthenticated(session);
 
         if (!isAuthenticated) {
             return Optional.empty();
         }
 
-        SecurityContextImpl context = (SecurityContextImpl) sess.getAttribute("SPRING_SECURITY_CONTEXT");
+        SecurityContextImpl context = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
         DefaultOidcUser userObj = (DefaultOidcUser) context.getAuthentication().getPrincipal();
-        return Optional.ofNullable(userObj.getEmail());
+        return Optional.ofNullable(userObj.getAttribute(attribute));
     }
 
-    public static String retrieveEmailOrThrow(HttpSession sess) {
-        return retrieveEmail(sess).orElseThrow(() -> new SecurityException("User is not authenticated"));
+    public static String retrieveGivenNameOrThrow(HttpSession session) {
+        return retrieveAttribute(session, "given_name").orElseThrow(() -> new SecurityException("User is not authenticated"));
+    }
+
+    public static String retrieveFamilyNameOrThrow(HttpSession session) {
+        return retrieveAttribute(session, "family_name").orElseThrow(() -> new SecurityException("User is not authenticated"));
+    }
+
+    public static String retrievePictureOrThrow(HttpSession session) {
+        return retrieveAttribute(session, "picture").orElseThrow(() -> new SecurityException("User is not authenticated"));
+    }
+
+    public static String retrieveEmailOrThrow(HttpSession session) {
+        return retrieveAttribute(session, "email").orElseThrow(() -> new SecurityException("User is not authenticated"));
     }
 }

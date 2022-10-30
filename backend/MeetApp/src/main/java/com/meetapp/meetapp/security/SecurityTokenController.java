@@ -22,7 +22,7 @@ import java.util.HashMap;
 public class SecurityTokenController {
 
     @GetMapping("/api/verifyTokenBearer")
-    public String verifyTokenBearer(HttpSession sess, HttpServletRequest request) throws GeneralSecurityException, IOException {
+    public String verifyTokenBearer(HttpSession session, HttpServletRequest request) throws GeneralSecurityException, IOException {
         String cookie = request.getHeader("Authorization");
         String onlyToken = cookie.split(" ")[1];
         if (JwtValidator.verify(onlyToken)) {
@@ -30,9 +30,10 @@ public class SecurityTokenController {
             HashMap<String, Object> claims = new HashMap<>();
             String email = JwtValidator.retrieveClientFromToken(onlyToken);
             claims.put("sub", "42342");
-            claims.put("given_name", "XXXX");
-            claims.put("family_name", "YYYY");
+            claims.put("given_name", "Jan");
+            claims.put("family_name", "Testowicz");
             claims.put("email", email);
+            claims.put("picture", "https://d1csarkz8obe9u.cloudfront.net/posterpreviews/testing-logo-design-template-ce84480d61b3db9a8e1522a99875832f_screen.jpg?ts=1615794516");
             OidcIdToken oidcIdToken = new OidcIdToken(onlyToken, Instant.now(), Instant.MAX, claims);
             OidcUserAuthority oidcUserAuthority = new OidcUserAuthority(oidcIdToken);
             ArrayList<GrantedAuthority> authorities = new ArrayList<>();
@@ -41,7 +42,7 @@ public class SecurityTokenController {
             OAuth2AuthenticationToken oAuthToken = new OAuth2AuthenticationToken(defaultUser, authorities, "google");
             oAuthToken.setAuthenticated(true);
             cont.setAuthentication(oAuthToken);
-            sess.setAttribute("SPRING_SECURITY_CONTEXT", cont);
+            session.setAttribute("SPRING_SECURITY_CONTEXT", cont);
         }
         return "";
     }

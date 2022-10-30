@@ -51,19 +51,19 @@ public class AnnouncementController {
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
     public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement,
-                                           HttpSession sess) {
-        return announcementService.createAnnouncement(newAnnouncement, sess);
+                                           HttpSession session) {
+        return announcementService.createAnnouncement(newAnnouncement, session);
     }
 
     @PutMapping("/announcements/{announcementId}")
     public Announcement updateAnnouncement(@PathVariable Integer announcementId,
                                            @Valid @RequestBody AnnouncementDTO updatedAnnouncement,
-                                           HttpSession sess) {
-        return announcementService.updateAnnouncement(announcementId, updatedAnnouncement, sess);
+                                           HttpSession session) {
+        return announcementService.updateAnnouncement(announcementId, updatedAnnouncement, session);
     }
 
     @DeleteMapping("/announcements/{announcementId}")
-    public void deleteAnnouncement(@PathVariable Integer announcementId, HttpSession sess) {
-        announcementService.deleteAnnouncement(announcementId, sess);
+    public void deleteAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        announcementService.deleteAnnouncement(announcementId, session);
     }
 }
