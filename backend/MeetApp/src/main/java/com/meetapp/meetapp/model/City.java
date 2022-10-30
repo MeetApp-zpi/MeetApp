@@ -23,7 +23,7 @@ public class City {
     }
 
     public City(String name) {
-        super();
+        this();
 
         this.name = name;
     }

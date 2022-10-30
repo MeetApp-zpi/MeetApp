@@ -35,7 +35,7 @@ public class Location {
     }
 
     public Location(City city, Voivodeship voivodeship, Double latitude, Double longitude) {
-        super();
+        this();
 
         this.city = city;
         this.voivodeship = voivodeship;

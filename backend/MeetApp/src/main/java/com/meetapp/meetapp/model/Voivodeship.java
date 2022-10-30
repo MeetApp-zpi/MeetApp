@@ -24,7 +24,7 @@ public class Voivodeship {
     }
 
     public Voivodeship(String name) {
-        super();
+        this();
 
         this.name = name;
     }
