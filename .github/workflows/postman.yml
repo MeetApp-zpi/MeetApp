@@ -1,0 +1,43 @@
+name: Postman-CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+
+      - name: Setup Postgres
+        run: |
+          cd config
+          docker-compose -f "docker-compose.yml" up -d --build
+      
+      - name: Setup Spring Boot App
+        run: |
+          cd backend/MeetApp
+          POSTGRES_USERNAME=postgres POSTGRES_PASSWORD=postgres ./gradlew bootRun &
+
+      - name: Install Postman CLI
+        run: |
+          sleep 60 && curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+      - name: Login to Postman CLI
+        run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+      - name: Run API tests
+        run: |
+          postman collection run "16600135-77ace63b-9d4d-4976-a869-e395ba3cbda5" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
+
+      - name: Stop containers
+        if: always()
+        run: |
+          cd config 
+          docker-compose -f "docker-compose.yml" down
