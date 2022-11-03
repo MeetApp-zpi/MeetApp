@@ -1,1 +1,0 @@
-import{S as o,i as r,s as i,e as c,c as l,n as s,d as u}from"./index.0ee55615.js";function f(n){let t;return{c(){t=c("h2"),t.textContent="test bois"},m(e,a){l(e,t,a)},p:s,i:s,o:s,d(e){e&&u(t)}}}class p extends o{constructor(t){super(),r(this,t,null,f,i,{})}}export{p as default};

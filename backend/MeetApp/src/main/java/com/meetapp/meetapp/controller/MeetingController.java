@@ -3,6 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.MeetingDTO;
 import com.meetapp.meetapp.model.Meeting;
 import com.meetapp.meetapp.service.MeetingService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class MeetingController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<String> handleUnauthorized(Exception e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
     @GetMapping("/meetings")
     public List<Meeting> getMeetings(@RequestParam(required = false) List<String> categoryIds,
                                      @RequestParam(required = false) String locationId) {
@@ -44,17 +50,18 @@ public class MeetingController {
 
     @PostMapping("/meetings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting) {
-        return meetingService.createMeeting(newMeeting);
+    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting, HttpSession session) {
+        return meetingService.createMeeting(newMeeting, session);
     }
 
     @PutMapping("/meetings/{meetingId}")
-    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingDTO updatedMeeting) {
-        return meetingService.updateMeeting(meetingId, updatedMeeting);
+    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingDTO updatedMeeting,
+                                 HttpSession session) {
+        return meetingService.updateMeeting(meetingId, updatedMeeting, session);
     }
 
     @DeleteMapping("/meetings/{meetingId}")
-    public void deleteMeeting(@PathVariable Integer meetingId) {
-        meetingService.deleteMeeting(meetingId);
+    public void deleteMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        meetingService.deleteMeeting(meetingId, session);
     }
 }

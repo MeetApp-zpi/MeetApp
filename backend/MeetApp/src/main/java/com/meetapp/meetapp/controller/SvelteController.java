@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class SvelteController {
-
-    @GetMapping("/**/{path:[^.]*}")
+    @GetMapping("{_:^(?!index\\.html|api|index).*$}")
     public String returnIndex() {
         return "forward:/index.html";
     }
