@@ -20,17 +20,19 @@ public class SampleDataLoader implements ApplicationRunner {
     private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
     private final ClientRepository clientRepository;
+    private final AnnouncementRepository announcementRepository;
 
     private final Byte[] sampleProfilePicture;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
                             LocationRepository locationRepository, CategoryRepository categoryRepository,
-                            ClientRepository clientRepository) {
+                            ClientRepository clientRepository, AnnouncementRepository announcementRepository) {
         this.cityRepository = cityRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.locationRepository = locationRepository;
         this.categoryRepository = categoryRepository;
         this.clientRepository = clientRepository;
+        this.announcementRepository = announcementRepository;
 
         this.sampleProfilePicture = ClientService.downloadPictureOrThrow(
                 "https://d1csarkz8obe9u.cloudfront" +
@@ -43,6 +45,7 @@ public class SampleDataLoader implements ApplicationRunner {
         locationRepository.saveAll(getLocations());
         categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
+        announcementRepository.saveAll(getAnnouncements());
     }
 
     private List<Location> getLocations() {
@@ -77,6 +80,40 @@ public class SampleDataLoader implements ApplicationRunner {
                 newClient("prawdziwy.polityk@prawdziwysejm.gov.pl", "Prawdziwy", "Polityk"),
                 newClient("janusz75@buziaczek.pl", "Fanatyk", "Wędkarstwa"),
                 newClient("palsie@koniu.org", "Norbert", "G"));
+    }
+
+    private List<Announcement> getAnnouncements() {
+        return Arrays.asList(
+                new Announcement(getClientOrThrow("meetapp.zpi@gmail.com"),
+                        getLocationOrThrow("Wrocław", "dolnośląskie"), "Testowe Ogłoszenie",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut elit metus. Ut vel urna " +
+                                "fermentum, elementum neque quis, malesuada ante. Donec vehicula dui vitae tincidunt " +
+                                "venenatis. Curabitur orci."),
+                new Announcement(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
+                        getLocationOrThrow("Trzebnica", "dolnośląskie"), "Mocna ekipa szuka rolkarza",
+                        "Naprawdę mocna ekipa roklarzy szuka rekruta który nie będzie bał się ekstremalnie jeździć po" +
+                                " mieście."),
+                new Announcement(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
+                        getLocationOrThrow("Białystok", "podlaskie"), "Nie będzie niczego",
+                        "Jak już będę prezydentem, to będzie zupełnie inaczej. Nie będzie sejmu i senatu. Polska " +
+                                "będzie od morza do morza. Żeby nie było bandyctwa, żeby nie było złodziejstwa, żeby " +
+                                "nie było niczego."), new Announcement(getClientOrThrow("janusz75@buziaczek.pl"),
+                        getLocationOrThrow("Bydgoszcz", "kujawsko-pomorskie"), "Szukam partnera do polowania na suma",
+                        "Sum grasuje w rzece pod Bydgoszczą. Jest ogromny i już kilka razy mnie pogryzł. Cena nie gra" +
+                                " roli, musimy go złapać."),
+                new Announcement(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Warszawa", "mazowieckie"),
+                        "Leśnik potrzebny w aleji!",
+                        "Już od 10 minut tu siedzę a dalej nie widziałem żadnego leśnika. Słychać tylko jakąś żabę. " +
+                                "Mój oponent ma dużo więcej złota, a to wszystko przez różnicę dżungli. POMOCY P.S> " +
+                                "Wszyscy oprócz Shyvanny ;>"));
+    }
+
+    private Client getClientOrThrow(String email) {
+        return clientRepository.findClientByEmail(email).orElseThrow();
+    }
+
+    private Location getLocationOrThrow(String cityName, String voivodeshipName) {
+        return locationRepository.findByCityNameAndVoivodeshipName(cityName, voivodeshipName).orElseThrow();
     }
 
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {
