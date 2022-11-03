@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,18 +22,21 @@ public class SampleDataLoader implements ApplicationRunner {
     private final CategoryRepository categoryRepository;
     private final ClientRepository clientRepository;
     private final AnnouncementRepository announcementRepository;
+    private final MeetingRepository meetingRepository;
 
     private final Byte[] sampleProfilePicture;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
                             LocationRepository locationRepository, CategoryRepository categoryRepository,
-                            ClientRepository clientRepository, AnnouncementRepository announcementRepository) {
+                            ClientRepository clientRepository, AnnouncementRepository announcementRepository,
+                            MeetingRepository meetingRepository) {
         this.cityRepository = cityRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.locationRepository = locationRepository;
         this.categoryRepository = categoryRepository;
         this.clientRepository = clientRepository;
         this.announcementRepository = announcementRepository;
+        this.meetingRepository = meetingRepository;
 
         this.sampleProfilePicture = ClientService.downloadPictureOrThrow(
                 "https://d1csarkz8obe9u.cloudfront" +
@@ -46,6 +50,7 @@ public class SampleDataLoader implements ApplicationRunner {
         categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
         announcementRepository.saveAll(getAnnouncements());
+        meetingRepository.saveAll(getMeetings());
     }
 
     private List<Location> getLocations() {
@@ -106,6 +111,36 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Już od 10 minut tu siedzę a dalej nie widziałem żadnego leśnika. Słychać tylko jakąś żabę. " +
                                 "Mój oponent ma dużo więcej złota, a to wszystko przez różnicę dżungli. POMOCY P.S> " +
                                 "Wszyscy oprócz Shyvanny ;>"));
+    }
+
+    private List<Meeting> getMeetings() {
+        return Arrays.asList(new Meeting(getClientOrThrow("meetapp.zpi@gmail.com"),
+                        getLocationOrThrow("Poznań", "wielkopolskie"), "Testowe Spotkanie",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a lacus interdum, pulvinar" +
+                                " ex a, luctus nulla. Orci varius natoque penatibus et magnis dis parturient montes, " +
+                                "nascetur ridiculus mus. Quisque facilisis lectus ac vulputate turpis duis.",
+                        Instant.parse("2023-02-25T21:37:00.000Z"), 200),
+                new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
+                        getLocationOrThrow("Wrocław", "dolnośląskie"),
+                        "Nocny przejazd przez centrum Wrocławia w styczniu.",
+                        "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Sobotę 7 stycznia!!! 💪💪🚩💯 " +
+                                "Zaczynamy o 18:00. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
+                        Instant.parse("2023-01-07T18:00:00.000Z"), 35),
+                new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
+                        getLocationOrThrow("Białystok", "podlaskie"), "Wiec Wyborczy! W grudniu",
+                        "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +
+                                "podobają mi się. Po drugie: zakłady muszą powstać państwowe, a nie zagraniczne. " +
+                                "Wszyscy ludzie muszą mieć chleb, żeby nie głodowali. Rynek.",
+                        Instant.parse("2022-12-20T12:30:00.000Z")),
+                new Meeting(getClientOrThrow("janusz75@buziaczek.pl"), getLocationOrThrow("Wrocław", "dolnośląskie"),
+                        "Wielki połów karpia w martwej Odrze, 23 grudnia",
+                        "W odrze dzięki śnięciu ryb bardzo łatwo teraz złapać pysznego karpika na wigilijny stół. " +
+                                "Umówmy się na 17:00 na łowienie. Już czuję ten smak w ustach.",
+                        Instant.parse("2022-12-23T17:00:00.000Z")),
+                new Meeting(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Częstochowa", "śląskie"),
+                        "Atak na Niebieskiego Strażnika",
+                        "Niebieski strażnik pojawi się w dżungli pierwszego kwietnia o 14:20. Potrzebne 4 osoby aby " +
+                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"), 4));
     }
 
     private Client getClientOrThrow(String email) {
