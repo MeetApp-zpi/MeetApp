@@ -1,13 +1,8 @@
 package com.meetapp.meetapp.configuration;
 
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.City;
-import com.meetapp.meetapp.model.Location;
-import com.meetapp.meetapp.model.Voivodeship;
-import com.meetapp.meetapp.repository.CategoryRepository;
-import com.meetapp.meetapp.repository.CityRepository;
-import com.meetapp.meetapp.repository.LocationRepository;
-import com.meetapp.meetapp.repository.VoivodeshipRepository;
+import com.meetapp.meetapp.model.*;
+import com.meetapp.meetapp.repository.*;
+import com.meetapp.meetapp.service.ClientService;
 import lombok.val;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -24,19 +19,30 @@ public class SampleDataLoader implements ApplicationRunner {
     private final VoivodeshipRepository voivodeshipRepository;
     private final LocationRepository locationRepository;
     private final CategoryRepository categoryRepository;
+    private final ClientRepository clientRepository;
+
+    private final Byte[] sampleProfilePicture;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
-                            LocationRepository locationRepository, CategoryRepository categoryRepository) {
+                            LocationRepository locationRepository, CategoryRepository categoryRepository,
+                            ClientRepository clientRepository) {
         this.cityRepository = cityRepository;
         this.voivodeshipRepository = voivodeshipRepository;
         this.locationRepository = locationRepository;
         this.categoryRepository = categoryRepository;
+        this.clientRepository = clientRepository;
+
+        this.sampleProfilePicture = ClientService.downloadPictureOrThrow(
+                "https://d1csarkz8obe9u.cloudfront" +
+                        ".net/posterpreviews/testing-logo-design-template-ce84480d61b3db9a8e1522a99875832f_screen" +
+                        ".jpg?ts=1615794516");
     }
 
     @Override
     public void run(ApplicationArguments args) {
         locationRepository.saveAll(getLocations());
         categoryRepository.saveAll(getCategories());
+        clientRepository.saveAll(getClients());
     }
 
     private List<Location> getLocations() {
@@ -65,11 +71,23 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Category("Podróże"));
     }
 
+    private List<Client> getClients() {
+        return Arrays.asList(newClient("meetapp.zpi@gmail.com", "Jan", "Testowicz"),
+                newClient("fanatyk.rolkarstwa@rolki.pl", "Rolkowy", "Świrus"),
+                newClient("prawdziwy.polityk@prawdziwysejm.gov.pl", "Prawdziwy", "Polityk"),
+                newClient("janusz75@buziaczek.pl", "Fanatyk", "Wędkarstwa"),
+                newClient("palsie@koniu.org", "Norbert", "G"));
+    }
+
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {
         val city = cityRepository.findByName(cityName).orElseGet(() -> cityRepository.save(new City(cityName)));
         val voivodeship = voivodeshipRepository.findByName(voivodeshipName)
                 .orElseGet(() -> voivodeshipRepository.save(new Voivodeship(voivodeshipName)));
 
         return new Location(city, voivodeship, latitude, longitude);
+    }
+
+    private Client newClient(String email, String firstName, String lastName) {
+        return new Client(email, firstName, lastName, this.sampleProfilePicture);
     }
 }

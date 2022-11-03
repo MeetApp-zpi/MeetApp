@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -58,6 +59,8 @@ public class Client {
     Set<Event> events;
 
     public Client(String email, String firstName, String lastName, Byte[] profilePicture) {
+        this();
+
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -67,5 +70,8 @@ public class Client {
     public Client() {
         id = 0;
         isDeleted = false;
+        interests = new HashSet<>();
+        meetings = new HashSet<>();
+        events = new HashSet<>();
     }
 }
