@@ -1,7 +1,7 @@
 <script lang="ts">
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
-    import MdAccessibility from 'svelte-icons/md/MdAccessibility.svelte';
+    import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
     import type { PageType } from './types';
 
     export let pageType: PageType;
@@ -17,7 +17,7 @@
         <div class="text-center">Ogłoszenia</div>
     </div>
     <div class="lg:hidden flex flex-col {pageType === 'meetings' ? 'text-white' : ''}">
-        <MdAccessibility />
+        <MeetingSymbol />
         <div class="text-center">Spotkania</div>
     </div>
 </footer>
