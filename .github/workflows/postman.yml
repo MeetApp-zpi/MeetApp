@@ -35,6 +35,8 @@ jobs:
       - name: Run API tests
         run: |
           postman collection run "16600135-77ace63b-9d4d-4976-a869-e395ba3cbda5" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
+          postman collection run "16600135-b6ecdef0-33d4-45e8-8289-985f91548f08" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
+          postman collection run "16600135-990d33f8-d1d8-4d94-a0a9-2e99b67a678e" -e "16600135-0bddef12-c2a9-4e25-8863-54c4067f5212"
 
       - name: Stop containers
         if: always()
