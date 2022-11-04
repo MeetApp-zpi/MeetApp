@@ -2,14 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: 'Montserrat', sans-serif;
+    src: url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+}
+
 :root {
-    --white: #FFFFFB;
+    --white: #fffffb;
     --pickle: #768753;
-    --gray: #BEBEBE;
-    --grass: #A2B47B;
-    --cocoa: #38302E;
-    --orange: #E5A443;
-    --pine: #4D6753;
+    --gray: #bebebe;
+    --grass: #a2b47b;
+    --cocoa: #38302e;
+    --orange: #e5a443;
+    --pine: #4d6753;
     --laurel: #cad1c9;
     --tea: #d0d9ba;
     --snow-drift: #edefea;
@@ -28,4 +33,5 @@
 
 body {
     min-height: 100vh;
+    font-family: 'Montserrat', sans-serif;
 }

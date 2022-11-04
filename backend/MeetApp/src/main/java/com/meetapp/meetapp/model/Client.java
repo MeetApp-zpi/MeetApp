@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -47,33 +48,30 @@ public class Client {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "ClientMeeting", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "MeetingId"))
+    @JoinTable(name = "ClientMeeting", joinColumns = @JoinColumn(name = "ClientId"),
+            inverseJoinColumns = @JoinColumn(name = "MeetingId"))
     Set<Meeting> meetings;
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "ClientEvents", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "EventId"))
+    @JoinTable(name = "ClientEvents", joinColumns = @JoinColumn(name = "ClientId"),
+            inverseJoinColumns = @JoinColumn(name = "EventId"))
     Set<Event> events;
 
     public Client(String email, String firstName, String lastName, Byte[] profilePicture) {
-        this(email, firstName, lastName);
+        this();
 
-        this.profilePicture = profilePicture;
-    }
-
-    public Client(String email, String firstName, String lastName) {
-        id = 0;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
-        isDeleted = false;
+        this.profilePicture = profilePicture;
     }
 
     public Client() {
         id = 0;
-        email = "";
-        firstName = "";
-        lastName = "";
         isDeleted = false;
+        interests = new HashSet<>();
+        meetings = new HashSet<>();
+        events = new HashSet<>();
     }
 }
