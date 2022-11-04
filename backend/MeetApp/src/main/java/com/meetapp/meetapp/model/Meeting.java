@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -49,6 +50,7 @@ public class Meeting extends Post {
 
         this.personQuota = personQuota;
         this.enrolled = 0;
+        this.enrollees = new HashSet<>();
     }
 
     public Meeting(Client author, Location location, String title, String description, Instant meetingDate) {

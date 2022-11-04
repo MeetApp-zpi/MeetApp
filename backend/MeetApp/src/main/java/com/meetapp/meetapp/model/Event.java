@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -52,26 +53,31 @@ public class Event extends Post {
     @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;
 
-    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate, Integer personQuota, String schedule) {
-        this(author, location, title, description, startDate, endDate);
-
-        this.personQuota = personQuota;
-        this.schedule = schedule;
-    }
-
-    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate, Integer personQuota) {
-        this(author, location, title, description, startDate, endDate);
-
-        this.personQuota = personQuota;
-    }
-
-    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate, String schedule) {
-        this(author, location, title, description, startDate, endDate);
+    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
+                 Integer personQuota, String schedule) {
+        this(author, location, title, description, startDate, endDate, personQuota);
 
         this.schedule = schedule;
     }
 
-    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate) {
+    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
+                 Integer personQuota) {
+        this(author, location, title, description, startDate, endDate);
+
+        this.personQuota = personQuota;
+        this.enrolled = 0;
+        this.enrollees = new HashSet<>();
+    }
+
+    public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
+                 String schedule) {
+        this(author, location, title, description, startDate, endDate);
+
+        this.schedule = schedule;
+    }
+
+    public Event(Client author, Location location, String title, String description, Instant startDate,
+                 Instant endDate) {
         super(author, location);
 
         this.title = title;
