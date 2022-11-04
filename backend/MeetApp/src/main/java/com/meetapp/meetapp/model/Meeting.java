@@ -13,6 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -43,15 +44,11 @@ public class Meeting extends Post {
     @ManyToMany(targetEntity = Client.class, mappedBy = "meetings")
     Set<Client> enrollees;
 
-    public Meeting(Client author, Location location, String title, String description, Instant meetingDate, Integer personQuota) {
-        super(author, location);
-
-        this.title = title;
-        this.description = description;
-        this.meetingDate = meetingDate;
+    public Meeting(Client author, Location location, String title, String description, Instant meetingDate,
+                   Integer personQuota) {
+        this(author, location, title, description, meetingDate);
 
         this.personQuota = personQuota;
-        this.enrolled = 0;
     }
 
     public Meeting(Client author, Location location, String title, String description, Instant meetingDate) {
@@ -60,6 +57,9 @@ public class Meeting extends Post {
         this.title = title;
         this.description = description;
         this.meetingDate = meetingDate;
+
+        this.enrollees = new HashSet<>();
+        this.enrolled = 0;
     }
 
     public Meeting() {

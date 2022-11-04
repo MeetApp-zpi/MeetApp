@@ -53,7 +53,8 @@ public class ClientService {
             foundClient.setIsDeleted(true);
             return clientRepository.save(foundClient);
         } else {
-            throw new SecurityException("A client with email: " + authenticatedEmail + " cannot delete user with id: " + clientId);
+            throw new SecurityException(
+                    "A client with email: " + authenticatedEmail + " cannot delete user with id: " + clientId);
         }
     }
 
@@ -62,7 +63,7 @@ public class ClientService {
                 () -> new NoSuchElementException("A client with id: " + clientId + " does not exist."));
     }
 
-    public Byte[] downloadPictureOrThrow(String pictureUrl) {
+    public static Byte[] downloadPictureOrThrow(String pictureUrl) {
         try {
             URL urlObj = new URL(pictureUrl);
             BufferedImage bufferedImage = ImageIO.read(urlObj);
