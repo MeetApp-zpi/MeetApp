@@ -49,8 +49,6 @@ public class Meeting extends Post {
         this(author, location, title, description, meetingDate);
 
         this.personQuota = personQuota;
-        this.enrolled = 0;
-        this.enrollees = new HashSet<>();
     }
 
     public Meeting(Client author, Location location, String title, String description, Instant meetingDate) {
@@ -59,6 +57,9 @@ public class Meeting extends Post {
         this.title = title;
         this.description = description;
         this.meetingDate = meetingDate;
+
+        this.enrollees = new HashSet<>();
+        this.enrolled = 0;
     }
 
     public Meeting() {

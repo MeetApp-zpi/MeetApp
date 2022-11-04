@@ -65,8 +65,6 @@ public class Event extends Post {
         this(author, location, title, description, startDate, endDate);
 
         this.personQuota = personQuota;
-        this.enrolled = 0;
-        this.enrollees = new HashSet<>();
     }
 
     public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
@@ -84,6 +82,9 @@ public class Event extends Post {
         this.description = description;
         this.startDate = startDate;
         this.endDate = endDate;
+
+        this.enrollees = new HashSet<>();
+        this.enrolled = 0;
     }
 
     public Event() {
