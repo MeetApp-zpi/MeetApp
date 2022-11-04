@@ -18,10 +18,6 @@
 </header>
 
 <style>
-    .header-burger-bg {
-        background-color: var(--tea);
-    }
-
     .header-background-color {
         background-color: var(--grass);
     }
