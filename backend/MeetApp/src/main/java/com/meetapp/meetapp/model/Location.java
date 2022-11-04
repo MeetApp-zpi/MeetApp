@@ -23,14 +23,23 @@ public class Location {
     private Voivodeship voivodeship;
 
     @NotNull
-    @Column(name = "longitude", nullable = false)
-    private Double longitude;
-
-    @NotNull
     @Column(name = "latitude", nullable = false)
     private Double latitude;
 
+    @NotNull
+    @Column(name = "longitude", nullable = false)
+    private Double longitude;
+
     public Location() {
         id = 0;
+    }
+
+    public Location(City city, Voivodeship voivodeship, Double latitude, Double longitude) {
+        this();
+
+        this.city = city;
+        this.voivodeship = voivodeship;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

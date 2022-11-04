@@ -9,7 +9,6 @@ import java.util.Set;
 
 @Data
 public class AnnouncementDTO {
-
     @NotNull
     private Integer locationId;
 
