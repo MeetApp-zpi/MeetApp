@@ -11,8 +11,8 @@ import java.time.LocalDate;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "city_generator")
-    @SequenceGenerator(name = "city_generator", sequenceName = "city_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "post_generator")
+    @SequenceGenerator(name = "post_generator", sequenceName = "post_sequence", allocationSize = 1)
     private Integer id;
 
     @NotNull

@@ -21,4 +21,10 @@ public class City {
     public City() {
         id = 0;
     }
+
+    public City(String name) {
+        this();
+
+        this.name = name;
+    }
 }
