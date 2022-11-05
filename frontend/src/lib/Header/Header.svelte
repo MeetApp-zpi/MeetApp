@@ -2,12 +2,10 @@
     import MdMenu from 'svelte-icons/md/MdMenu.svelte';
 </script>
 
-<header
-    class="flex justify-between header-background-color max-h-10 p-2 lg:max-h-20 lg:h-20 lg:p-4"
->
+<header class="flex justify-between bg-grass max-h-10 p-2 lg:max-h-20 lg:h-20 lg:p-4">
     <div
-        class="lg:hidden w-10 hover:cursor-pointer rounded-full hover:bg-[#d0d9ba] transition-colors ease-in-out delay-75
-        active:ring-1 active:ring-[#38302E]"
+        class="lg:hidden w-10 hover:cursor-pointer rounded-full hover:bg-tea transition-colors ease-in-out delay-75
+        active:ring-1 active:ring-cocoa"
     >
         <MdMenu />
     </div>
@@ -16,9 +14,3 @@
     </div>
     <div class="w-10" />
 </header>
-
-<style>
-    .header-background-color {
-        background-color: var(--grass);
-    }
-</style>
