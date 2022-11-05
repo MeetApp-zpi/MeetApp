@@ -9,7 +9,7 @@
     export let pageType: PageType;
 </script>
 
-<footer class="flex justify-between p-2 bg-grass h-16 max-h-16 lg:h-20 lg:p-4">
+<footer class="flex justify-between p-2 bg-grass h-16">
     <a
         class="lg:hidden flex flex-col p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea
             {pageType === 'events' ? 'text-ivory' : ''}"
