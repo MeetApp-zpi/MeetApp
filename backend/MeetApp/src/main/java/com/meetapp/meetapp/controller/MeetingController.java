@@ -5,6 +5,7 @@ import com.meetapp.meetapp.model.Meeting;
 import com.meetapp.meetapp.service.MeetingService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -27,8 +28,8 @@ public class MeetingController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class})
-    public ResponseEntity<String> handleIllegalArg(IllegalArgumentException e) {
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
+    public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
