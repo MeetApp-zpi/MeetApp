@@ -35,8 +35,8 @@ public class Client {
     private String lastName;
 
     @NotNull
-    @Column(nullable = false)
-    private Byte[] profilePicture;
+    @Column(nullable = false, length = 255)
+    private String profilePicture;
 
     @NotNull
     @Column(nullable = false)
@@ -58,7 +58,7 @@ public class Client {
             inverseJoinColumns = @JoinColumn(name = "EventId"))
     Set<Event> events;
 
-    public Client(String email, String firstName, String lastName, Byte[] profilePicture) {
+    public Client(String email, String firstName, String lastName, String profilePicture) {
         this();
 
         this.email = email;
