@@ -36,7 +36,6 @@ public class Client {
 
     @NotNull
     @Column(nullable = false)
-    @JsonIgnore
     private Byte[] profilePicture;
 
     @NotNull
