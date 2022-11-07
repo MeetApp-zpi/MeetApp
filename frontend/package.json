@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "routify -b && vite",
         "dev:routify": "routify",
         "build": "routify -b && vite build",
         "preview": "vite preview",

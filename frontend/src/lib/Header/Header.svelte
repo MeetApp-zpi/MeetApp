@@ -2,7 +2,7 @@
     import MdMenu from 'svelte-icons/md/MdMenu.svelte';
 </script>
 
-<header class="flex justify-between bg-grass p-2 h-16 lg:h-32 lg:p-4 align-middle">
+<header class="flex justify-between bg-grass p-2 h-16 align-middle">
     <div
         class="lg:hidden p-1 hover:cursor-pointer rounded-full hover:bg-tea transition-colors ease-in-out delay-75
         active:ring-1 active:ring-cocoa"

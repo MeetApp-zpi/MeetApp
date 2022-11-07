@@ -9,7 +9,7 @@
     export let pageType: PageType;
 </script>
 
-<footer class="flex justify-between p-2 bg-grass h-16">
+<footer class="flex justify-between p-2 bg-grass h-16 lg:hidden">
     <a
         class="lg:hidden flex flex-col p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea
             {pageType === 'events' ? 'text-ivory' : ''}"
@@ -19,11 +19,13 @@
         <div class="text-center">Wydarzenia</div>
     </a>
     <a
-        class="lg:hidden flex flex-col p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea 
+        class="lg:hidden flex flex-col justify-center p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea 
             {pageType === 'announcements' ? 'text-ivory' : ''}"
         href={$url('/announcements')}
     >
-        <MdAnnouncement />
+        <div class="h-full">
+            <MdAnnouncement />
+        </div>
         <div class="text-center">Ogłoszenia</div>
     </a>
     <a
