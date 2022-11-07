@@ -22,6 +22,7 @@
                 {data.description}
             </div>
             <div class="text-lg">
+                <img src="data:image/jpeg;charset=utf-8;base64, {data.author.profilePicture}" alt="Profile avatar" />
                 {data.author.firstName}
                 {data.author.lastName}
             </div>
