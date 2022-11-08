@@ -2,7 +2,6 @@ package com.meetapp.meetapp.configuration;
 
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.*;
-import com.meetapp.meetapp.service.ClientService;
 import lombok.val;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -25,7 +24,7 @@ public class SampleDataLoader implements ApplicationRunner {
     private final MeetingRepository meetingRepository;
     private final EventRepository eventRepository;
 
-    private final Byte[] sampleProfilePicture;
+    private final String sampleProfilePicture;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
                             LocationRepository locationRepository, CategoryRepository categoryRepository,
@@ -40,9 +39,9 @@ public class SampleDataLoader implements ApplicationRunner {
         this.meetingRepository = meetingRepository;
         this.eventRepository = eventRepository;
 
-        this.sampleProfilePicture = ClientService.downloadPictureOrThrow("https://d1csarkz8obe9u.cloudfront" +
+        this.sampleProfilePicture = "https://d1csarkz8obe9u.cloudfront" +
                 ".net/posterpreviews/testing-logo-design-template-ce84480d61b3db9a8e1522a99875832f_screen" +
-                ".jpg?ts=1615794516");
+                ".jpg?ts=1615794516";
     }
 
     @Override
