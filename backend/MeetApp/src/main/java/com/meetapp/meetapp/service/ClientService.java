@@ -1,21 +1,25 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.dto.CategoryListDTO;
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class ClientService {
 
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository) {
         this.clientRepository = clientRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public Client createClientAccount(HttpSession session) {
@@ -48,6 +52,27 @@ public class ClientService {
             throw new SecurityException(
                     "A client with email: " + authenticatedEmail + " cannot delete user with id: " + clientId);
         }
+    }
+
+    public List<Category> retrieveClientCategories(HttpSession session) {
+        return categoryRepository.findByClients_Email(SessionManager.retrieveEmailOrThrow(session));
+    }
+
+    public List<Category> updateClientCategories(HttpSession session, CategoryListDTO updatedCategoriesDTO) {
+        Client currentClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        List<Category> updatedCategories = findClientCategories(updatedCategoriesDTO.getCategories());
+        currentClient.setInterests(new HashSet<>(updatedCategories));
+        clientRepository.save(currentClient);
+        return updatedCategories;
+    }
+
+    public List<Category> findClientCategories(Set<Integer> categoryIds) {
+        return categoryRepository.findAllById(categoryIds);
+    }
+
+    public Client findClientOrThrow(String clientEmail) {
+        return clientRepository.findClientByEmail(clientEmail).orElseThrow(
+                () -> new NoSuchElementException("A client with email: " + clientEmail + " does not exist."));
     }
 
     public Client findClientOrThrow(Integer clientId) {

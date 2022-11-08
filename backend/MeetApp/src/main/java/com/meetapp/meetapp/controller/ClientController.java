@@ -1,5 +1,7 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.CategoryListDTO;
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.service.ClientService;
 import jakarta.servlet.http.HttpSession;
@@ -7,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -32,6 +36,14 @@ public class ClientController {
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<String> handleUnauthorized(Exception e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+    }
+
+    @GetMapping("/users/categories")
+    public List<Category> getClientCategories(HttpSession session) { return clientService.retrieveClientCategories(session); }
+
+    @PutMapping("/users/categories")
+    public List<Category> updateClientCategories(HttpSession session, @RequestBody CategoryListDTO updatedCategories) {
+        return clientService.updateClientCategories(session, updatedCategories);
     }
 
     @PostMapping("/users")

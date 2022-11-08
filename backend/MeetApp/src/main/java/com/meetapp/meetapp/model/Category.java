@@ -22,8 +22,7 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "CategoryId"), inverseJoinColumns = @JoinColumn(name = "ClientId"))
+    @ManyToMany(targetEntity = Client.class, mappedBy = "interests")
     Set<Client> clients;
 
     public Category(String name) {
