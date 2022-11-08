@@ -23,7 +23,7 @@
             </div>
         </button>
         {#if areDetailsShown}
-            <div transition:slide class="border-t-2">
+            <div transition:slide class="border-t-2 border-shadow">
                 {data.description}
             </div>
             <div class="text-lg flex flex-row items-center" in:slide={{ delay: 100 }} out:slide>
@@ -39,3 +39,9 @@
         {/if}
     </div>
 </div>
+
+<style>
+    .border-shadow {
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
