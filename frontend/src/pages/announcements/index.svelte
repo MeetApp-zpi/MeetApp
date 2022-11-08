@@ -24,10 +24,7 @@
     <Header />
     <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-12rem)] overflow-auto">
         {#each data as item}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <div on:click={() => viewDetails(item.id)}>
-                <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} />
-            </div>
+            <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
     <Footer pageType="announcements" />

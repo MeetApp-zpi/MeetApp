@@ -6,12 +6,6 @@ import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.WritableRaster;
-import java.io.IOException;
-import java.net.URL;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -28,15 +22,13 @@ public class ClientService {
         String email = SessionManager.retrieveEmailOrThrow(session);
         String givenName = SessionManager.retrieveGivenNameOrThrow(session);
         String familyName = SessionManager.retrieveFamilyNameOrThrow(session);
-
         String pictureUrl = SessionManager.retrievePictureOrThrow(session);
-        Byte[] picture = downloadPictureOrThrow(pictureUrl);
 
         if (clientRepository.existsByEmail(email)) {
             throw new IllegalArgumentException("User with this e-mail address already exists");
         }
 
-        return clientRepository.save(new Client(email, givenName, familyName, picture));
+        return clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
     }
 
     public Client deleteClientAccount(Integer clientId, HttpSession session) {
@@ -61,25 +53,5 @@ public class ClientService {
     public Client findClientOrThrow(Integer clientId) {
         return clientRepository.findById(clientId).orElseThrow(
                 () -> new NoSuchElementException("A client with id: " + clientId + " does not exist."));
-    }
-
-    public static Byte[] downloadPictureOrThrow(String pictureUrl) {
-        try {
-            URL urlObj = new URL(pictureUrl);
-            BufferedImage bufferedImage = ImageIO.read(urlObj);
-            WritableRaster raster = bufferedImage.getRaster();
-            DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-            byte[] dataBytes = data.getData();
-            Byte[] byteObjects = new Byte[dataBytes.length];
-
-            int i = 0;
-            for (byte b : dataBytes) {
-                byteObjects[i++] = b;
-            }
-
-            return byteObjects;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to download image from: " + pictureUrl);
-        }
     }
 }
