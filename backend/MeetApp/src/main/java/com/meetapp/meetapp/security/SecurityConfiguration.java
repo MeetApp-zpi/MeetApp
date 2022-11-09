@@ -21,7 +21,6 @@ public class SecurityConfiguration {
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                 ))
                 .oauth2Login()
-                    .loginPage("/login")
                 .and()
                 .cors().disable()
                 .csrf().disable();

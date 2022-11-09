@@ -1,9 +1,8 @@
 <script lang="ts">
-    export let user: String;
     let data = '';
 
     $: {
-        fetch(`http://localhost:8080/api/users/${user}`)
+        fetch(`http://localhost:5173/api/users/categories`)
             .then((res) => res.text())
             .then((res) => (data = res))
             .catch((err) => console.error(err));
