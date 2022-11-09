@@ -43,7 +43,8 @@ public class Client {
     private Boolean isDeleted;
 
     @JsonIgnore
-    @ManyToMany(targetEntity = Category.class, mappedBy = "clients")
+    @ManyToMany
+    @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "CategoryId"))
     Set<Category> interests; // TODO add endpoints etc
 
     @JsonIgnore
