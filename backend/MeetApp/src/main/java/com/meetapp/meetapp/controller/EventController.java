@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.service.EventService;
@@ -28,7 +29,8 @@ public class EventController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class})
     public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -39,24 +41,24 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<Event> getEvents(@RequestParam(required = false) List<String> categoryIds,
-                                 @RequestParam(required = false) String locationId) {
+    public List<EventDTO> getEvents(@RequestParam(required = false) List<String> categoryIds,
+                                    @RequestParam(required = false) String locationId) {
         return eventService.retrieveEvents();
     }
 
     @GetMapping("/events/{eventId}")
-    public Event getEventInfo(@PathVariable Integer eventId) {
+    public EventDTO getEvent(@PathVariable Integer eventId) {
         return eventService.retrieveEvent(eventId);
     }
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession session) {
+    public Event createEvent(@Valid @RequestBody EventCreationDTO newEvent, HttpSession session) {
         return eventService.createEvent(newEvent, session);
     }
 
     @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent,
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventCreationDTO updatedEvent,
                                HttpSession session) {
         return eventService.updateEvent(eventId, updatedEvent, session);
     }
