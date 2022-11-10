@@ -1,6 +1,9 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.dto.DateTimeDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.dto.MeetingDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.model.Meeting;
@@ -9,6 +12,7 @@ import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.repository.MeetingRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,21 +26,28 @@ public class MeetingService {
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
 
-    public MeetingService(MeetingRepository meetingRepository, LocationRepository locationRepository, ClientRepository clientRepository) {
+    public MeetingService(MeetingRepository meetingRepository, LocationRepository locationRepository,
+                          ClientRepository clientRepository) {
         this.meetingRepository = meetingRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
     }
 
-    public List<Meeting> retrieveMeetings() {
-        return meetingRepository.findAll();
+    public List<MeetingDTO> retrieveMeetings() {
+        return meetingRepository.findAll().stream()
+                .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
+                        meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
+                        new DateTimeDTO(meeting.getMeetingDate()))).toList();
     }
 
-    public Meeting retrieveMeeting(Integer meetingId) {
-        return findMeetingOrThrow(meetingId);
+    public MeetingDTO retrieveMeeting(Integer meetingId) {
+        val foundMeeting = findMeetingOrThrow(meetingId);
+        return new MeetingDTO(new PostDTO(foundMeeting), foundMeeting.getTitle(), foundMeeting.getDescription(),
+                foundMeeting.getEnrolled(), foundMeeting.getPersonQuota(),
+                new DateTimeDTO(foundMeeting.getMeetingDate()));
     }
 
-    public Meeting createMeeting(MeetingDTO newMeeting, HttpSession session) {
+    public Meeting createMeeting(MeetingCreationDTO newMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
@@ -48,7 +59,7 @@ public class MeetingService {
         return meetingRepository.save(meetingToSave);
     }
 
-    public Meeting updateMeeting(Integer meetingId, MeetingDTO updatedMeeting, HttpSession session) {
+    public Meeting updateMeeting(Integer meetingId, MeetingCreationDTO updatedMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
@@ -63,7 +74,8 @@ public class MeetingService {
             foundMeeting.setLocation(foundLocation);
             return meetingRepository.save(foundMeeting);
         } else {
-            throw new SecurityException("Meeting with id: " + meetingId + " does not belong to the user with id: " + supposedAuthor.getId());
+            throw new SecurityException("Meeting with id: " + meetingId + " does not belong to the user with id: " +
+                    supposedAuthor.getId());
         }
     }
 
