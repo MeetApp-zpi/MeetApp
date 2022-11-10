@@ -1,7 +1,7 @@
 <script lang="ts">
     let cssClass: string;
     export { cssClass as class };
-    export let isSelected: boolean = false;
+    export let isSelected: boolean;
     export let clickCallback: () => void;
 
     const switchSelection = () => {

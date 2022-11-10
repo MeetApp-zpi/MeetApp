@@ -14,7 +14,13 @@
 
     execute('users/categories', 'GET')
         .then((r) => r.json())
-        .then((r) => (userExistingInterests = r));
+        .then((r) => {
+            for (const interest of r) {
+                selectedCategories.push(interest.id);
+            }
+        });
+
+    $: console.log(selectedCategories);
 
     execute('users/details', 'GET')
         .then((r) => r.json())
@@ -46,7 +52,11 @@
         <div class="px-2 py-2">
             {#if categories !== null}
                 {#each categories as category}
-                    <SelectablePill class="mx-2 my-1 px-6" clickCallback={() => clickedCategory(category.id)}>{category.name}</SelectablePill>
+                    <SelectablePill
+                        class="mx-2 my-1 px-6"
+                        isSelected={selectedCategories.includes(category.id)}
+                        clickCallback={() => clickedCategory(category.id)}>{category.name}</SelectablePill
+                    >
                 {/each}
             {/if}
         </div>
@@ -55,6 +65,8 @@
         <div class="">
             <Button clickHandler={submitChanges} class="px-10 py-1">Gotowe!</Button>
         </div>
-        <div class="text-sm text-sage px-16 text-center py-2">Wybiorę zainteresowania następnym razem</div>
+        <button on:click={() => (window.location.href = 'http://localhost:5173/')}>
+            <div class="text-sm text-sage px-16 text-center py-2">Wybiorę zainteresowania następnym razem</div>
+        </button>
     </div>
 </div>
