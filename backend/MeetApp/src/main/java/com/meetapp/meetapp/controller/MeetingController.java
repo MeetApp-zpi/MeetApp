@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.MeetingCreationDTO;
+import com.meetapp.meetapp.dto.MeetingDTO;
 import com.meetapp.meetapp.model.Meeting;
 import com.meetapp.meetapp.service.MeetingService;
 import jakarta.servlet.http.HttpSession;
@@ -39,13 +40,13 @@ public class MeetingController {
     }
 
     @GetMapping("/meetings")
-    public List<Meeting> getMeetings(@RequestParam(required = false) List<String> categoryIds,
-                                     @RequestParam(required = false) String locationId) {
+    public List<MeetingDTO> getMeetings(@RequestParam(required = false) List<String> categoryIds,
+                                        @RequestParam(required = false) String locationId) {
         return meetingService.retrieveMeetings();
     }
 
     @GetMapping("/meetings/{meetingId}")
-    public Meeting getMeetingInfo(@PathVariable Integer meetingId) {
+    public MeetingDTO getMeeting(@PathVariable Integer meetingId) {
         return meetingService.retrieveMeeting(meetingId);
     }
 
