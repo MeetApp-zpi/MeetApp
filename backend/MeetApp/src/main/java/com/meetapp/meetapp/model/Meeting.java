@@ -32,6 +32,7 @@ public class Meeting extends Post {
 
     private Integer personQuota;
 
+    @NotNull
     private Integer enrolled;
 
     @NotNull
@@ -40,6 +41,7 @@ public class Meeting extends Post {
     @Column(nullable = false)
     private Instant meetingDate;
 
+    @NotNull
     @JsonIgnore
     @ManyToMany(targetEntity = Client.class, mappedBy = "meetings")
     Set<Client> enrollees;
