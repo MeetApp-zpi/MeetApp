@@ -33,32 +33,42 @@
                         </h2>
                     </div>
                 </div>
-                <div class="text-pine bg-tea flex flex-col rounded-xl p-2 m-4">
-                    <div class="flex flex-row">
+                <div class="text-pine bg-tea flex flex-col rounded-xl p-2 m-4 gap-y-1">
+                    <div class="flex flex-row align-middle">
                         <div class="w-6 mx-2">
                             <FaMapMarkedAlt />
                         </div>
-                        {data.location.city.name}, {data.location.voivodeship.name}
+                        <div class="self-center">
+                            {data.location.city.name}, {data.location.voivodeship.name}
+                        </div>
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarAlt />
                         </div>
-                        {data.startDateTime.date}
+                        <div class="self-center">
+                            {data.startDateTime.date}
+                        </div>
                         <div class="w-6 mx-2">
                             <MdAccessTime />
                         </div>
-                        {data.startDateTime.time}
+                        <div class="self-center">
+                            {data.startDateTime.time}
+                        </div>
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarCheck />
                         </div>
-                        {data.endDateTime.date}
+                        <div class="self-center">
+                            {data.endDateTime.date}
+                        </div>
                         <div class="w-6 mx-2">
                             <MdAccessTime />
                         </div>
-                        {data.endDateTime.time}
+                        <div class="self-center">
+                            {data.endDateTime.time}
+                        </div>
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
