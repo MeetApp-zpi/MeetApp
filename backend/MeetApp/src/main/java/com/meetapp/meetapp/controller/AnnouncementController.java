@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
+import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.service.AnnouncementService;
 import jakarta.servlet.http.HttpSession;
@@ -39,13 +40,13 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements")
-    public List<Announcement> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
-                                               @RequestParam(required = false) Integer locationId) {
+    public List<AnnouncementDTO> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
+                                                  @RequestParam(required = false) Integer locationId) {
         return announcementService.retrieveAnnouncements();
     }
 
     @GetMapping("/announcements/{announcementId}")
-    public Announcement getAnnouncementInfo(@PathVariable Integer announcementId) {
+    public AnnouncementDTO getAnnouncement(@PathVariable Integer announcementId) {
         return announcementService.retrieveAnnouncement(announcementId);
     }
 
