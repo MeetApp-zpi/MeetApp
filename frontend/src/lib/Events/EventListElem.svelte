@@ -27,7 +27,7 @@
                     <div class="w-6 mx-2">
                         <FaCalendarAlt />
                     </div>
-                    {data.startDate}
+                    {data.startDateTime.date}
                 </div>
                 <div class="flex flex-row">
                     <div class="w-6 mx-2">

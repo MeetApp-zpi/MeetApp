@@ -14,6 +14,8 @@
     const viewDetails = (postId) => {
         return null;
     };
+
+    $: console.log(data);
 </script>
 
 <div class="h-screen">
