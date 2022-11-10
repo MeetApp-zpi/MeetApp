@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
@@ -35,7 +35,7 @@ public class AnnouncementService {
         return findAnnouncementOrThrow(announcementId);
     }
 
-    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession session) {
+    public Announcement createAnnouncement(AnnouncementCreationDTO newAnnouncement, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
@@ -47,7 +47,7 @@ public class AnnouncementService {
         return announcementRepository.save(announcementToSave);
     }
 
-    public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement, HttpSession session) {
+    public Announcement updateAnnouncement(Integer announcementId, AnnouncementCreationDTO updatedAnnouncement, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());

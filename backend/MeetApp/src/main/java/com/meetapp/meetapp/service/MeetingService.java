@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.MeetingDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.model.Meeting;
@@ -36,7 +36,7 @@ public class MeetingService {
         return findMeetingOrThrow(meetingId);
     }
 
-    public Meeting createMeeting(MeetingDTO newMeeting, HttpSession session) {
+    public Meeting createMeeting(MeetingCreationDTO newMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
@@ -48,7 +48,7 @@ public class MeetingService {
         return meetingRepository.save(meetingToSave);
     }
 
-    public Meeting updateMeeting(Integer meetingId, MeetingDTO updatedMeeting, HttpSession session) {
+    public Meeting updateMeeting(Integer meetingId, MeetingCreationDTO updatedMeeting, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());

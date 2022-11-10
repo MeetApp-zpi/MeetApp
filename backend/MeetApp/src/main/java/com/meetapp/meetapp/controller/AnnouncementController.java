@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.controller;
 
-import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.service.AnnouncementService;
 import jakarta.servlet.http.HttpSession;
@@ -51,14 +51,14 @@ public class AnnouncementController {
 
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
-    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement,
+    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementCreationDTO newAnnouncement,
                                            HttpSession session) {
         return announcementService.createAnnouncement(newAnnouncement, session);
     }
 
     @PutMapping("/announcements/{announcementId}")
     public Announcement updateAnnouncement(@PathVariable Integer announcementId,
-                                           @Valid @RequestBody AnnouncementDTO updatedAnnouncement,
+                                           @Valid @RequestBody AnnouncementCreationDTO updatedAnnouncement,
                                            HttpSession session) {
         return announcementService.updateAnnouncement(announcementId, updatedAnnouncement, session);
     }

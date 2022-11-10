@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.controller;
 
-import com.meetapp.meetapp.dto.EventDTO;
+import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.service.EventService;
 import jakarta.servlet.http.HttpSession;
@@ -51,12 +51,12 @@ public class EventController {
 
     @PostMapping("/events")
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession session) {
+    public Event createEvent(@Valid @RequestBody EventCreationDTO newEvent, HttpSession session) {
         return eventService.createEvent(newEvent, session);
     }
 
     @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent,
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventCreationDTO updatedEvent,
                                HttpSession session) {
         return eventService.updateEvent(eventId, updatedEvent, session);
     }

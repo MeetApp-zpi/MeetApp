@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.controller;
 
-import com.meetapp.meetapp.dto.MeetingDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.model.Meeting;
 import com.meetapp.meetapp.service.MeetingService;
 import jakarta.servlet.http.HttpSession;
@@ -51,12 +51,12 @@ public class MeetingController {
 
     @PostMapping("/meetings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting, HttpSession session) {
+    public Meeting createMeeting(@Valid @RequestBody MeetingCreationDTO newMeeting, HttpSession session) {
         return meetingService.createMeeting(newMeeting, session);
     }
 
     @PutMapping("/meetings/{meetingId}")
-    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingDTO updatedMeeting,
+    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingCreationDTO updatedMeeting,
                                  HttpSession session) {
         return meetingService.updateMeeting(meetingId, updatedMeeting, session);
     }

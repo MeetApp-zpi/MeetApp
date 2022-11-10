@@ -1,6 +1,6 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.EventDTO;
+import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.model.Location;
@@ -36,7 +36,7 @@ public class EventService {
         return findEventOrThrow(eventId);
     }
 
-    public Event createEvent(EventDTO newEvent, HttpSession session) {
+    public Event createEvent(EventCreationDTO newEvent, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
@@ -49,7 +49,7 @@ public class EventService {
         return eventRepository.save(eventToSave);
     }
 
-    public Event updateEvent(Integer eventId, EventDTO updatedEvent, HttpSession session) {
+    public Event updateEvent(Integer eventId, EventCreationDTO updatedEvent, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedEvent.getLocationId());
