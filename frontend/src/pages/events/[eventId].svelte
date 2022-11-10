@@ -6,19 +6,17 @@
     import FaCalendarAlt from 'svelte-icons/fa/FaCalendarAlt.svelte';
     import FaCalendarCheck from 'svelte-icons/fa/FaCalendarCheck.svelte';
     import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
+    import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
 
     export let eventId: number;
 
     let data = null;
 
-    $: console.log(data);
-
     execute(`events/${eventId}`, 'GET')
         .then((res) => res.json())
         .then((r) => {
             data = r;
-            console.log(r);
         });
 </script>
 
@@ -40,19 +38,27 @@
                         <div class="w-6 mx-2">
                             <FaMapMarkedAlt />
                         </div>
-                        {data.location.city.name}
+                        {data.location.city.name}, {data.location.voivodeship.name}
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarAlt />
                         </div>
-                        {data.startDate}
+                        {data.startDateTime.date}
+                        <div class="w-6 mx-2">
+                            <MdAccessTime />
+                        </div>
+                        {data.startDateTime.time}
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarCheck />
                         </div>
-                        {data.endDate}
+                        {data.endDateTime.date}
+                        <div class="w-6 mx-2">
+                            <MdAccessTime />
+                        </div>
+                        {data.endDateTime.time}
                     </div>
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
