@@ -3,6 +3,7 @@
 
     import FaCalendarAlt from 'svelte-icons/fa/FaCalendarAlt.svelte';
     import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
+    import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     import Button from '../../lib/Button/Button.svelte';
 
@@ -27,7 +28,11 @@
                 <div class="w-6 mx-2">
                     <FaCalendarAlt />
                 </div>
-                {data.meetingDate}
+                {data.meetingDateTime.date}
+                <div class="w-6 mx-2">
+                    <MdAccessTime />
+                </div>
+                {data.meetingDateTime.time}
             </div>
             <div class="flex flex-row">
                 <div class="w-6 mx-2">
@@ -51,7 +56,7 @@
                 {data.author.lastName}
             </div>
             <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
-                <Button class="text-base px-12 py-1 mx-12 my-2" clickHandler={() => null}>Zapisuję się!</Button>
+                <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={() => null}>Zapisuję się!</Button>
             </div>
         {/if}
     </div>
