@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.EventCreationDTO;
+import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.service.EventService;
 import jakarta.servlet.http.HttpSession;
@@ -28,7 +29,8 @@ public class EventController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class})
     public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -39,13 +41,13 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<Event> getEvents(@RequestParam(required = false) List<String> categoryIds,
-                                 @RequestParam(required = false) String locationId) {
+    public List<EventDTO> getEvents(@RequestParam(required = false) List<String> categoryIds,
+                                    @RequestParam(required = false) String locationId) {
         return eventService.retrieveEvents();
     }
 
     @GetMapping("/events/{eventId}")
-    public Event getEventInfo(@PathVariable Integer eventId) {
+    public EventDTO getEvent(@PathVariable Integer eventId) {
         return eventService.retrieveEvent(eventId);
     }
 

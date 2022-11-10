@@ -1,6 +1,9 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
+import com.meetapp.meetapp.dto.EventDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.model.Location;
@@ -9,6 +12,7 @@ import com.meetapp.meetapp.repository.EventRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,18 +26,25 @@ public class EventService {
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
 
-    public EventService(EventRepository eventRepository, LocationRepository locationRepository, ClientRepository clientRepository) {
+    public EventService(EventRepository eventRepository, LocationRepository locationRepository,
+                        ClientRepository clientRepository) {
         this.eventRepository = eventRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
     }
 
-    public List<Event> retrieveEvents() {
-        return eventRepository.findAll();
+    public List<EventDTO> retrieveEvents() {
+        return eventRepository.findAll().stream()
+                .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
+                        event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
+                        new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()))).toList();
     }
 
-    public Event retrieveEvent(Integer eventId) {
-        return findEventOrThrow(eventId);
+    public EventDTO retrieveEvent(Integer eventId) {
+        val foundEvent = findEventOrThrow(eventId);
+        return new EventDTO(new PostDTO(foundEvent), foundEvent.getTitle(), foundEvent.getDescription(),
+                foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
+                new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()));
     }
 
     public Event createEvent(EventCreationDTO newEvent, HttpSession session) {
@@ -43,8 +54,9 @@ public class EventService {
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
 
-        Event eventToSave = new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(),
-                startDate, endDate, newEvent.getPersonQuota(), newEvent.getSchedule());
+        Event eventToSave =
+                new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(), startDate,
+                        endDate, newEvent.getPersonQuota(), newEvent.getSchedule());
 
         return eventRepository.save(eventToSave);
     }
@@ -69,7 +81,8 @@ public class EventService {
 
             return eventRepository.save(foundEvent);
         } else {
-            throw new SecurityException("Event with id: " + eventId + " does not belong to the user with id: " + supposedAuthor.getId());
+            throw new SecurityException(
+                    "Event with id: " + eventId + " does not belong to the user with id: " + supposedAuthor.getId());
         }
     }
 
@@ -84,8 +97,8 @@ public class EventService {
     }
 
     public Event findEventOrThrow(Integer eventId) {
-        return eventRepository.findById(eventId).orElseThrow(
-                () -> new NoSuchElementException("An event with id: " + eventId + " does not exist."));
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("An event with id: " + eventId + " does not exist."));
     }
 
     public Location findLocationOrThrow(Integer locationId) {
@@ -94,8 +107,8 @@ public class EventService {
     }
 
     public Client findClientOrThrow(String email) {
-        return clientRepository.findClientByEmail(email).orElseThrow(
-                () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
+        return clientRepository.findClientByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("A client with email: " + email + " does not exist."));
     }
 
     public Instant parseDateOrThrow(String dateString) {
