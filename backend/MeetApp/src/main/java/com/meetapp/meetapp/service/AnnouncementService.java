@@ -4,10 +4,11 @@ import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.Announcement;
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
-import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
+import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
@@ -15,20 +16,24 @@ import jakarta.servlet.http.HttpSession;
 import lombok.val;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
 
     public AnnouncementService(AnnouncementRepository announcementRepository, LocationRepository locationRepository,
-                               ClientRepository clientRepository) {
+                               ClientRepository clientRepository, CategoryRepository categoryRepository) {
         this.announcementRepository = announcementRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<AnnouncementDTO> retrieveAnnouncements() {
@@ -48,10 +53,11 @@ public class AnnouncementService {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
+        List<Category> foundCategories = findCategories(newAnnouncement.getCategoryIds());
 
         Announcement announcementToSave =
                 new Announcement(foundClient, foundLocation, newAnnouncement.getDescription(),
-                        newAnnouncement.getTitle());
+                        newAnnouncement.getTitle(), new HashSet<>(foundCategories));
 
         return announcementRepository.save(announcementToSave);
     }
@@ -83,6 +89,10 @@ public class AnnouncementService {
         if (announcementToDelete.getAuthor().equals(supposedAuthor)) {
             announcementRepository.deleteById(announcementId);
         }
+    }
+
+    public List<Category> findCategories(Set<Integer> categoryIds) {
+        return categoryRepository.findAllById(categoryIds);
     }
 
     public Announcement findAnnouncementOrThrow(Integer announcementId) {
