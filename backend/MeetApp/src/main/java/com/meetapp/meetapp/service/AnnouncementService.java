@@ -73,6 +73,7 @@ public class AnnouncementService {
             foundAnnouncement.setLocation(foundLocation);
             foundAnnouncement.setTitle(updatedAnnouncement.getTitle());
             foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
+            foundAnnouncement.setCategories(new HashSet<>(findCategories(updatedAnnouncement.getCategoryIds())));
             return announcementRepository.save(foundAnnouncement);
         } else {
             throw new SecurityException(

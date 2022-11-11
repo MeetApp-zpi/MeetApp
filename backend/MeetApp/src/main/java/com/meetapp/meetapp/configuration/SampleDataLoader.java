@@ -27,6 +27,7 @@ public class SampleDataLoader implements ApplicationRunner {
     private final EventRepository eventRepository;
 
     private final String sampleProfilePicture;
+    private List<Category> categories;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
                             LocationRepository locationRepository, CategoryRepository categoryRepository,
@@ -49,7 +50,7 @@ public class SampleDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         locationRepository.saveAll(getLocations());
-        categoryRepository.saveAll(getCategories());
+        categories = categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
         announcementRepository.saveAll(getAnnouncements());
         meetingRepository.saveAll(getMeetings());
@@ -483,12 +484,11 @@ public class SampleDataLoader implements ApplicationRunner {
 
     private Set<Category> getCategories(Set<Integer> categoryIds) {
 //        List<Category> t = categoryRepository.findAllById(categoryIds);
-        List<Category> existing = getCategories();
-        HashSet<Category> categories = new HashSet<>();
+        HashSet<Category> categoriesInSet = new HashSet<>();
         for (Integer i : categoryIds) {
-            categories.add(existing.get(i));
+            categoriesInSet.add(categories.get(i));
         }
-        return new HashSet<>(categories);
+        return new HashSet<>(categoriesInSet);
     }
 
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {

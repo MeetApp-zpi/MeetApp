@@ -79,6 +79,7 @@ public class MeetingService {
             foundMeeting.setPersonQuota(updatedMeeting.getPersonQuota());
             foundMeeting.setDescription(updatedMeeting.getDescription());
             foundMeeting.setLocation(foundLocation);
+            foundMeeting.setCategories(new HashSet<>(findCategories(updatedMeeting.getCategoryIds())));
             return meetingRepository.save(foundMeeting);
         } else {
             throw new SecurityException("Meeting with id: " + meetingId + " does not belong to the user with id: " +

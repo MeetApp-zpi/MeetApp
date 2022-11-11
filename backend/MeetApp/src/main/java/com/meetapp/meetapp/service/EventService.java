@@ -85,6 +85,7 @@ public class EventService {
             foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
             foundEvent.setLocation(foundLocation);
             foundEvent.setIsActive(true);
+            foundEvent.setCategories(new HashSet<>(findCategories(updatedEvent.getCategoryIds())));
 
             return eventRepository.save(foundEvent);
         } else {
