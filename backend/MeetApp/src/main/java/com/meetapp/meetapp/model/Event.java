@@ -31,6 +31,7 @@ public class Event extends Post {
 
     private Integer personQuota;
 
+    @NotNull
     private Integer enrolled;
 
     @NotNull
@@ -49,6 +50,7 @@ public class Event extends Post {
     @Column(nullable = true, length = 5_000)
     private String schedule;
 
+    @NotNull
     @JsonIgnore
     @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;

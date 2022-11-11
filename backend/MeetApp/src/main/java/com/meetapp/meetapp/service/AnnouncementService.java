@@ -1,14 +1,18 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,15 +31,20 @@ public class AnnouncementService {
         this.clientRepository = clientRepository;
     }
 
-    public List<Announcement> retrieveAnnouncements() {
-        return announcementRepository.findAll();
+    public List<AnnouncementDTO> retrieveAnnouncements() {
+        return announcementRepository.findAll().stream()
+                .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
+                        announcement.getTitle(), announcement.getDescription(),
+                        announcement.getEnrolled())).toList();
     }
 
-    public Announcement retrieveAnnouncement(Integer announcementId) {
-        return findAnnouncementOrThrow(announcementId);
+    public AnnouncementDTO retrieveAnnouncement(Integer announcementId) {
+        val foundAnnouncement = findAnnouncementOrThrow(announcementId);
+        return new AnnouncementDTO(new PostDTO(foundAnnouncement), foundAnnouncement.getTitle(),
+                foundAnnouncement.getDescription(), foundAnnouncement.getEnrolled());
     }
 
-    public Announcement createAnnouncement(AnnouncementDTO newAnnouncement, HttpSession session) {
+    public Announcement createAnnouncement(AnnouncementCreationDTO newAnnouncement, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(newAnnouncement.getLocationId());
@@ -47,7 +56,8 @@ public class AnnouncementService {
         return announcementRepository.save(announcementToSave);
     }
 
-    public Announcement updateAnnouncement(Integer announcementId, AnnouncementDTO updatedAnnouncement, HttpSession session) {
+    public Announcement updateAnnouncement(Integer announcementId, AnnouncementCreationDTO updatedAnnouncement,
+                                           HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client supposedAuthor = findClientOrThrow(email);
         Location foundLocation = findLocationOrThrow(updatedAnnouncement.getLocationId());
@@ -59,7 +69,9 @@ public class AnnouncementService {
             foundAnnouncement.setDescription(updatedAnnouncement.getDescription());
             return announcementRepository.save(foundAnnouncement);
         } else {
-            throw new SecurityException("Announcement with id: " + announcementId + " does not belong to the user with id: " + supposedAuthor.getId());
+            throw new SecurityException(
+                    "Announcement with id: " + announcementId + " does not belong to the user with id: " +
+                            supposedAuthor.getId());
         }
     }
 

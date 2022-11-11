@@ -22,6 +22,10 @@ public class ClientService {
         this.categoryRepository = categoryRepository;
     }
 
+    public Client retrieveClientDetails(HttpSession session) {
+        return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+    }
+
     public Client createClientAccount(HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         String givenName = SessionManager.retrieveGivenNameOrThrow(session);

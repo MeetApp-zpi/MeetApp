@@ -26,8 +26,10 @@ public class Announcement extends Post {
     @Column(nullable = false, length = 200)
     private String description;
 
+    @NotNull
     private Integer enrolled;
 
+    @NotNull
     @JsonIgnore
     @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;
