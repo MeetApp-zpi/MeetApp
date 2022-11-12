@@ -52,14 +52,16 @@ public class EventController {
         return eventService.retrieveEvent(eventId);
     }
 
-    @PostMapping(value = "/events", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/events", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
     public Event createEvent(@Valid @ModelAttribute EventCreationDTO newEvent, HttpSession session) {
         return eventService.createEvent(newEvent, session);
     }
 
-    @PutMapping(value = "/events/{eventId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventCreationDTO updatedEvent,
+    @PutMapping(value = "/events/{eventId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @ModelAttribute EventCreationDTO updatedEvent,
                                HttpSession session) {
         return eventService.updateEvent(eventId, updatedEvent, session);
     }
