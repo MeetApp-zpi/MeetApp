@@ -21,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -109,8 +110,10 @@ public class EventService {
 
     public String savePictureAndGetPath(MultipartFile picture) {
         try {
-            // TODO: how do we set up our paths?
-            Path fileNameAndPath = Paths.get("/static", picture.getOriginalFilename());
+            LocalDateTime today = LocalDateTime.now();
+            String datePath = today.getYear() + String.valueOf(today.getMonthValue());
+            Path fileNameAndPath = Paths.get("static/" + datePath, picture.getOriginalFilename());
+            Files.createDirectories(Paths.get("static/" + datePath));
             Files.write(fileNameAndPath, picture.getBytes());
             return fileNameAndPath.toString();
         } catch (IOException e) {
