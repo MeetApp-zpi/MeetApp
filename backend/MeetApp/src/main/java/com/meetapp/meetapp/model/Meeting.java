@@ -5,7 +5,6 @@ import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
-
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -47,14 +46,15 @@ public class Meeting extends Post {
     Set<Client> enrollees;
 
     public Meeting(Client author, Location location, String title, String description, Instant meetingDate,
-                   Integer personQuota) {
-        this(author, location, title, description, meetingDate);
+                   Set<Category> categories, Integer personQuota) {
+        this(author, location, title, description, meetingDate, categories);
 
         this.personQuota = personQuota;
     }
 
-    public Meeting(Client author, Location location, String title, String description, Instant meetingDate) {
-        super(author, location);
+    public Meeting(Client author, Location location, String title, String description, Instant meetingDate,
+                   Set<Category> categories) {
+        super(author, location, categories);
 
         this.title = title;
         this.description = description;

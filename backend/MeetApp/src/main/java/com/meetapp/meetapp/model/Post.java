@@ -1,10 +1,12 @@
 package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Data
@@ -34,11 +36,18 @@ public class Post {
     @Column(nullable = false)
     private Boolean isActive;
 
-    public Post(Client author, Location location) {
+    @NotEmpty
+    @Column(nullable = false)
+    @ManyToMany
+    @JoinTable(name = "PostCategory", joinColumns = @JoinColumn(name = "PostId"), inverseJoinColumns = @JoinColumn(name = "CategoryId"))
+    private Set<Category> categories;
+
+    public Post(Client author, Location location, Set<Category> categories) {
         this();
 
         this.author = author;
         this.location = location;
+        this.categories = categories;
     }
 
     public Post() {

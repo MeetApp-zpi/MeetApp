@@ -4,9 +4,11 @@ import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.dto.PostDTO;
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.EventRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
@@ -17,20 +19,24 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class EventService {
     private final EventRepository eventRepository;
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
 
     public EventService(EventRepository eventRepository, LocationRepository locationRepository,
-                        ClientRepository clientRepository) {
+                        ClientRepository clientRepository, CategoryRepository categoryRepository) {
         this.eventRepository = eventRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<EventDTO> retrieveEvents() {
@@ -53,10 +59,11 @@ public class EventService {
         Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
+        List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
                 new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(), startDate,
-                        endDate, newEvent.getPersonQuota(), newEvent.getSchedule());
+                        endDate, new HashSet<>(foundCategories), newEvent.getPersonQuota(), newEvent.getSchedule());
 
         return eventRepository.save(eventToSave);
     }
@@ -78,6 +85,7 @@ public class EventService {
             foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
             foundEvent.setLocation(foundLocation);
             foundEvent.setIsActive(true);
+            foundEvent.setCategories(new HashSet<>(findCategories(updatedEvent.getCategoryIds())));
 
             return eventRepository.save(foundEvent);
         } else {
@@ -94,6 +102,10 @@ public class EventService {
         if (eventToDelete.getAuthor().equals(supposedAuthor)) {
             eventRepository.deleteById(eventId);
         }
+    }
+
+    public List<Category> findCategories(Set<Integer> categoryIds) {
+        return categoryRepository.findAllById(categoryIds);
     }
 
     public Event findEventOrThrow(Integer eventId) {
