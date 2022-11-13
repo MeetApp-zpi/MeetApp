@@ -15,6 +15,6 @@ public class LocationService {
     }
 
     public List<Location> retrieveLocations() {
-        return locationRepository.findAll();
+        return locationRepository.findAllByOrderByCityNameAscVoivodeshipNameAsc();
     }
 }
