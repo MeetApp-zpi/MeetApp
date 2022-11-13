@@ -10,7 +10,11 @@
 <div class="bg-olive rounded-2xl m-2 p-2">
     <div class="flex flex-row hover:cursor-pointer">
         <div class="w-1/3 self-center">
-            <img class="w-full" src="no-image.png" alt="Not found" />
+            {#if data.picture !== null}
+                <img class="w-full" src="http://localhost:8080/{data.picture}" alt="Event poster" />
+            {:else}
+                <img class="w-full" src="no-image.png" alt="Missing picture" />
+            {/if}
         </div>
         <div class="flex flex-col w-2/3 pl-2">
             <button on:click={clickHandler}>
