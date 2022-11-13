@@ -46,6 +46,9 @@ public class Event extends Post {
     @Column(nullable = false)
     private Instant endDate;
 
+    @Column
+    private String picture;
+
     @Size(min = 1, max = 5_000) // null elements are considered valid
     @Column(nullable = true, length = 5_000)
     private String schedule;

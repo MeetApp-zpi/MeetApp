@@ -16,8 +16,14 @@ import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.HashSet;
 import java.util.List;
@@ -43,14 +49,16 @@ public class EventService {
         return eventRepository.findAll().stream()
                 .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
                         event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
-                        new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()))).toList();
+                        new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
+                        event.getPicture())).toList();
     }
 
     public EventDTO retrieveEvent(Integer eventId) {
         val foundEvent = findEventOrThrow(eventId);
         return new EventDTO(new PostDTO(foundEvent), foundEvent.getTitle(), foundEvent.getDescription(),
                 foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
-                new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()));
+                new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()),
+                foundEvent.getPicture());
     }
 
     public Event createEvent(EventCreationDTO newEvent, HttpSession session) {
@@ -59,11 +67,14 @@ public class EventService {
         Location foundLocation = findLocationOrThrow(newEvent.getLocationId());
         Instant startDate = parseDateOrThrow(newEvent.getStartDate());
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
+        String pictureUri = newEvent.getPicture() != null ? savePictureAndGetPath(newEvent.getPicture()) : null;
+
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
                 new Event(foundClient, foundLocation, newEvent.getTitle(), newEvent.getDescription(), startDate,
                         endDate, new HashSet<>(foundCategories), newEvent.getPersonQuota(), newEvent.getSchedule());
+        eventToSave.setPicture(pictureUri);
 
         return eventRepository.save(eventToSave);
     }
@@ -75,6 +86,7 @@ public class EventService {
         Instant startDate = parseDateOrThrow(updatedEvent.getStartDate());
         Instant endDate = parseDateOrThrow(updatedEvent.getEndDate());
         Event foundEvent = findEventOrThrow(eventId);
+        String pictureUri = updatedEvent.getPicture() != null ? savePictureAndGetPath(updatedEvent.getPicture()) : null;
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
@@ -85,6 +97,7 @@ public class EventService {
             foundEvent.setPersonQuota(updatedEvent.getPersonQuota());
             foundEvent.setLocation(foundLocation);
             foundEvent.setIsActive(true);
+            foundEvent.setPicture(pictureUri);
             foundEvent.setCategories(new HashSet<>(findCategories(updatedEvent.getCategoryIds())));
 
             return eventRepository.save(foundEvent);
@@ -104,6 +117,20 @@ public class EventService {
         }
     }
 
+    public String savePictureAndGetPath(MultipartFile picture) {
+        try {
+            LocalDateTime today = LocalDateTime.now();
+            String datePath = today.getYear() + String.valueOf(today.getMonthValue());
+            Path fileNameAndPath = Paths.get("static/" + datePath, picture.getOriginalFilename());
+            Files.createDirectories(Paths.get("static/" + datePath));
+            Files.write(fileNameAndPath, picture.getBytes());
+            return fileNameAndPath.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("Event photo with name: " + picture.getOriginalFilename() +
+                    " could not be saved.");
+        }
+    }
+    
     public List<Category> findCategories(Set<Integer> categoryIds) {
         return categoryRepository.findAllById(categoryIds);
     }
