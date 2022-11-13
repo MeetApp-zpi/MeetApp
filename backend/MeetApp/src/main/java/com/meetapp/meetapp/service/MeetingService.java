@@ -4,9 +4,11 @@ import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.dto.MeetingDTO;
 import com.meetapp.meetapp.dto.PostDTO;
+import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Location;
 import com.meetapp.meetapp.model.Meeting;
+import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.repository.MeetingRepository;
@@ -17,20 +19,24 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class MeetingService {
     private final MeetingRepository meetingRepository;
     private final LocationRepository locationRepository;
     private final ClientRepository clientRepository;
+    private final CategoryRepository categoryRepository;
 
     public MeetingService(MeetingRepository meetingRepository, LocationRepository locationRepository,
-                          ClientRepository clientRepository) {
+                          ClientRepository clientRepository, CategoryRepository categoryRepository) {
         this.meetingRepository = meetingRepository;
         this.locationRepository = locationRepository;
         this.clientRepository = clientRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public List<MeetingDTO> retrieveMeetings() {
@@ -52,9 +58,10 @@ public class MeetingService {
         Instant castedDate = parseDateOrThrow(newMeeting.getMeetingDate());
         Location foundLocation = findLocationOrThrow(newMeeting.getLocationId());
         Client foundClient = findClientOrThrow(email);
+        List<Category> foundCategories = findCategories(newMeeting.getCategoryIds());
 
         Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getDescription(),
-                newMeeting.getTitle(), castedDate, newMeeting.getPersonQuota());
+                newMeeting.getTitle(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
 
         return meetingRepository.save(meetingToSave);
     }
@@ -72,6 +79,7 @@ public class MeetingService {
             foundMeeting.setPersonQuota(updatedMeeting.getPersonQuota());
             foundMeeting.setDescription(updatedMeeting.getDescription());
             foundMeeting.setLocation(foundLocation);
+            foundMeeting.setCategories(new HashSet<>(findCategories(updatedMeeting.getCategoryIds())));
             return meetingRepository.save(foundMeeting);
         } else {
             throw new SecurityException("Meeting with id: " + meetingId + " does not belong to the user with id: " +
@@ -87,6 +95,10 @@ public class MeetingService {
         if (meetingToDelete.getAuthor().equals(supposedAuthor)) {
             meetingRepository.deleteById(meetingId);
         }
+    }
+
+    public List<Category> findCategories(Set<Integer> categoryIds) {
+        return categoryRepository.findAllById(categoryIds);
     }
 
     public Meeting findMeetingOrThrow(Integer meetingId) {

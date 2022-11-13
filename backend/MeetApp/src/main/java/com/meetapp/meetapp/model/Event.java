@@ -59,29 +59,29 @@ public class Event extends Post {
     Set<Client> enrollees;
 
     public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
-                 Integer personQuota, String schedule) {
-        this(author, location, title, description, startDate, endDate, personQuota);
+                 Set<Category> categories, Integer personQuota, String schedule) {
+        this(author, location, title, description, startDate, endDate, categories, personQuota);
 
         this.schedule = schedule;
     }
 
     public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
-                 Integer personQuota) {
-        this(author, location, title, description, startDate, endDate);
+                 Set<Category> categories, Integer personQuota) {
+        this(author, location, title, description, startDate, endDate, categories);
 
         this.personQuota = personQuota;
     }
 
     public Event(Client author, Location location, String title, String description, Instant startDate, Instant endDate,
-                 String schedule) {
-        this(author, location, title, description, startDate, endDate);
+                 Set<Category> categories, String schedule) {
+        this(author, location, title, description, startDate, endDate, categories);
 
         this.schedule = schedule;
     }
 
     public Event(Client author, Location location, String title, String description, Instant startDate,
-                 Instant endDate) {
-        super(author, location);
+                 Instant endDate, Set<Category> categories) {
+        super(author, location, categories);
 
         this.title = title;
         this.description = description;

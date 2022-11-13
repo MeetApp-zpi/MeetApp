@@ -34,8 +34,8 @@ public class Announcement extends Post {
     @ManyToMany(targetEntity = Client.class, mappedBy = "events")
     Set<Client> enrollees;
 
-    public Announcement(Client author, Location location, String title, String description) {
-        super(author, location);
+    public Announcement(Client author, Location location, String title, String description, Set<Category> categories) {
+        super(author, location, categories);
 
         this.title = title;
         this.description = description;
