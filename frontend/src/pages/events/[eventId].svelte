@@ -26,7 +26,7 @@
         <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-8rem)] overflow-auto">
             <div class="flex flex-col">
                 <div class="relative m-4 self-stretch">
-                    <img class="object-fill w-full" src="../no-image.png" alt="Event poster" />
+                    <img class="object-fill w-full" src="http://localhost:8080/{data.picture}" alt="Event poster" />
                     <div class="absolute bottom-0 left-0 right-0 px-4 py-2 opacity-40 bg-ivory">
                         <h2 class="font-bold text-xl text-cocoa">
                             {data.title}

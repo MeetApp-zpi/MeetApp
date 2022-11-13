@@ -152,6 +152,13 @@ public class SampleDataLoader implements ApplicationRunner {
     }
 
     private List<Event> getEvents() {
+        Event withPhoto = new Event(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Siedlce", "mazowieckie"),
+                "lorem ipsum title again", "Lorem ipsum dolor sit amet consectetur et description",
+                Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
+                getCategories(new HashSet<>(Arrays.asList(1))), 4200);
+
+        withPhoto.setPicture("pictures\\202211\\pietrucha.jpg");
+
         return Arrays.asList(
                 new Event(getClientOrThrow("meetapp.zpi@gmail.com"), getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Testowe Wydarzenie", "Lorem ipsum dolor sit amet, " +
@@ -468,10 +475,7 @@ public class SampleDataLoader implements ApplicationRunner {
                         Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
                         getCategories(new HashSet<>(Arrays.asList(3))),
                         "Lorem ipsum schedule"),
-                new Event(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Siedlce", "mazowieckie"),
-                        "lorem ipsum title again", "Lorem ipsum dolor sit amet consectetur et description",
-                        Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
-                        getCategories(new HashSet<>(Arrays.asList(1))), 4200));
+                withPhoto);
     }
 
     private Client getClientOrThrow(String email) {
