@@ -6,6 +6,7 @@
     import Header from '../../../lib/Header/Header.svelte';
     import execute from '../../../lib/fetchWrapper';
 
+    let categoryValue = null;
     let cityValue = null;
     let titleValue = null;
     let descriptionValue = null;
@@ -14,6 +15,7 @@
     let descriptionInput = null;
 
     let locations = [];
+    let categories = [];
 
     function cityRenderer(item, isSelected) {
         return `${item.city}<span class='text-gray'>, ${item.voivodeship}</span>`;
@@ -37,6 +39,25 @@
                 ];
             }
         });
+
+    execute('categories', 'GET')
+        .then((r) => r.json())
+        .then((r) => (categories = r));
+
+    const validateCategory = () => {
+        let errorMsg = document.getElementById('categoryErrorMsg');
+        let svControl = document.getElementById('categoryInputBox').children[0].children[0];
+        if (categoryValue === null || categoryValue.length === 0) {
+            errorMsg.classList.remove('hidden');
+            errorMsg.className += ' block';
+            svControl.className += ' !border-red-500';
+            return false;
+        }
+        errorMsg.classList.remove('block');
+        errorMsg.className += ' hidden';
+        svControl.classList.remove('!border-red-500');
+        return true;
+    };
 
     const validateTitle = () => {
         if (titleValue === null || titleValue.length < 5 || titleValue.length > 50) {
@@ -72,16 +93,29 @@
     };
 
     const handleSubmit = () => {
-        if (validateTitle() && validateCity() && validateDescription()) {
-            execute('announcements', 'POST');
+        if (validateCategory() && validateTitle() && validateCity() && validateDescription()) {
+            let requestBody = {
+                locationId: cityValue,
+                title: titleValue,
+                description: descriptionValue,
+                categoryIds: categoryValue
+            };
+
+            execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173'));
         }
     };
+
+    $: console.log(cityValue);
 </script>
 
 <div class="h-screen">
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
-        <div class="">
+        <div class="w-full">
+            <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
+                <Svelecte options={categories} placeholder="Kategoria" inputId="categorySelect" multiple="true" bind:value={categoryValue} />
+            </div>
+            <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
             <div class="mx-4">
                 <input
                     bind:value={titleValue}
@@ -126,3 +160,11 @@
         </div>
     </div>
 </div>
+
+<style>
+    .categorySvelecteBox :global(.sv-control) {
+        border-color: var(--grass);
+        border-width: 2px;
+        padding-left: 0.5rem;
+    }
+</style>
