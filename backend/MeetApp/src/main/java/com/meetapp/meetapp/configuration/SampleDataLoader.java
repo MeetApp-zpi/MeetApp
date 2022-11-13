@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ConditionalOnProperty(name = "useSampleData", havingValue = "true")
 @Component
@@ -25,6 +27,7 @@ public class SampleDataLoader implements ApplicationRunner {
     private final EventRepository eventRepository;
 
     private final String sampleProfilePicture;
+    private List<Category> categories;
 
     public SampleDataLoader(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository,
                             LocationRepository locationRepository, CategoryRepository categoryRepository,
@@ -47,7 +50,7 @@ public class SampleDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         locationRepository.saveAll(getLocations());
-        categoryRepository.saveAll(getCategories());
+        categories = categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
         announcementRepository.saveAll(getAnnouncements());
         meetingRepository.saveAll(getMeetings());
@@ -92,24 +95,29 @@ public class SampleDataLoader implements ApplicationRunner {
                         getLocationOrThrow("Wrocław", "dolnośląskie"), "Testowe Ogłoszenie",
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ut elit metus. Ut vel urna " +
                                 "fermentum, elementum neque quis, malesuada ante. Donec vehicula dui vitae tincidunt " +
-                                "venenatis. Curabitur orci."),
+                                "venenatis. Curabitur orci.",
+                        getCategories(new HashSet<>(Arrays.asList(1, 3)))),
                 new Announcement(getClientOrThrow("fanatyk" + ".rolkarstwa@rolki.pl"),
                         getLocationOrThrow("Trzebnica", "dolnośląskie"), "Mocna ekipa szuka rolkarza",
                         "Naprawdę mocna ekipa roklarzy szuka rekruta który nie będzie bał się ekstremalnie jeździć po" +
-                                " mieście."),
+                                " mieście.",
+                        getCategories(new HashSet<>(Arrays.asList(2, 5)))),
                 new Announcement(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov" + ".pl"),
                         getLocationOrThrow("Białystok", "podlaskie"), "Nie będzie niczego",
                         "Jak już będę prezydentem, to będzie zupełnie inaczej. Nie będzie sejmu i senatu. Polska " +
                                 "będzie od morza do morza. Żeby nie było bandyctwa, żeby nie było złodziejstwa, żeby " +
-                                "nie było niczego."), new Announcement(getClientOrThrow("janusz75@buziaczek.pl"),
+                                "nie było niczego.",
+                        getCategories(new HashSet<>(Arrays.asList(1)))), new Announcement(getClientOrThrow("janusz75@buziaczek.pl"),
                         getLocationOrThrow("Bydgoszcz", "kujawsko-pomorskie"), "Szukam partnera do polowania na suma",
                         "Sum grasuje w rzece pod Bydgoszczą. Jest ogromny i już kilka razy mnie pogryzł. Cena nie gra" +
-                                " roli, musimy go złapać."),
+                                " roli, musimy go złapać.",
+                        getCategories(new HashSet<>(Arrays.asList(1, 3, 4, 6)))),
                 new Announcement(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Warszawa", "mazowieckie"),
                         "Leśnik potrzebny w aleji!",
                         "Już od 10 minut tu siedzę a dalej nie widziałem żadnego leśnika. Słychać tylko jakąś żabę. " +
                                 "Mój oponent ma dużo więcej złota, a to wszystko przez różnicę dżungli. POMOCY P.S> " +
-                                "Wszyscy oprócz Shyvanny ;>"));
+                                "Wszyscy oprócz Shyvanny ;>",
+                        getCategories(new HashSet<>(Arrays.asList(1, 3)))));
     }
 
     private List<Meeting> getMeetings() {
@@ -119,28 +127,28 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a lacus interdum, pulvinar" +
                                 " ex a, luctus nulla. Orci varius natoque penatibus et magnis dis parturient montes, " +
                                 "nascetur ridiculus mus. Quisque facilisis lectus ac vulputate turpis duis.",
-                        Instant.parse("2023-02-25T21:37:00.000Z"), 200),
+                        Instant.parse("2023-02-25T21:37:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))), 200),
                 new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
                         "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Sobotę 7 stycznia!!! 💪💪🚩💯 " +
                                 "Zaczynamy o 18:00. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
-                        Instant.parse("2023-01-07T18:00:00.000Z"), 35),
+                        Instant.parse("2023-01-07T18:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
                 new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         getLocationOrThrow("Białystok", "podlaskie"), "Wiec Wyborczy! W grudniu",
                         "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +
                                 "podobają mi się. Po drugie: zakłady muszą powstać państwowe, a nie zagraniczne. " +
                                 "Wszyscy ludzie muszą mieć chleb, żeby nie głodowali. Rynek.",
-                        Instant.parse("2022-12-20T12:30:00.000Z")),
+                        Instant.parse("2022-12-20T12:30:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2, 4)))),
                 new Meeting(getClientOrThrow("janusz75@buziaczek.pl"), getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Wielki połów karpia w martwej Odrze, 23 grudnia",
                         "W odrze dzięki śnięciu ryb bardzo łatwo teraz złapać pysznego karpika na wigilijny stół. " +
                                 "Umówmy się na 17:00 na łowienie. Już czuję ten smak w ustach.",
-                        Instant.parse("2022-12-23T17:00:00.000Z")),
+                        Instant.parse("2022-12-23T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(5)))),
                 new Meeting(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Częstochowa", "śląskie"),
                         "Atak na Niebieskiego Strażnika",
                         "Niebieski strażnik pojawi się w dżungli pierwszego kwietnia o 14:20. Potrzebne 4 osoby aby " +
-                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"), 4));
+                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2))), 4));
     }
 
     private List<Event> getEvents() {
@@ -336,7 +344,7 @@ public class SampleDataLoader implements ApplicationRunner {
                         "cursus " +
                         "nulla sit amet mauris interdum auctor. Nulla ut faucibus turpis. Nullam elementum ante eu " +
                         "nunc " + "cursus, non dignissim vel vel.", Instant.parse("2022-12-20T10:00:00.000Z"),
-                        Instant.parse("2022-12-22T17:00:00.000Z"), 200,
+                        Instant.parse("2022-12-22T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))), 200,
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ligula arcu, pulvinar " +
                                 "eget " +
                                 "enim quis, posuere eleifend leo. Mauris sed nisi aliquet, consequat nibh ac, " +
@@ -445,7 +453,7 @@ public class SampleDataLoader implements ApplicationRunner {
                                 "2023\"! Odbędą się one już w terminie 17-18 maja. Dla wszystkich uczestników " +
                                 "przewidziane są nagrody, a dla zwycięzcy - udział w chórku nowej piosenki " +
                                 "Powiatowej!!! 😎🆒 dozo 😁", Instant.parse("2023-05-17T10:00:00.000Z"),
-                        Instant.parse("2023-05-18T16:00:00.000Z"), 300,
+                        Instant.parse("2023-05-18T16:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(4))), 300,
                         "17.\n10:00 - Uroczyste otwarcie. przecięcie wstęgi przez Pana burmistrza\n11:00 - " +
                                 "Eliminacje\n" +
                                 "14:00 - Ćwierćfinały\n\n18.\n10:00 - Otwarcie dnia\n11:00 - Finały 🏁💪🦾\n14:00 - " +
@@ -453,15 +461,17 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Event(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         getLocationOrThrow("Szczecin", "zachodniopomorskie"), "Lorem ipsum ipsum dolor et cetera",
                         "A long, detailed description of the event", Instant.parse("2022-12-21T10:00:00.000Z"),
-                        Instant.parse("2022-12-28T22:00:00.000Z"), 20,
+                        Instant.parse("2022-12-28T22:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2))), 20,
                         "A schedule describing what's planned for each day of the event."),
                 new Event(getClientOrThrow("janusz75@buziaczek.pl"), getLocationOrThrow("Katowice", "śląskie"),
                         "lorem ipsum title", "Lorem ipsum dolor sit amet consectetur et description",
                         Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
+                        getCategories(new HashSet<>(Arrays.asList(3))),
                         "Lorem ipsum schedule"),
                 new Event(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Siedlce", "mazowieckie"),
                         "lorem ipsum title again", "Lorem ipsum dolor sit amet consectetur et description",
-                        Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"), 4200));
+                        Instant.parse("2023-06-06T06:06:06.666Z"), Instant.parse("2023-07-07T07:07:07.777Z"),
+                        getCategories(new HashSet<>(Arrays.asList(1))), 4200));
     }
 
     private Client getClientOrThrow(String email) {
@@ -470,6 +480,15 @@ public class SampleDataLoader implements ApplicationRunner {
 
     private Location getLocationOrThrow(String cityName, String voivodeshipName) {
         return locationRepository.findByCityNameAndVoivodeshipName(cityName, voivodeshipName).orElseThrow();
+    }
+
+    private Set<Category> getCategories(Set<Integer> categoryIds) {
+//        List<Category> t = categoryRepository.findAllById(categoryIds);
+        HashSet<Category> categoriesInSet = new HashSet<>();
+        for (Integer i : categoryIds) {
+            categoriesInSet.add(categories.get(i));
+        }
+        return new HashSet<>(categoriesInSet);
     }
 
     private Location newLocation(String cityName, String voivodeshipName, Double latitude, Double longitude) {

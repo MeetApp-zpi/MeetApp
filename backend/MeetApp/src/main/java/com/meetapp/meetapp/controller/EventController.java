@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -51,14 +52,16 @@ public class EventController {
         return eventService.retrieveEvent(eventId);
     }
 
-    @PostMapping("/events")
+    @PostMapping(value = "/events", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventCreationDTO newEvent, HttpSession session) {
+    public Event createEvent(@Valid @ModelAttribute EventCreationDTO newEvent, HttpSession session) {
         return eventService.createEvent(newEvent, session);
     }
 
-    @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventCreationDTO updatedEvent,
+    @PutMapping(value = "/events/{eventId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @ModelAttribute EventCreationDTO updatedEvent,
                                HttpSession session) {
         return eventService.updateEvent(eventId, updatedEvent, session);
     }

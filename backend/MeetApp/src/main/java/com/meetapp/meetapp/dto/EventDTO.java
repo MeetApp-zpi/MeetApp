@@ -12,5 +12,6 @@ public record EventDTO(
         Integer personQuota, //
         @Size(min = 0, max = 5_000) String schedule, //
         @NotNull DateTimeDTO startDateTime, //
-        @NotNull DateTimeDTO endDateTime) {
+        @NotNull DateTimeDTO endDateTime,
+        String picture) {
 }
