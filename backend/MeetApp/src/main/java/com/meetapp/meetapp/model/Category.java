@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,6 +26,10 @@ public class Category {
     @ManyToMany(targetEntity = Client.class, mappedBy = "interests")
     Set<Client> clients;
 
+    @JsonIgnore
+    @ManyToMany(targetEntity = Post.class, mappedBy = "categories")
+    Set<Post> posts;
+
     public Category(String name) {
         id = 0;
         this.name = name;
@@ -33,5 +38,7 @@ public class Category {
     public Category() {
         id = 0;
         name = "";
+        clients = new HashSet<>();
+        posts = new HashSet<>();
     }
 }
