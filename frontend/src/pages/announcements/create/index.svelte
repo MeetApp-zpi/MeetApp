@@ -156,7 +156,7 @@
             </div>
         </div>
         <div class="">
-            <Button class="px-6 py-1 mt-2 mb-4 text-sm" clickHandler={handleSubmit}>Stwórz ogłoszenie</Button>
+            <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz ogłoszenie</Button>
         </div>
     </div>
 </div>
