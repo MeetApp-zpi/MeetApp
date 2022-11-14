@@ -121,16 +121,16 @@ public class EventService {
         try {
             LocalDateTime today = LocalDateTime.now();
             String datePath = today.getYear() + String.valueOf(today.getMonthValue());
-            Path fileNameAndPath = Paths.get("static/" + datePath, picture.getOriginalFilename());
-            Files.createDirectories(Paths.get("static/" + datePath));
+            Path fileNameAndPath = Paths.get("src/main/resources/public/pictures/" + datePath, picture.getOriginalFilename());
+            Files.createDirectories(Paths.get("src/main/resources/public/pictures/" + datePath));
             Files.write(fileNameAndPath, picture.getBytes());
-            return fileNameAndPath.toString();
+            return String.valueOf(Paths.get(datePath, picture.getOriginalFilename()));
         } catch (IOException e) {
             throw new RuntimeException("Event photo with name: " + picture.getOriginalFilename() +
                     " could not be saved.");
         }
     }
-    
+
     public List<Category> findCategories(Set<Integer> categoryIds) {
         return categoryRepository.findAllById(categoryIds);
     }
