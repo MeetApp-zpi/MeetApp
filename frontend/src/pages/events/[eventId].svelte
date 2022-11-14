@@ -8,16 +8,20 @@
     import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
     import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
+    // noinspection TypeScriptCheckImport
+    import { redirect } from '@roxi/routify';
 
     export let eventId: number;
 
-    let data = null;
+    let data: string = null;
 
-    execute(`events/${eventId}`, 'GET')
-        .then((res) => res.json())
-        .then((r) => {
-            data = r;
-        });
+    execute(`events/${eventId}`, 'GET').then(async (response: Response) => {
+        if (response.status != 200) {
+            $redirect('/events');
+        }
+
+        data = await response.json();
+    });
 </script>
 
 <div class="h-screen">
@@ -26,12 +30,18 @@
         <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-8rem)] overflow-auto">
             <div class="flex flex-col">
                 <div class="relative m-4 self-stretch">
-                    <img class="object-fill w-full" src="http://localhost:8080/{data.picture}" alt="Event poster" />
-                    <div class="absolute bottom-0 left-0 right-0 px-4 py-2 opacity-40 bg-ivory">
-                        <h2 class="font-bold text-xl text-cocoa">
+                    {#if data.picture !== null}
+                        <img class="rounded-lg object-fill w-full" src="http://localhost:8080/{data.picture}" alt="Event poster" />
+                        <div class="absolute bottom-0 left-0 right-0 px-4 py-2 opacity-40 bg-ivory">
+                            <h2 class="font-bold text-xl text-cocoa">
+                                {data.title}
+                            </h2>
+                        </div>
+                    {:else}
+                        <h2 class="font-bold text-xl text-pine">
                             {data.title}
                         </h2>
-                    </div>
+                    {/if}
                 </div>
                 <div class="text-pine bg-tea flex flex-col rounded-xl p-2 m-4 gap-y-1">
                     <div class="flex flex-row align-middle">
