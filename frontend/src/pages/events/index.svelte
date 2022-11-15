@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { redirect } from '@roxi/routify';
+
     import EventListElem from '../../lib/Events/EventListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -12,7 +14,7 @@
         .then((r) => (data = r));
 
     const viewDetails = (postId) => {
-        return null;
+        $redirect(`/events/${postId}`);
     };
 </script>
 

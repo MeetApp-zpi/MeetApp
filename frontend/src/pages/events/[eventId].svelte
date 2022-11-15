@@ -13,7 +13,14 @@
 
     export let eventId: number;
 
-    let data: string = null;
+    let data = null;
+    let isEnrolled: boolean = false;
+
+    const checkEnrolledStatus = () => {
+        execute(`events/isEnrolled/${eventId}`, 'GET')
+            .then((r) => r.json())
+            .then((r) => (isEnrolled = r));
+    };
 
     execute(`events/${eventId}`, 'GET').then(async (response: Response) => {
         if (response.status != 200) {
@@ -22,6 +29,16 @@
 
         data = await response.json();
     });
+
+    const enroll = () => {
+        execute(`events/enroll/${eventId}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    const unenroll = () => {
+        execute(`events/unenroll/${eventId}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    checkEnrolledStatus();
 </script>
 
 <div class="h-screen">
@@ -102,5 +119,9 @@
             <div class="py-8" />
         </div>
     {/if}
-    <Button clickHandler={() => null} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Zapisuję się!</Button>
+    {#if isEnrolled}
+        <Button clickHandler={unenroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Wypisuję się!</Button>
+    {:else}
+        <Button clickHandler={enroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Zapisuję się!</Button>
+    {/if}
 </div>

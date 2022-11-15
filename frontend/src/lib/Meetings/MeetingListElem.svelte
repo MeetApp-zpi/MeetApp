@@ -6,13 +6,32 @@
     import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     import Button from '../../lib/Button/Button.svelte';
+    import execute from '../fetchWrapper';
 
     export let data;
     export let areDetailsShown: boolean;
     export let clickHandler: () => void;
+
+    let isEnrolled: boolean = false;
+
+    const checkEnrolledStatus = () => {
+        execute(`meetings/isEnrolled/${data.id}`, 'GET')
+            .then((r) => r.json())
+            .then((r) => (isEnrolled = r));
+    };
+
+    const enroll = () => {
+        execute(`meetings/enroll/${data.id}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    const unenroll = () => {
+        execute(`meetings/unenroll/${data.id}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    checkEnrolledStatus();
 </script>
 
-<div class="bg-olive rounded-2xl m-2 p-2">
+<div class="{isEnrolled ? 'bg-tusk' : 'bg-olive'} rounded-2xl m-2 p-2">
     <div class="flex flex-col">
         <button on:click={clickHandler} class="hover:cursor-pointer">
             <div class="font-bold text-left">
@@ -56,7 +75,11 @@
                 {data.author.lastName}
             </div>
             <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
-                <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={() => null}>Zapisuję się!</Button>
+                {#if isEnrolled}
+                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
+                {:else}
+                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
+                {/if}
             </div>
         {/if}
     </div>
