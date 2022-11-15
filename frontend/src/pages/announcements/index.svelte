@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import AnnouncementListElem from '../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -27,5 +28,6 @@
             <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
+    <AddPostButton pageType="announcements" />
     <Footer pageType="announcements" />
 </div>

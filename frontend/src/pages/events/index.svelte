@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import EventListElem from '../../lib/Events/EventListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -23,5 +24,6 @@
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
+    <AddPostButton pageType="events" />
     <Footer pageType="events" />
 </div>
