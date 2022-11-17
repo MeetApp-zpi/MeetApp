@@ -7,7 +7,7 @@
     let data = [];
     let selected: number | null = null;
 
-    execute('announcements', 'GET')
+    let promise = execute('announcements', 'GET')
         .then((r) => r.json())
         .then((r) => (data = r));
 
@@ -23,9 +23,11 @@
 <div class="h-screen">
     <Header />
     <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-12rem)] overflow-auto">
-        {#each data as item}
-            <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
-        {/each}
+        {#await promise then _}
+            {#each data as item}
+                <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
+            {/each}
+        {/await}
     </div>
     <Footer pageType="announcements" />
 </div>
