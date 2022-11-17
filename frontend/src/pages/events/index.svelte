@@ -7,6 +7,10 @@
 
     let data = [];
     let selected: number | null = null;
+    let sortOptions = [
+        { id: 1, name: 'Sortuj po 10$' },
+        { id: 2, name: 'Sortuj byle jak' }
+    ];
 
     execute('events', 'GET')
         .then((r) => r.json())
@@ -19,7 +23,7 @@
 
 <div class="h-screen">
     <Header />
-    <SortFilterBanner />
+    <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
         {#each data as item}
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />

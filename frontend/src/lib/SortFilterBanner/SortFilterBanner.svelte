@@ -6,6 +6,8 @@
     import SearchModal from './SearchModal/SearchModal.svelte';
     import SortModal from './SortModal/SortModal.svelte';
 
+    export let sortOptions;
+
     let isFilterOpen: boolean = false;
     let isSortOpen: boolean = false;
     let isSearchOpen: boolean = false;
@@ -51,7 +53,7 @@
     </div>
 {:else if isSortOpen}
     <div class="">
-        <SortModal />
+        <SortModal options={sortOptions} />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {:else if isSearchOpen}
