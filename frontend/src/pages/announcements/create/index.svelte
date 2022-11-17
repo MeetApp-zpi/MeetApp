@@ -4,6 +4,7 @@
 
     import Button from '../../../lib/Button/Button.svelte';
     import Header from '../../../lib/Header/Header.svelte';
+    import MultiselectInput from '../../../lib/MultiselectInput/MultiselectInput.svelte';
     import execute from '../../../lib/fetchWrapper';
 
     let categoryValue = null;
@@ -104,8 +105,6 @@
             execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173'));
         }
     };
-
-    $: console.log(cityValue);
 </script>
 
 <div class="h-screen">
@@ -113,7 +112,8 @@
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
             <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
-                <Svelecte options={categories} placeholder="Kategoria" inputId="categorySelect" multiple="true" bind:value={categoryValue} />
+                <MultiselectInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:valueBinder={categoryValue} />
+                <!-- <Svelecte options={categories} placeholder="Kategoria" inputId="categorySelect" multiple="true" bind:value={categoryValue} /> -->
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
             <div class="mx-4">

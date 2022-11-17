@@ -2,6 +2,7 @@
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
+    import SortFilterBanner from '../../lib/SortFilterBanner/SortFilterBanner.svelte';
     import execute from '../../lib/fetchWrapper';
 
     let data = [];
@@ -22,7 +23,8 @@
 
 <div class="h-screen">
     <Header />
-    <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-12rem)] overflow-auto">
+    <SortFilterBanner />
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
         {#each data as item}
             <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
