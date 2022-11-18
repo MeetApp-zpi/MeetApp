@@ -6,6 +6,8 @@
     export let inputId;
     export let valueBinder;
     export let style;
+
+    $: console.log('svelecte:', valueBinder);
 </script>
 
 <div class="svelecte-multiselect">

@@ -7,8 +7,6 @@
     import SortModal from './SortModal/SortModal.svelte';
 
     export let sortOptions;
-    export let setData;
-    export let pageType: 'announcements' | 'meetings' | 'events';
 
     let isFilterOpen: boolean = false;
     let isSortOpen: boolean = false;
@@ -50,17 +48,17 @@
 </div>
 {#if isFilterOpen}
     <div class="">
-        <FilterModal {setData} {pageType} />
+        <FilterModal />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {:else if isSortOpen}
     <div class="">
-        <SortModal options={sortOptions} {setData} {pageType} />
+        <SortModal options={sortOptions} />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {:else if isSearchOpen}
     <div class="">
-        <SearchModal {setData} {pageType} />
+        <SearchModal />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {/if}

@@ -2,19 +2,14 @@
     import { slide } from 'svelte/transition';
 
     import Button from '../../../lib/Button/Button.svelte';
-    import execute from '../../../lib/fetchWrapper';
+    import { sortingOption } from '../../stores';
 
     export let options;
-    export let setData;
-    export let pageType;
 
     let selectedSorting;
 
-    const getSortedPosts = () => {
-        let urlParams = new URLSearchParams({ sortMethod: selectedSorting });
-        execute(`${pageType}?${urlParams.toString()}`, 'GET')
-            .then((r) => r.json())
-            .then((r) => setData(r));
+    const setSortedPosts = () => {
+        $sortingOption = selectedSorting;
     };
 </script>
 
@@ -34,5 +29,5 @@
             <label class="text-cocoa font-bold" for="option-{item.id}">{item.name}</label>
         </div>
     {/each}
-    <Button class="px-10 py-1 mt-2" clickHandler={getSortedPosts}>Sortuj</Button>
+    <Button class="px-10 py-1 mt-2" clickHandler={setSortedPosts}>Sortuj</Button>
 </div>

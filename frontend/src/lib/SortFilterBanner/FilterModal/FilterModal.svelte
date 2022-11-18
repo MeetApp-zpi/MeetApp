@@ -5,15 +5,13 @@
     import MultiselectInput from '../../../lib/MultiselectInput/MultiselectInput.svelte';
     import SelectablePill from '../../../lib/SelectablePill/SelectablePill.svelte';
     import execute from '../../../lib/fetchWrapper';
-
-    export let setData;
-    export let pageType;
+    import { filteredCategoryIds, filteredLocationIds } from '../../stores';
 
     let categories = [];
     let locations = [];
 
-    let cityValues;
-    let selectedCategories = [];
+    let cityValues = $filteredLocationIds;
+    let selectedCategories = $filteredCategoryIds;
 
     let promise = execute('categories', 'GET')
         .then((r) => r.json())
@@ -44,18 +42,9 @@
         }
     };
 
-    const getFilteredPosts = () => {
-        let urlParams = new URLSearchParams();
-        for (let categoryId of selectedCategories) {
-            urlParams.append('categoryIds', categoryId);
-        }
-        for (let locationId of cityValues) {
-            urlParams.append('locationIds', locationId);
-        }
-
-        execute(`${pageType}?` + urlParams.toString(), 'GET')
-            .then((r) => r.json())
-            .then((r) => setData(r));
+    const setFilteredPosts = () => {
+        $filteredCategoryIds = selectedCategories;
+        $filteredLocationIds = cityValues;
     };
 </script>
 
@@ -63,7 +52,11 @@
     <div class="flex flex-col z-20 w-full py-2 px-4 fixed items-center bg-ivory" transition:slide>
         <div class="">
             {#each categories as category}
-                <SelectablePill isSelected={false} class="px-4 mx-1 my-1" clickCallback={() => clickedCategory(category.id)}>
+                <SelectablePill
+                    isSelected={selectedCategories.includes(category.id)}
+                    class="px-4 mx-1 my-1"
+                    clickCallback={() => clickedCategory(category.id)}
+                >
                     {category.name}
                 </SelectablePill>
             {/each}
@@ -78,7 +71,7 @@
             />
         </div>
         <div class="mb-2">
-            <Button class="px-6" clickHandler={getFilteredPosts}>Filtruj</Button>
+            <Button class="px-6" clickHandler={setFilteredPosts}>Filtruj</Button>
         </div>
     </div>
 {/await}
