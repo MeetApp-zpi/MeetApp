@@ -4,7 +4,7 @@
     import Button from '../../../lib/Button/Button.svelte';
     import { nameSearchParam } from '../../stores';
 
-    let inputValue;
+    let inputValue = $nameSearchParam;
 
     const setTitledPosts = () => {
         $nameSearchParam = inputValue;

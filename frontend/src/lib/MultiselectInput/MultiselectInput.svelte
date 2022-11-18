@@ -4,14 +4,12 @@
     export let data;
     export let placeholder;
     export let inputId;
-    export let valueBinder;
+    export let selected;
     export let style;
-
-    $: console.log('svelecte:', valueBinder);
 </script>
 
 <div class="svelecte-multiselect">
-    <Svelecte {style} options={data} {placeholder} {inputId} multiple="true" bind:value={valueBinder} />
+    <Svelecte {style} options={data} {placeholder} {inputId} multiple="true" bind:value={selected} />
 </div>
 
 <style>

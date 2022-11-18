@@ -6,7 +6,7 @@
 
     export let options;
 
-    let selectedSorting;
+    let selectedSorting = $sortingOption;
 
     const setSortedPosts = () => {
         $sortingOption = selectedSorting;

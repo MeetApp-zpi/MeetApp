@@ -112,7 +112,7 @@
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
             <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
-                <MultiselectInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:valueBinder={categoryValue} />
+                <MultiselectInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
                 <!-- <Svelecte options={categories} placeholder="Kategoria" inputId="categorySelect" multiple="true" bind:value={categoryValue} /> -->
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>

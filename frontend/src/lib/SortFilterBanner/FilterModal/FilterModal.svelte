@@ -13,11 +13,11 @@
     let cityValues = $filteredLocationIds;
     let selectedCategories = $filteredCategoryIds;
 
-    let promise = execute('categories', 'GET')
+    execute('categories', 'GET')
         .then((r) => r.json())
         .then((r) => (categories = r));
 
-    execute('locations', 'GET')
+    let promise = execute('locations', 'GET')
         .then((r) => r.json())
         .then((r) => {
             for (const [index, location] of r.entries()) {
@@ -67,7 +67,7 @@
                 data={locations}
                 placeholder="Miasto"
                 inputId="citySelect"
-                bind:valueBinder={cityValues}
+                bind:selected={cityValues}
             />
         </div>
         <div class="mb-2">
