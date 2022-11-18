@@ -23,11 +23,15 @@
             selected = null;
         }
     };
+
+    const setData = (newData) => {
+        data = newData;
+    };
 </script>
 
 <div class="h-screen">
     <Header />
-    <SortFilterBanner {sortOptions} />
+    <SortFilterBanner {sortOptions} {setData} pageType="announcements" />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
         {#each data as item}
             <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
