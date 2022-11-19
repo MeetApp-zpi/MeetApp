@@ -42,35 +42,18 @@ public class AnnouncementService {
     public List<AnnouncementDTO> retrieveAnnouncements(List<Integer> categoryIds, List<Integer> locationIds,
                                                        Integer sortOption, String nameSearch) {
 
-        Specification<Announcement> specification = null;
+        Specification<Announcement> specification = Specification.where(null);
 
         if (categoryIds != null) {
-            specification = AnnouncementSpecifications.hasCategory(categoryIds.get(0));
-            for (Integer categoryId : categoryIds.subList(1, categoryIds.size() - 1)) {
-                specification = specification.or(AnnouncementSpecifications.hasCategory(categoryId));
-            }
+            specification = specification.and(AnnouncementSpecifications.hasCategory(categoryIds));
         }
 
         if (locationIds != null) {
-            if (specification == null) {
-                specification = AnnouncementSpecifications.hasLocation(locationIds.get(0));
-                for (Integer locationId : locationIds) {
-                    specification = specification.or(AnnouncementSpecifications.hasLocation(locationId));
-                }
-            } else {
-                specification = specification.and(AnnouncementSpecifications.hasLocation(locationIds.get(0)));
-                for (Integer locationId : locationIds.subList(1, locationIds.size() - 1)) {
-                    specification = specification.or(AnnouncementSpecifications.hasLocation(locationIds.get(locationId)));
-                }
-            }
+            specification = specification.and(AnnouncementSpecifications.hasLocation(locationIds));
         }
 
         if (nameSearch != null) {
-            if (specification == null) {
-                specification = AnnouncementSpecifications.titleContains(nameSearch);
-            } else {
-                specification = specification.and(AnnouncementSpecifications.titleContains(nameSearch));
-            }
+            specification = specification.and(AnnouncementSpecifications.titleContains(nameSearch));
         }
 
         if (sortOption != null) {
@@ -84,11 +67,6 @@ public class AnnouncementService {
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();
         }
-
-//        return announcementRepository.findAll().stream()
-//                .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
-//                        announcement.getTitle(), announcement.getDescription(),
-//                        announcement.getEnrolled())).toList();
     }
 
     public AnnouncementDTO retrieveAnnouncement(Integer announcementId) {
