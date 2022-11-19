@@ -12,8 +12,11 @@ import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
+import com.meetapp.meetapp.specification.AnnouncementSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -36,11 +39,56 @@ public class AnnouncementService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<AnnouncementDTO> retrieveAnnouncements() {
-        return announcementRepository.findAll().stream()
-                .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
-                        announcement.getTitle(), announcement.getDescription(),
-                        announcement.getEnrolled())).toList();
+    public List<AnnouncementDTO> retrieveAnnouncements(List<Integer> categoryIds, List<Integer> locationIds,
+                                                       Integer sortOption, String nameSearch) {
+
+        Specification<Announcement> specification = null;
+
+        if (categoryIds != null) {
+            specification = AnnouncementSpecifications.hasCategory(categoryIds.get(0));
+            for (Integer categoryId : categoryIds.subList(1, categoryIds.size() - 1)) {
+                specification = specification.or(AnnouncementSpecifications.hasCategory(categoryId));
+            }
+        }
+
+        if (locationIds != null) {
+            if (specification == null) {
+                specification = AnnouncementSpecifications.hasLocation(locationIds.get(0));
+                for (Integer locationId : locationIds) {
+                    specification = specification.or(AnnouncementSpecifications.hasLocation(locationId));
+                }
+            } else {
+                specification = specification.and(AnnouncementSpecifications.hasLocation(locationIds.get(0)));
+                for (Integer locationId : locationIds.subList(1, locationIds.size() - 1)) {
+                    specification = specification.or(AnnouncementSpecifications.hasLocation(locationIds.get(locationId)));
+                }
+            }
+        }
+
+        if (nameSearch != null) {
+            if (specification == null) {
+                specification = AnnouncementSpecifications.titleContains(nameSearch);
+            } else {
+                specification = specification.and(AnnouncementSpecifications.titleContains(nameSearch));
+            }
+        }
+
+        if (sortOption != null) {
+            return announcementRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+                    .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
+                            announcement.getTitle(), announcement.getDescription(),
+                            announcement.getEnrolled())).toList();
+        } else {
+            return announcementRepository.findAll(specification).stream()
+                    .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
+                            announcement.getTitle(), announcement.getDescription(),
+                            announcement.getEnrolled())).toList();
+        }
+
+//        return announcementRepository.findAll().stream()
+//                .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
+//                        announcement.getTitle(), announcement.getDescription(),
+//                        announcement.getEnrolled())).toList();
     }
 
     public AnnouncementDTO retrieveAnnouncement(Integer announcementId) {
@@ -109,5 +157,13 @@ public class AnnouncementService {
     public Client findClientOrThrow(String email) {
         return clientRepository.findClientByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
+    }
+
+    public Sort paramToSortOrThrow(Integer sortOption) {
+        return switch (sortOption) {
+            case 1 -> Sort.by(Sort.Direction.ASC, "enrolled");
+            case 2 -> Sort.by(Sort.Direction.DESC, "enrolled");
+            default -> throw new NoSuchElementException("A sortOption with id: " + sortOption + " does not exist.");
+        };
     }
 }

@@ -1,11 +1,15 @@
 package com.meetapp.meetapp.specification;
 
 import com.meetapp.meetapp.model.Announcement;
+import lombok.val;
 import org.springframework.data.jpa.domain.Specification;
 
 public class AnnouncementSpecifications {
     public static Specification<Announcement> hasCategory(Integer category) {
-        return (announcement, cq, cb) -> cb.isMember(category, announcement.join("categories").get("categoryId"));
+        return (announcement, cq, cb) -> {
+            val joined = announcement.join("categories");
+            return cb.equal(joined.get("CategoryId"), category);
+        };
     }
 
     public static Specification<Announcement> hasLocation(Integer location) {

@@ -41,8 +41,10 @@ public class AnnouncementController {
 
     @GetMapping("/announcements")
     public List<AnnouncementDTO> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
-                                                  @RequestParam(required = false) Integer locationId) {
-        return announcementService.retrieveAnnouncements();
+                                                  @RequestParam(required = false) List<Integer> locationIds,
+                                                  @RequestParam(required = false) Integer sortOption,
+                                                  @RequestParam(required = false) String nameSearch) {
+        return announcementService.retrieveAnnouncements(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/announcements/{announcementId}")
