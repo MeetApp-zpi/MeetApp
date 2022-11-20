@@ -9,8 +9,11 @@
     let data = [];
     let selected: number | null = null;
     let sortOptions = [
-        { id: 1, name: 'Sortuj po 10$' },
-        { id: 2, name: 'Sortuj byle jak' }
+        { id: 1, name: 'Od najnowszych' },
+        { id: 2, name: 'Od najstarszych' },
+        { id: 3, name: 'Po liczbie zapisanych rosnąco' },
+        { id: 4, name: 'Po liczbie zapisanych malejąco' },
+        { id: 5, name: 'Najbliżej daty rozpoczęcia' }
     ];
 
     clearFilters();
@@ -28,7 +31,7 @@
             urlParams.append('locationIds', locationId);
         }
         if ($sortingOption !== null) {
-            urlParams.append('sortOption', $sortingOption);
+            urlParams.append('sortOption', $sortingOption.toString());
         }
         if ($nameSearchParam !== null) {
             urlParams.append('nameSearch', $nameSearchParam);

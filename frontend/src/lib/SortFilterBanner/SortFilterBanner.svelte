@@ -48,17 +48,17 @@
 </div>
 {#if isFilterOpen}
     <div class="">
-        <FilterModal />
+        <FilterModal modalCloser={clearModals} />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {:else if isSortOpen}
     <div class="">
-        <SortModal options={sortOptions} />
+        <SortModal options={sortOptions} modalCloser={clearModals} />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {:else if isSearchOpen}
     <div class="">
-        <SearchModal />
+        <SearchModal modalCloser={clearModals} />
         <div on:click={clearModals} on:keydown={clearModals} class="bg-black bg-opacity-40 fixed h-full w-full z-10" transition:fade />
     </div>
 {/if}

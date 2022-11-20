@@ -7,6 +7,8 @@
     import execute from '../../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds } from '../../stores';
 
+    export let modalCloser;
+
     let categories = [];
     let locations = [];
 
@@ -45,6 +47,7 @@
     const setFilteredPosts = () => {
         $filteredCategoryIds = selectedCategories;
         $filteredLocationIds = cityValues;
+        modalCloser();
     };
 </script>
 
@@ -71,7 +74,7 @@
             />
         </div>
         <div class="mb-2">
-            <Button class="px-6" clickHandler={setFilteredPosts}>Filtruj</Button>
+            <Button class="px-10 py-1 mt-2" clickHandler={setFilteredPosts}>Filtruj</Button>
         </div>
     </div>
 {/await}

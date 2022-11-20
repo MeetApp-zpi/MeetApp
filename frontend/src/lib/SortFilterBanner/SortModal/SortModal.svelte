@@ -5,11 +5,13 @@
     import { sortingOption } from '../../stores';
 
     export let options;
+    export let modalCloser;
 
     let selectedSorting = $sortingOption;
 
     const setSortedPosts = () => {
         $sortingOption = selectedSorting;
+        modalCloser();
     };
 </script>
 

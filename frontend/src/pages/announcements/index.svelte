@@ -9,8 +9,10 @@
     let data = [];
     let selected: number | null = null;
     let sortOptions = [
-        { id: 1, name: 'Po liczbie zapisanych rosnąco' },
-        { id: 2, name: 'Po liczbie zapisanych malejąco' }
+        { id: 1, name: 'Od najnowszych' },
+        { id: 2, name: 'Od najstarszych' },
+        { id: 3, name: 'Po liczbie zapisanych rosnąco' },
+        { id: 4, name: 'Po liczbie zapisanych malejąco' }
     ];
 
     clearFilters();
@@ -32,13 +34,11 @@
             urlParams.append('locationIds', locationId);
         }
         if ($sortingOption !== null) {
-            urlParams.append('sortOption', $sortingOption);
+            urlParams.append('sortOption', $sortingOption.toString());
         }
         if ($nameSearchParam !== null) {
             urlParams.append('nameSearch', $nameSearchParam);
         }
-
-        console.log(urlParams.toString());
 
         execute('announcements?' + urlParams.toString(), 'GET')
             .then((r) => r.json())
