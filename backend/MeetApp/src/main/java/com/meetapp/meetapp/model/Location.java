@@ -2,10 +2,12 @@ package com.meetapp.meetapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Location {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "location_generator")

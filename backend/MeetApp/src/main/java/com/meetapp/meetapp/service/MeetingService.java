@@ -1,13 +1,7 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.DateTimeDTO;
-import com.meetapp.meetapp.dto.MeetingCreationDTO;
-import com.meetapp.meetapp.dto.MeetingDTO;
-import com.meetapp.meetapp.dto.PostDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Location;
-import com.meetapp.meetapp.model.Meeting;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
@@ -51,6 +45,48 @@ public class MeetingService {
         return new MeetingDTO(new PostDTO(foundMeeting), foundMeeting.getTitle(), foundMeeting.getDescription(),
                 foundMeeting.getEnrolled(), foundMeeting.getPersonQuota(),
                 new DateTimeDTO(foundMeeting.getMeetingDate()));
+    }
+
+    public Boolean isLoggedUserEnrolled(Integer meetingId, HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return meetingRepository.existsByIdIsAndEnrolleesContains(meetingId, foundClient);
+    }
+
+    public MeetingDTO enrollMeeting(Integer meetingId, HttpSession session) {
+        Meeting foundMeeting = findMeetingOrThrow(meetingId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        Integer personQuota = foundMeeting.getPersonQuota();
+        Integer currentlyEnrolled = foundMeeting.getEnrolled();
+
+        if (currentlyEnrolled < personQuota && !isLoggedUserEnrolled(meetingId, session)) {
+            foundClient.getMeetings().add(foundMeeting);
+            foundMeeting.setEnrolled(foundMeeting.getEnrolled() + 1);
+        }
+
+        Meeting savedMeeting = meetingRepository.save(foundMeeting);
+        Client savedClient = clientRepository.save(foundClient);
+        return new MeetingDTO(new PostDTO(new Post(savedClient,
+                savedMeeting.getLocation(), savedMeeting.getCategories())), savedMeeting.getTitle(),
+                savedMeeting.getDescription(), savedMeeting.getEnrolled(), savedMeeting.getPersonQuota(),
+                new DateTimeDTO(savedMeeting.getMeetingDate()));
+    }
+
+    public MeetingDTO unenrollMeeting(Integer meetingId, HttpSession session) {
+        Meeting foundMeeting = findMeetingOrThrow(meetingId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (isLoggedUserEnrolled(meetingId, session)) {
+            foundClient.getMeetings().remove(foundMeeting);
+            foundMeeting.setEnrolled(foundMeeting.getEnrolled() - 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Meeting savedMeeting = meetingRepository.save(foundMeeting);
+        return new MeetingDTO(new PostDTO(new Post(savedClient,
+                savedMeeting.getLocation(), savedMeeting.getCategories())), savedMeeting.getTitle(),
+                savedMeeting.getDescription(), savedMeeting.getEnrolled(), savedMeeting.getPersonQuota(),
+                new DateTimeDTO(savedMeeting.getMeetingDate()));
     }
 
     public Meeting createMeeting(MeetingCreationDTO newMeeting, HttpSession session) {
