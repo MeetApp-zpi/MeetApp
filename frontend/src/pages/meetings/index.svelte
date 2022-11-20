@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -17,6 +18,10 @@
     ];
 
     clearFilters();
+
+    let promise = execute('meetings', 'GET')
+        .then((r) => r.json())
+
 
     const viewDetails = (postId) => {
         if (selected !== postId) {
@@ -51,9 +56,12 @@
     <Header />
     <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
-        {#each data as item}
-            <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
-        {/each}
+        {#await promise then _}
+            {#each data as item}
+                <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
+            {/each}
+        {/await}
     </div>
+    <AddPostButton pageType="meetings" />
     <Footer pageType="meetings" />
 </div>

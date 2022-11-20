@@ -3,11 +3,23 @@
     import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
 
+    import execute from '../fetchWrapper';
+
     export let data;
     export let clickHandler: () => void;
+
+    let isEnrolled: boolean = false;
+
+    const checkEnrolledStatus = () => {
+        execute(`events/isEnrolled/${data.id}`, 'GET')
+            .then((r) => r.json())
+            .then((r) => (isEnrolled = r));
+    };
+
+    checkEnrolledStatus();
 </script>
 
-<div class="bg-olive rounded-2xl m-2 p-2">
+<div class="{isEnrolled ? 'bg-tusk' : 'bg-olive'} rounded-2xl m-2 p-2">
     <div class="flex flex-row hover:cursor-pointer">
         <div class="w-1/3 self-center">
             {#if data.picture !== null}
