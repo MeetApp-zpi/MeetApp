@@ -10,6 +10,8 @@
     };
 </script>
 
-<button class="absolute rounded-full bg-grass border-pine border-2 bottom-20 right-2 h-16 w-16" on:click={navigateToCreator}>
-    <MdAdd />
+<button class="absolute rounded-full bg-grass bottom-20 right-4 h-12 w-12" on:click={navigateToCreator}>
+    <div class="h-8 w-8 ml-auto mr-auto">
+        <MdAdd />
+    </div>
 </button>
