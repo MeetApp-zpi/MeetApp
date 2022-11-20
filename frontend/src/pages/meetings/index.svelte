@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -7,7 +8,7 @@
     let data = [];
     let selected: number | null = null;
 
-    execute('meetings', 'GET')
+    let promise = execute('meetings', 'GET')
         .then((r) => r.json())
         .then((r) => (data = r));
 
@@ -23,9 +24,12 @@
 <div class="h-screen">
     <Header />
     <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-12rem)] overflow-auto">
-        {#each data as item}
-            <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
-        {/each}
+        {#await promise then _}
+            {#each data as item}
+                <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
+            {/each}
+        {/await}
     </div>
+    <AddPostButton pageType="meetings" />
     <Footer pageType="meetings" />
 </div>
