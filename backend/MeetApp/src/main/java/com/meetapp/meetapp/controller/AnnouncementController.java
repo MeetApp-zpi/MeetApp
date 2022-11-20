@@ -52,6 +52,21 @@ public class AnnouncementController {
         return announcementService.retrieveAnnouncement(announcementId);
     }
 
+    @GetMapping("/announcements/isEnrolled/{announcementId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.isLoggedUserEnrolled(announcementId, session);
+    }
+
+    @GetMapping("/announcements/enroll/{announcementId}")
+    public AnnouncementDTO enrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.enrollAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/unenroll/{announcementId}")
+    public AnnouncementDTO unenrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.unenrollAnnouncement(announcementId, session);
+    }
+
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
     public Announcement createAnnouncement(@Valid @RequestBody AnnouncementCreationDTO newAnnouncement,

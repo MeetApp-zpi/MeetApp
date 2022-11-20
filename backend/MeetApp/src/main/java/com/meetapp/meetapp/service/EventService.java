@@ -1,13 +1,7 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.DateTimeDTO;
-import com.meetapp.meetapp.dto.EventCreationDTO;
-import com.meetapp.meetapp.dto.EventDTO;
-import com.meetapp.meetapp.dto.PostDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Event;
-import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.EventRepository;
@@ -85,6 +79,50 @@ public class EventService {
                 foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
                 new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()),
                 foundEvent.getPicture());
+    }
+
+    public Boolean isLoggedUserEnrolled(Integer eventId, HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return eventRepository.existsByIdIsAndEnrolleesContains(eventId, foundClient);
+    }
+
+    public EventDTO enrollEvent(Integer eventId, HttpSession session) {
+        Event foundEvent = findEventOrThrow(eventId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        Integer personQuota = foundEvent.getPersonQuota();
+        Integer currentlyEnrolled = foundEvent.getEnrolled();
+
+        if (!isLoggedUserEnrolled(eventId, session) && currentlyEnrolled < personQuota) {
+            foundClient.getEvents().add(foundEvent);
+            foundEvent.setEnrolled(foundEvent.getEnrolled() + 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Event savedEvent = eventRepository.save(foundEvent);
+        return new EventDTO(new PostDTO(new Post(savedClient,
+                savedEvent.getLocation(), savedEvent.getCategories())), savedEvent.getTitle(),
+                savedEvent.getDescription(), savedEvent.getEnrolled(), savedEvent.getPersonQuota(),
+                savedEvent.getSchedule(), new DateTimeDTO(savedEvent.getStartDate()),
+                new DateTimeDTO(savedEvent.getEndDate()), savedEvent.getPicture());
+    }
+
+    public EventDTO unenrollEvent(Integer eventId, HttpSession session) {
+        Event foundEvent = findEventOrThrow(eventId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (isLoggedUserEnrolled(eventId, session)) {
+            foundClient.getEvents().remove(foundEvent);
+            foundEvent.setEnrolled(foundEvent.getEnrolled() - 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Event savedEvent = eventRepository.save(foundEvent);
+        return new EventDTO(new PostDTO(new Post(savedClient,
+                savedEvent.getLocation(), savedEvent.getCategories())), savedEvent.getTitle(),
+                savedEvent.getDescription(), savedEvent.getEnrolled(), savedEvent.getPersonQuota(),
+                savedEvent.getSchedule(), new DateTimeDTO(savedEvent.getStartDate()),
+                new DateTimeDTO(savedEvent.getEndDate()), savedEvent.getPicture());
     }
 
     public Event createEvent(EventCreationDTO newEvent, HttpSession session) {

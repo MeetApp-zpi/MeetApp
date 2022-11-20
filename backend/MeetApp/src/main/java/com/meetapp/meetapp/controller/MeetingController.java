@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.dto.MeetingDTO;
 import com.meetapp.meetapp.model.Meeting;
@@ -50,6 +51,21 @@ public class MeetingController {
     @GetMapping("/meetings/{meetingId}")
     public MeetingDTO getMeeting(@PathVariable Integer meetingId) {
         return meetingService.retrieveMeeting(meetingId);
+    }
+
+    @GetMapping("/meetings/isEnrolled/{meetingId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.isLoggedUserEnrolled(meetingId, session);
+    }
+
+    @GetMapping("/meetings/enroll/{meetingId}")
+    public MeetingDTO enrollMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.enrollMeeting(meetingId, session);
+    }
+
+    @GetMapping("/meetings/unenroll/{meetingId}")
+    public MeetingDTO unenrollMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.unenrollMeeting(meetingId, session);
     }
 
     @PostMapping("/meetings")

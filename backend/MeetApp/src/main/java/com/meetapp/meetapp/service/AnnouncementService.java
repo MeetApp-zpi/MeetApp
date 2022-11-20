@@ -3,10 +3,7 @@ package com.meetapp.meetapp.service;
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
-import com.meetapp.meetapp.model.Announcement;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -73,6 +70,43 @@ public class AnnouncementService {
         val foundAnnouncement = findAnnouncementOrThrow(announcementId);
         return new AnnouncementDTO(new PostDTO(foundAnnouncement), foundAnnouncement.getTitle(),
                 foundAnnouncement.getDescription(), foundAnnouncement.getEnrolled());
+    }
+
+    public Boolean isLoggedUserEnrolled(Integer announcementId, HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return announcementRepository.existsByIdIsAndEnrolleesContains(announcementId, foundClient);
+    }
+
+    public AnnouncementDTO enrollAnnouncement(Integer announcementId, HttpSession session) {
+        Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (!isLoggedUserEnrolled(announcementId, session)) {
+            foundClient.getAnnouncements().add(foundAnnouncement);
+            foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() + 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
+        return new AnnouncementDTO(new PostDTO(new Post(savedClient,
+                savedAnnouncement.getLocation(), savedAnnouncement.getCategories())), savedAnnouncement.getTitle(),
+                savedAnnouncement.getDescription(), savedAnnouncement.getEnrolled());
+    }
+
+    public AnnouncementDTO unenrollAnnouncement(Integer announcementId, HttpSession session) {
+        Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (isLoggedUserEnrolled(announcementId, session)) {
+            foundClient.getAnnouncements().remove(foundAnnouncement);
+            foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() - 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
+        return new AnnouncementDTO(new PostDTO(new Post(savedClient,
+                savedAnnouncement.getLocation(), savedAnnouncement.getCategories())), savedAnnouncement.getTitle(),
+                savedAnnouncement.getDescription(), savedAnnouncement.getEnrolled());
     }
 
     public Announcement createAnnouncement(AnnouncementCreationDTO newAnnouncement, HttpSession session) {

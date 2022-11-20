@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "client_generator")
@@ -46,6 +48,12 @@ public class Client {
     @ManyToMany
     @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "CategoryId"))
     Set<Category> interests; // TODO add endpoints etc
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "ClientAnnouncement", joinColumns = @JoinColumn(name="ClientId"),
+            inverseJoinColumns = @JoinColumn(name = "AnnouncementId"))
+    Set<Announcement> announcements;
 
     @JsonIgnore
     @ManyToMany
