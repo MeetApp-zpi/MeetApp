@@ -1,4 +1,5 @@
 <script lang="ts">
+    import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -29,5 +30,6 @@
             {/each}
         {/await}
     </div>
+    <AddPostButton pageType="meetings" />
     <Footer pageType="meetings" />
 </div>
