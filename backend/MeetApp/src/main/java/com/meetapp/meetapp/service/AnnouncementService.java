@@ -139,9 +139,10 @@ public class AnnouncementService {
 
     public Sort paramToSortOrThrow(Integer sortOption) {
         return switch (sortOption) {
-            case 1 -> Sort.by(Sort.Direction.ASC, "enrolled");
-            case 2 -> Sort.by(Sort.Direction.DESC, "enrolled");
-            default -> throw new NoSuchElementException("A sortOption with id: " + sortOption + " does not exist.");
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
+            case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate");
         };
     }
 }
