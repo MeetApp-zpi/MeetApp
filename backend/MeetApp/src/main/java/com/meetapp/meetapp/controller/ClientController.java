@@ -57,6 +57,12 @@ public class ClientController {
         return clientService.createClientAccount(session);
     }
 
+    @PostMapping("/logout")
+    public void logoutClient(HttpSession session) {
+        session.invalidate();
+        return;
+    }
+
     @DeleteMapping("/users/{user_id}")
     public Client deleteAccount(@PathVariable Integer user_id, HttpSession session) {
         return clientService.deleteClientAccount(user_id, session);

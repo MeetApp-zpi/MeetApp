@@ -12,6 +12,11 @@
     import { horizontalSlide } from './horizontalSlide';
     import { userDetails } from '../stores';
     import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
+    import execute from '../fetchWrapper';
+
+    const logout = () => {
+        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
+    };
 </script>
 
 <div class="z-20 h-screen flex flex-col w-2/3 fixed top-0 left-0" transition:horizontalSlide>
@@ -76,7 +81,7 @@
                 </div>
                 <div class="">Wiadomości</div>
             </div>
-            <div class="flex flex-row items-center">
+            <div class="flex flex-row items-center" on:click={logout} on:keydown={logout}>
                 <div class="h-8 w-8 mr-2">
                     <FaSignOutAlt />
                 </div>
