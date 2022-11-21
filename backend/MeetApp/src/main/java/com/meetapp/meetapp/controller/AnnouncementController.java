@@ -41,13 +41,30 @@ public class AnnouncementController {
 
     @GetMapping("/announcements")
     public List<AnnouncementDTO> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
-                                                  @RequestParam(required = false) Integer locationId) {
-        return announcementService.retrieveAnnouncements();
+                                                  @RequestParam(required = false) List<Integer> locationIds,
+                                                  @RequestParam(required = false) Integer sortOption,
+                                                  @RequestParam(required = false) String nameSearch) {
+        return announcementService.retrieveAnnouncements(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/announcements/{announcementId}")
     public AnnouncementDTO getAnnouncement(@PathVariable Integer announcementId) {
         return announcementService.retrieveAnnouncement(announcementId);
+    }
+
+    @GetMapping("/announcements/isEnrolled/{announcementId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.isLoggedUserEnrolled(announcementId, session);
+    }
+
+    @GetMapping("/announcements/enroll/{announcementId}")
+    public AnnouncementDTO enrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.enrollAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/unenroll/{announcementId}")
+    public AnnouncementDTO unenrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.unenrollAnnouncement(announcementId, session);
     }
 
     @PostMapping("/announcements")
