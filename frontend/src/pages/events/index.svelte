@@ -10,7 +10,6 @@
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
 
     let data = [];
-    let selected: number | null = null;
     let sortOptions = [
         { id: 1, name: 'Od najnowszych' },
         { id: 2, name: 'Od najstarszych' },

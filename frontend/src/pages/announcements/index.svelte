@@ -15,14 +15,9 @@
         { id: 3, name: 'Po liczbie zapisanych rosnąco' },
         { id: 4, name: 'Po liczbie zapisanych malejąco' }
     ];
-
+    let announcementsPromise: Promise<never>;
 
     clearFilters();
-
-    let promise = execute('announcements', 'GET')
-        .then((r) => r.json())
-        .then((r) => (data = r));
-
 
     const viewDetails = (postId) => {
         if (selected !== postId) {
@@ -47,7 +42,7 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        execute('announcements?' + urlParams.toString(), 'GET')
+        announcementsPromise = execute('announcements?' + urlParams.toString(), 'GET')
             .then((r) => r.json())
             .then((r) => (data = r));
     }
@@ -57,9 +52,9 @@
     <Header />
     <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
-      {#await promise then _}
+      {#await announcementsPromise then _}
           {#each data as item}
-              <AnnouncementListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
+              <AnnouncementListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />
           {/each}
       {/await}
     </div>
