@@ -15,7 +15,7 @@
         <div class="w-24 self-center">
             <img src="logo.png" alt="MeetApp" />
         </div>
-        <button class="flex flex-row self-center shadow-md border-snow-drift border-2 py-2 px-5 rounded-md" on:click={redirectToGoogleLogin}>
+        <button class="flex flex-row self-center shadow-md border-snow-drift border-2 py-2 px-2 rounded-md" on:click={redirectToGoogleLogin}>
             <div class="w-5 mr-4 align-middle"><img src="google.png" alt="Google" /></div>
             <div class="align-middle text-cocoa text-sm">Sign in with Google</div>
         </button>

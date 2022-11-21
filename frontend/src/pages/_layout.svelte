@@ -9,6 +9,8 @@
                 $userDetails = r;
             }
         });
+
+    $: console.log($userDetails);
 </script>
 
 <slot />
