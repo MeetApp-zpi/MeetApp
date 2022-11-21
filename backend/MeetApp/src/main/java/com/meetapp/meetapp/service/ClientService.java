@@ -1,10 +1,10 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.CategoryListDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
+import com.meetapp.meetapp.repository.PostRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
@@ -16,14 +16,37 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
 
-    public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository) {
+    public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository,
+                         PostRepository postRepository) {
         this.clientRepository = clientRepository;
         this.categoryRepository = categoryRepository;
+        this.postRepository = postRepository;
     }
 
     public Client retrieveClientDetails(HttpSession session) {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Record> retrieveClientPosts(HttpSession session) {
+        return  (List<Record>) postRepository.findAllByAuthorEmailIs(SessionManager.retrieveEmailOrThrow(session))
+                .stream().map((Post post) -> {
+                    if (post instanceof Announcement casted) {
+                        return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                                casted.getEnrolled());
+                    } else if (post instanceof Meeting casted) {
+                        return new MeetingDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                                casted.getEnrolled(), casted.getPersonQuota(), new DateTimeDTO(casted.getMeetingDate()));
+                    } else {
+                        Event casted = (Event) post;
+                        return new EventDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                                casted.getEnrolled(), casted.getPersonQuota(), casted.getSchedule(),
+                                new DateTimeDTO(casted.getStartDate()), new DateTimeDTO(casted.getEndDate()),
+                                casted.getPicture());
+                    }
+                }).toList();
     }
 
     public Client createClientAccount(HttpSession session) {
