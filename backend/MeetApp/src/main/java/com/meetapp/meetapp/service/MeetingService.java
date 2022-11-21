@@ -7,8 +7,11 @@ import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.repository.MeetingRepository;
 import com.meetapp.meetapp.security.SessionManager;
+import com.meetapp.meetapp.specification.MeetingSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,11 +36,34 @@ public class MeetingService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<MeetingDTO> retrieveMeetings() {
-        return meetingRepository.findAll().stream()
-                .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
-                        meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
-                        new DateTimeDTO(meeting.getMeetingDate()))).toList();
+    public List<MeetingDTO> retrieveMeetings(List<Integer> categoryIds, List<Integer> locationIds,
+                                             Integer sortOption, String nameSearch) {
+
+        Specification<Meeting> specification = Specification.where(null);
+
+        if (categoryIds != null) {
+            specification = specification.and(MeetingSpecifications.hasCategory(categoryIds));
+        }
+
+        if (locationIds != null) {
+            specification = specification.and(MeetingSpecifications.hasLocation(locationIds));
+        }
+
+        if (nameSearch != null) {
+            specification = specification.and(MeetingSpecifications.titleContains(nameSearch));
+        }
+
+        if (sortOption != null) {
+            return meetingRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+                    .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
+                            meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
+                            new DateTimeDTO(meeting.getMeetingDate()))).toList();
+        } else {
+            return meetingRepository.findAll(specification).stream()
+                    .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
+                            meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
+                            new DateTimeDTO(meeting.getMeetingDate()))).toList();
+        }
     }
 
     public MeetingDTO retrieveMeeting(Integer meetingId) {
@@ -158,5 +184,15 @@ public class MeetingService {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateTime + "' is not in a valid time format");
         }
+    }
+
+    public Sort paramToSortOrThrow(Integer sortOption) {
+        return switch (sortOption) {
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
+            case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
+            case 5 -> Sort.by(Sort.Direction.DESC, "meetingDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate");
+        };
     }
 }

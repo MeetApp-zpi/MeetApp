@@ -43,9 +43,11 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<EventDTO> getEvents(@RequestParam(required = false) List<String> categoryIds,
-                                    @RequestParam(required = false) String locationId) {
-        return eventService.retrieveEvents();
+    public List<EventDTO> getEvents(@RequestParam(required = false) List<Integer> categoryIds,
+                                    @RequestParam(required = false) List<Integer> locationIds,
+                                    @RequestParam(required = false) Integer sortOption,
+                                    @RequestParam(required = false) String nameSearch) {
+        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/events/{eventId}")
