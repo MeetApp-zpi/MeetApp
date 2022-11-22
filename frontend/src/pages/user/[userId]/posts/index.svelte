@@ -1,13 +1,14 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { redirect } from '@roxi/routify';
 
-    import AnnouncementListElem from '../../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
-    import EventListElem from '../../../lib/Events/EventListElem.svelte';
-    import Header from '../../../lib/Header/Header.svelte';
-    import MeetingListElem from '../../../lib/Meetings/MeetingListElem.svelte';
-    import PostToolbar from '../../../lib/PostToolbar/PostToolbar.svelte';
+    import AnnouncementListElem from '../../../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
+    import EventListElem from '../../../../lib/Events/EventListElem.svelte';
+    import Header from '../../../../lib/Header/Header.svelte';
+    import MeetingListElem from '../../../../lib/Meetings/MeetingListElem.svelte';
 
-    import execute from '../../../lib/fetchWrapper';
+    import execute from '../../../../lib/fetchWrapper';
+
+    export let userId;
 
     let userPosts = [];
     let selected: number | null = null;
@@ -20,7 +21,7 @@
         }
     };
 
-    let promise = execute('users/posts', 'GET')
+    let promise = execute(`users/${userId}/posts`, 'GET')
         .then((r) => r.json())
         .then((r) => (userPosts = r));
 </script>
@@ -30,13 +31,12 @@
     {#await promise then _}
         {#each userPosts as post}
             {#if Object.hasOwn(post, 'startDateTime')}
-                <EventListElem data={post} clickHandler={() => $goto(`/events/${post.id}`)} />
+                <EventListElem data={post} clickHandler={() => $redirect(`/events/${post.id}`)} />
             {:else if Object.hasOwn(post, 'meetingDateTime')}
                 <MeetingListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
             {:else}
                 <AnnouncementListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
             {/if}
-            <PostToolbar postId={post.id} />
         {/each}
     {/await}
 </div>
