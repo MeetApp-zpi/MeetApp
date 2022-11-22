@@ -224,11 +224,11 @@ public class EventService {
 
     public Sort paramToSortOrThrow(Integer sortOption) {
         return switch (sortOption) {
-            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate").and(Sort.by(Sort.Direction.ASC, "Id"));
             case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
             case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
-            case 5 -> Sort.by(Sort.Direction.DESC, "startDate");
-            default -> Sort.by(Sort.Direction.DESC, "creationDate");
+            case 5 -> Sort.by(Sort.Direction.ASC, "startDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate").and(Sort.by(Sort.Direction.DESC, "Id"));
         };
     }
 }
