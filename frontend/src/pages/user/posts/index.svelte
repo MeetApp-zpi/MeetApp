@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import AnnouncementListElem from '../../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import EventListElem from '../../../lib/Events/EventListElem.svelte';
@@ -30,7 +30,7 @@
     {#await promise then _}
         {#each userPosts as post}
             {#if Object.hasOwn(post, 'startDateTime')}
-                <EventListElem data={post} clickHandler={() => $redirect(`/events/${post.id}`)} />
+                <EventListElem data={post} clickHandler={() => $goto(`/events/${post.id}`)} />
             {:else if Object.hasOwn(post, 'meetingDateTime')}
                 <MeetingListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
             {:else}
