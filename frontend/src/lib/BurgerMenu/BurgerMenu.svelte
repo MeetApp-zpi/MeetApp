@@ -67,7 +67,7 @@
                 </div>
                 <div class="">Moje posty</div>
             </div>
-            <div class="flex flex-row mb-2 items-center">
+            <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/myActivities')} on:keydown={() => $goto('/myActivities')}>
                 <div class="h-8 w-8 mr-2">
                     <FaHandsHelping />
                 </div>

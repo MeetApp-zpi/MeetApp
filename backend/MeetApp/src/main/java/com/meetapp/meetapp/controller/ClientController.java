@@ -49,7 +49,7 @@ public class ClientController {
     }
 
     @GetMapping("/users/activities")
-    public List<Post> getClientActivities(HttpSession session) {
+    public List<Record> getClientActivities(HttpSession session) {
         return clientService.retrieveLoggedInUserActivities(session);
     }
     
