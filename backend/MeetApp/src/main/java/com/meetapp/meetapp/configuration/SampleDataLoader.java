@@ -8,7 +8,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;

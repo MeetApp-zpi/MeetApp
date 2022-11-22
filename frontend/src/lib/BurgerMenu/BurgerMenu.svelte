@@ -1,5 +1,5 @@
 <script lang="ts">
-    import {redirect, url} from '@roxi/routify';
+    import { redirect, url } from '@roxi/routify';
 
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
@@ -9,82 +9,78 @@
     import MdMessage from 'svelte-icons/md/MdMessage.svelte';
     import MdPerson from 'svelte-icons/md/MdPerson.svelte';
 
-    import {horizontalSlide} from './horizontalSlide';
-    import {userDetails} from '../stores';
+    import { horizontalSlide } from './horizontalSlide';
+    import { userDetails } from '../stores';
     import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
 </script>
 
 <div class="z-20 h-screen flex flex-col w-2/3 fixed top-0 left-0" transition:horizontalSlide>
     {#if $userDetails !== null}
-        <div class="bg-grass text-ivory flex flex-row h-32 items-end">
-            <div class="">
-                <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar"/>
-            </div>
-            <a href={$url("/profile")} class="flex flex-col mb-2">
-                <div class="text-ivory font-bold">{$userDetails.firstName} {$userDetails.lastName}</div>
+        <div class="bg-grass text-ivory flex h-32 items-end">
+            <a href={$url('/profile')} class="flex flex-row items-end">
+                <div class="">
+                    <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar" />
+                </div>
+                <div class="flex flex-col mb-2">
+                    <div class="text-ivory font-bold">{$userDetails.firstName} {$userDetails.lastName}</div>
+                </div>
             </a>
         </div>
     {:else}
         <div class="bg-grass text-ivory h-32 flex items-end">
-            <div class="text-ivory mb-2 ml-4 text-lg font-bold" on:click={() => $redirect('/login')}
-                 on:keydown={() => $redirect('/login')}>
+            <div class="text-ivory mb-2 ml-4 text-lg font-bold" on:click={() => $redirect('/login')} on:keydown={() => $redirect('/login')}>
                 Zaloguj się
             </div>
         </div>
     {/if}
     <div class="h-full bg-ivory text-pine p-4">
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/events')}
-             on:keydown={() => $redirect('/events')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/events')} on:keydown={() => $redirect('/events')}>
             <div class="h-8 w-8 mr-2">
-                <FaCalendarDay/>
+                <FaCalendarDay />
             </div>
             <div class="">Wydarzenia</div>
         </div>
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/announcements')}
-             on:keydown={() => $redirect('/announcements')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/announcements')} on:keydown={() => $redirect('/announcements')}>
             <div class="h-8 w-8 mr-2">
-                <MdAnnouncement/>
+                <MdAnnouncement />
             </div>
             <div class="">Ogłoszenia</div>
         </div>
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/meetings')}
-             on:keydown={() => $redirect('/meetings')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/meetings')} on:keydown={() => $redirect('/meetings')}>
             <div class="h-8 w-8 mr-2">
-                <MeetingSymbol/>
+                <MeetingSymbol />
             </div>
             <div class="">Spotkania</div>
         </div>
         {#if $userDetails !== null}
-            <div class="h-px w-[90%] my-2 ml-auto mr-auto bg-black bg-opacity-10"/>
-            <div class="flex flex-row mb-2 items-center">
+            <div class="h-px w-[90%] my-2 ml-auto mr-auto bg-black bg-opacity-10" />
+            <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/profile')} on:keydown={() => $redirect('/profile')}>
                 <div class="h-8 w-8 mr-2">
-                    <MdPerson/>
+                    <MdPerson />
                 </div>
-                <a href={$url("/profile")}>
-                    <div class="">Mój profil</div>
-                </a>
+                <div class="">Mój profil</div>
             </div>
             <div class="flex flex-row mb-2 items-center">
                 <div class="h-6 w-8 mr-2">
-                    <FaCommentAlt/>
+                    <FaCommentAlt />
                 </div>
                 <div class="">Moje posty</div>
             </div>
             <div class="flex flex-row mb-2 items-center">
                 <div class="h-8 w-8 mr-2">
-                    <FaHandsHelping/>
+                    <FaHandsHelping />
                 </div>
                 <div class="">Biorę udział</div>
             </div>
             <div class="flex flex-row mb-2 items-center">
                 <div class="h-8 w-8 mr-2">
-                    <MdMessage/>
+                    <MdMessage />
                 </div>
                 <div class="">Wiadomości</div>
             </div>
             <div class="flex flex-row items-center">
                 <div class="h-8 w-8 mr-2">
-                    <FaSignOutAlt/>
+                    <FaSignOutAlt />
                 </div>
                 <div class="">Wyloguj</div>
             </div>
