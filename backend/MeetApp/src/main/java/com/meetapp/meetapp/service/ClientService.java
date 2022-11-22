@@ -1,9 +1,7 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.CategoryListDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Post;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.PostRepository;
@@ -18,7 +16,6 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
-    private final PostRepository postRepository;
     private final PostRepository postRepository;
 
     public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository,

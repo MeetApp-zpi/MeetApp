@@ -3,7 +3,6 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -56,6 +55,7 @@ public class ClientController {
     @GetMapping("/users/posts")
     public List<Record> getClientPosts(HttpSession session) {
         return clientService.retrieveClientPosts(session);
+    }
 
     @GetMapping("/users/isAuthor/{postId}")
     public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
