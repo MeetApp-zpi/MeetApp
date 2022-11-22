@@ -85,7 +85,7 @@ public class MeetingService {
         Integer personQuota = foundMeeting.getPersonQuota();
         Integer currentlyEnrolled = foundMeeting.getEnrolled();
 
-        if (currentlyEnrolled < personQuota && !isLoggedUserEnrolled(meetingId, session)) {
+        if ((personQuota == null || currentlyEnrolled < personQuota) && !isLoggedUserEnrolled(meetingId, session)) {
             foundClient.getPosts().add(foundMeeting);
             foundMeeting.setEnrolled(foundMeeting.getEnrolled() + 1);
         }

@@ -93,7 +93,7 @@ public class EventService {
         Integer personQuota = foundEvent.getPersonQuota();
         Integer currentlyEnrolled = foundEvent.getEnrolled();
 
-        if (!isLoggedUserEnrolled(eventId, session) && currentlyEnrolled < personQuota) {
+        if (!isLoggedUserEnrolled(eventId, session) && (personQuota == null || currentlyEnrolled < personQuota)) {
             foundClient.getPosts().add(foundEvent);
             foundEvent.setEnrolled(foundEvent.getEnrolled() + 1);
         }
