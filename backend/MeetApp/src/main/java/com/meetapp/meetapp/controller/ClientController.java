@@ -56,6 +56,15 @@ public class ClientController {
     @GetMapping("/users/posts")
     public List<Record> getClientPosts(HttpSession session) {
         return clientService.retrieveClientPosts(session);
+
+    @GetMapping("/users/isAuthor/{postId}")
+    public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
+        return clientService.isLoggedUserAuthorOfPost(session, postId);
+    }
+
+    @GetMapping("/enrollees/{postId}")
+    public List<Client> getEnrolleesOfPost(@PathVariable Integer postId) {
+        return clientService.getEnrolleesOfPost(postId);
     }
 
     @PutMapping("/users/categories")
@@ -66,6 +75,12 @@ public class ClientController {
     @PostMapping("/users")
     public Client createAccount(HttpSession session) {
         return clientService.createClientAccount(session);
+    }
+
+    @PostMapping("/logout")
+    public void logoutClient(HttpSession session) {
+        session.invalidate();
+        return;
     }
 
     @DeleteMapping("/users/{user_id}")

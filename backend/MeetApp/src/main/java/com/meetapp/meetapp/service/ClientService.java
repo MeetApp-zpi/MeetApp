@@ -1,7 +1,9 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.*;
-import com.meetapp.meetapp.model.*;
+import com.meetapp.meetapp.dto.CategoryListDTO;
+import com.meetapp.meetapp.model.Category;
+import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.PostRepository;
@@ -16,6 +18,7 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
+    private final PostRepository postRepository;
     private final PostRepository postRepository;
 
     public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository,
@@ -54,6 +57,17 @@ public class ClientService {
         return postRepository.findAllByAuthorEmailIs(SessionManager.retrieveEmailOrThrow(session))
                 .stream().map(ClientService::postToDto).toList();
     }
+    
+    public boolean isLoggedUserAuthorOfPost(HttpSession session, Integer postId) {
+        String loggedUserEmail = SessionManager.retrieveEmailOrThrow(session);
+        Post foundPost = findPostOrThrow(postId);
+        return foundPost.getAuthor().getEmail().equals(loggedUserEmail);
+    }
+
+    public List<Client> getEnrolleesOfPost(Integer postId) {
+        Post foundPost = findPostOrThrow(postId);
+        return foundPost.getEnrollees().stream().toList();
+    }
 
     public Client createClientAccount(HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
@@ -73,8 +87,7 @@ public class ClientService {
         Client foundClient = findClientOrThrow(clientId);
 
         if (Objects.equals(foundClient.getEmail(), authenticatedEmail)) {
-            foundClient.setEvents(null);
-            foundClient.setMeetings(null);
+            foundClient.setPosts(null);
             foundClient.setInterests(null);
             foundClient.setFirstName("Removed");
             foundClient.setLastName("Removed");
@@ -111,5 +124,10 @@ public class ClientService {
     public Client findClientOrThrow(Integer clientId) {
         return clientRepository.findById(clientId).orElseThrow(
                 () -> new NoSuchElementException("A client with id: " + clientId + " does not exist."));
+    }
+
+    public Post findPostOrThrow(Integer postId) {
+        return postRepository.findById(postId).orElseThrow(
+                () -> new NoSuchElementException("A post with id: " + postId + " does not exist."));
     }
 }

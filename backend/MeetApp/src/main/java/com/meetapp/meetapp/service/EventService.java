@@ -94,7 +94,7 @@ public class EventService {
         Integer currentlyEnrolled = foundEvent.getEnrolled();
 
         if (!isLoggedUserEnrolled(eventId, session) && currentlyEnrolled < personQuota) {
-            foundClient.getEvents().add(foundEvent);
+            foundClient.getPosts().add(foundEvent);
             foundEvent.setEnrolled(foundEvent.getEnrolled() + 1);
         }
 
@@ -112,7 +112,7 @@ public class EventService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (isLoggedUserEnrolled(eventId, session)) {
-            foundClient.getEvents().remove(foundEvent);
+            foundClient.getPosts().remove(foundEvent);
             foundEvent.setEnrolled(foundEvent.getEnrolled() - 1);
         }
 
@@ -224,11 +224,11 @@ public class EventService {
 
     public Sort paramToSortOrThrow(Integer sortOption) {
         return switch (sortOption) {
-            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate").and(Sort.by(Sort.Direction.ASC, "Id"));
             case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
             case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
-            case 5 -> Sort.by(Sort.Direction.DESC, "startDate");
-            default -> Sort.by(Sort.Direction.DESC, "creationDate");
+            case 5 -> Sort.by(Sort.Direction.ASC, "startDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate").and(Sort.by(Sort.Direction.DESC, "Id"));
         };
     }
 }

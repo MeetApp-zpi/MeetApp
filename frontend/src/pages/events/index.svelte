@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import EventListElem from '../../lib/Events/EventListElem.svelte';
@@ -10,7 +10,6 @@
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
 
     let data = [];
-    let selected: number | null = null;
     let sortOptions = [
         { id: 1, name: 'Od najnowszych' },
         { id: 2, name: 'Od najstarszych' },
@@ -22,7 +21,7 @@
     clearFilters();
 
     const viewDetails = (postId) => {
-        $redirect(`/events/${postId}`);
+        $goto(`/events/${postId}`);
     };
 
     $: {
