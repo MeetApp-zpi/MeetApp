@@ -3,6 +3,7 @@ package com.meetapp.meetapp.service;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.security.SessionManager;
@@ -24,6 +25,10 @@ public class ClientService {
 
     public Client retrieveClientDetails(HttpSession session) {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+    }
+
+    public List<Post> retrieveLoggedInUserActivities(HttpSession session) {
+
     }
 
     public Client createClientAccount(HttpSession session) {

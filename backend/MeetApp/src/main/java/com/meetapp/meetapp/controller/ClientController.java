@@ -3,6 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -45,6 +46,11 @@ public class ClientController {
     @GetMapping("/users/categories")
     public List<Category> getClientCategories(HttpSession session) {
         return clientService.retrieveClientCategories(session);
+    }
+
+    @GetMapping("/users/activities")
+    public List<Post> getClientActivities(HttpSession session) {
+        return clientService.retrieveLoggedInUserActivities(session);
     }
 
     @PutMapping("/users/categories")
