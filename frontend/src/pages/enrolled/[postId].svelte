@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { redirect } from '@roxi/routify';
 
     import Header from '../../lib/Header/Header.svelte';
     import UserPill from '../../lib/UserPill/UserPill.svelte';
@@ -11,7 +11,7 @@
 
     let promise = execute(`users/isAuthor/${postId}`, 'GET')
         .then((r) => r.text())
-        .then((r) => (r === 'false' ? $goto('/') : null));
+        .then((r) => (r === 'false' ? $redirect('/') : null));
 
     promise = promise.then((_) =>
         execute(`enrollees/${postId}`, 'GET')
