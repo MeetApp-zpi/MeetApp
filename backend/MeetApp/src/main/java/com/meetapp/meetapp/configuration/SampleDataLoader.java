@@ -8,6 +8,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -83,7 +84,10 @@ public class SampleDataLoader implements ApplicationRunner {
     }
 
     private List<Client> getClients() {
-        return Arrays.asList(newClient("meetapp.zpi@gmail.com", "Jan", "Testowicz"),
+        val meetAppClient = newClient("meetapp.zpi@gmail.com", "Jan", "Testowicz");
+        meetAppClient.setInterests(new HashSet<>(getCategories(new HashSet<>(Arrays.asList(1, 3, 5, 7)))));
+
+        return Arrays.asList(meetAppClient,
                 newClient("fanatyk.rolkarstwa@rolki.pl", "Rolkowy", "Świrus"),
                 newClient("prawdziwy.polityk@prawdziwysejm.gov.pl", "Prawdziwy", "Polityk"),
                 newClient("janusz75@buziaczek.pl", "Fanatyk", "Wędkarstwa"),
@@ -107,7 +111,8 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Jak już będę prezydentem, to będzie zupełnie inaczej. Nie będzie sejmu i senatu. Polska " +
                                 "będzie od morza do morza. Żeby nie było bandyctwa, żeby nie było złodziejstwa, żeby " +
                                 "nie było niczego.",
-                        getCategories(new HashSet<>(Arrays.asList(1)))), new Announcement(getClientOrThrow("janusz75@buziaczek.pl"),
+                        getCategories(new HashSet<>(Arrays.asList(1)))),
+                new Announcement(getClientOrThrow("janusz75@buziaczek.pl"),
                         getLocationOrThrow("Bydgoszcz", "kujawsko-pomorskie"), "Szukam partnera do polowania na suma",
                         "Sum grasuje w rzece pod Bydgoszczą. Jest ogromny i już kilka razy mnie pogryzł. Cena nie gra" +
                                 " roli, musimy go złapać.",
@@ -127,7 +132,8 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas a lacus interdum, pulvinar" +
                                 " ex a, luctus nulla. Orci varius natoque penatibus et magnis dis parturient montes, " +
                                 "nascetur ridiculus mus. Quisque facilisis lectus ac vulputate turpis duis.",
-                        Instant.parse("2023-02-25T21:37:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))), 200),
+                        Instant.parse("2023-02-25T21:37:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
+                        200),
                 new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
@@ -148,7 +154,8 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Meeting(getClientOrThrow("palsie@koniu.org"), getLocationOrThrow("Częstochowa", "śląskie"),
                         "Atak na Niebieskiego Strażnika",
                         "Niebieski strażnik pojawi się w dżungli pierwszego kwietnia o 14:20. Potrzebne 4 osoby aby " +
-                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"), getCategories(new HashSet<>(Arrays.asList(2))), 4));
+                                "go pokonać.", Instant.parse("2023-04-01T14:20:00.000Z"),
+                        getCategories(new HashSet<>(Arrays.asList(2))), 4));
     }
 
     private List<Event> getEvents() {
@@ -351,7 +358,8 @@ public class SampleDataLoader implements ApplicationRunner {
                         "cursus " +
                         "nulla sit amet mauris interdum auctor. Nulla ut faucibus turpis. Nullam elementum ante eu " +
                         "nunc " + "cursus, non dignissim vel vel.", Instant.parse("2022-12-20T10:00:00.000Z"),
-                        Instant.parse("2022-12-22T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))), 200,
+                        Instant.parse("2022-12-22T17:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(1, 3))),
+                        200,
                         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ligula arcu, pulvinar " +
                                 "eget " +
                                 "enim quis, posuere eleifend leo. Mauris sed nisi aliquet, consequat nibh ac, " +
@@ -487,7 +495,6 @@ public class SampleDataLoader implements ApplicationRunner {
     }
 
     private Set<Category> getCategories(Set<Integer> categoryIds) {
-//        List<Category> t = categoryRepository.findAllById(categoryIds);
         HashSet<Category> categoriesInSet = new HashSet<>();
         for (Integer i : categoryIds) {
             categoriesInSet.add(categories.get(i));

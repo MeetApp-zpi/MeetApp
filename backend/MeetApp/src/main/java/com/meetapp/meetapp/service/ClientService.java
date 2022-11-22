@@ -26,6 +26,10 @@ public class ClientService {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
     }
 
+    public Client retrieveClientDetails(Integer clientId) {
+        return findClientOrThrow(clientId);
+    }
+
     public Client createClientAccount(HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         String givenName = SessionManager.retrieveGivenNameOrThrow(session);
@@ -60,6 +64,10 @@ public class ClientService {
 
     public List<Category> retrieveClientCategories(HttpSession session) {
         return categoryRepository.findByClients_Email(SessionManager.retrieveEmailOrThrow(session));
+    }
+
+    public List<Category> retrieveClientCategories(Integer clientId) {
+        return categoryRepository.findByClients_Id(clientId);
     }
 
     public List<Category> updateClientCategories(HttpSession session, CategoryListDTO updatedCategoriesDTO) {
