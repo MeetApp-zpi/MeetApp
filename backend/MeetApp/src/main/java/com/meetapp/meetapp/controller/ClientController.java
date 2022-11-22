@@ -52,6 +52,16 @@ public class ClientController {
     public List<Post> getClientActivities(HttpSession session) {
         return clientService.retrieveLoggedInUserActivities(session);
     }
+    
+    @GetMapping("/users/isAuthor/{postId}")
+    public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
+        return clientService.isLoggedUserAuthorOfPost(session, postId);
+    }
+
+    @GetMapping("/enrollees/{postId}")
+    public List<Client> getEnrolleesOfPost(@PathVariable Integer postId) {
+        return clientService.getEnrolleesOfPost(postId);
+    }
 
     @PutMapping("/users/categories")
     public List<Category> updateClientCategories(HttpSession session, @RequestBody CategoryListDTO updatedCategories) {

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import EventListElem from '../../lib/Events/EventListElem.svelte';
@@ -22,7 +22,7 @@
     clearFilters();
 
     const viewDetails = (postId) => {
-        $redirect(`/events/${postId}`);
+        $goto(`/events/${postId}`);
     };
 
     $: {

@@ -94,7 +94,7 @@ public class EventService {
         Integer currentlyEnrolled = foundEvent.getEnrolled();
 
         if (!isLoggedUserEnrolled(eventId, session) && currentlyEnrolled < personQuota) {
-            foundClient.getEvents().add(foundEvent);
+            foundClient.getPosts().add(foundEvent);
             foundEvent.setEnrolled(foundEvent.getEnrolled() + 1);
         }
 
@@ -112,7 +112,7 @@ public class EventService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (isLoggedUserEnrolled(eventId, session)) {
-            foundClient.getEvents().remove(foundEvent);
+            foundClient.getPosts().remove(foundEvent);
             foundEvent.setEnrolled(foundEvent.getEnrolled() - 1);
         }
 

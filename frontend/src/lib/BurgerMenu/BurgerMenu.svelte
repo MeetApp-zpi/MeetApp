@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
@@ -31,25 +31,23 @@
         </div>
     {:else}
         <div class="bg-grass text-ivory h-32 flex items-end">
-            <div class="text-ivory mb-2 ml-4 text-lg font-bold" on:click={() => $redirect('/login')} on:keydown={() => $redirect('/login')}>
-                Zaloguj się
-            </div>
+            <div class="text-ivory mb-2 ml-4 text-lg font-bold" on:click={() => $goto('/login')} on:keydown={() => $goto('/login')}>Zaloguj się</div>
         </div>
     {/if}
     <div class="h-full bg-ivory text-pine p-4">
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/events')} on:keydown={() => $redirect('/events')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
             <div class="h-8 w-8 mr-2">
                 <FaCalendarDay />
             </div>
             <div class="">Wydarzenia</div>
         </div>
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/announcements')} on:keydown={() => $redirect('/announcements')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/announcements')} on:keydown={() => $goto('/announcements')}>
             <div class="h-8 w-8 mr-2">
                 <MdAnnouncement />
             </div>
             <div class="">Ogłoszenia</div>
         </div>
-        <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/meetings')} on:keydown={() => $redirect('/meetings')}>
+        <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
             <div class="h-8 w-8 mr-2">
                 <MeetingSymbol />
             </div>

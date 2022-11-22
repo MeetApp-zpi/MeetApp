@@ -51,21 +51,9 @@ public class Client {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "ClientAnnouncement", joinColumns = @JoinColumn(name="ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "AnnouncementId"))
-    Set<Announcement> announcements;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "ClientMeeting", joinColumns = @JoinColumn(name = "ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "MeetingId"))
-    Set<Meeting> meetings;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "ClientEvents", joinColumns = @JoinColumn(name = "ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "EventId"))
-    Set<Event> events;
+    @JoinTable(name = "ClientPost", joinColumns = @JoinColumn(name="ClientId"),
+            inverseJoinColumns = @JoinColumn(name = "PostId"))
+    Set<Post> posts;
 
     public Client(String email, String firstName, String lastName, String profilePicture) {
         this();
@@ -80,7 +68,6 @@ public class Client {
         id = 0;
         isDeleted = false;
         interests = new HashSet<>();
-        meetings = new HashSet<>();
-        events = new HashSet<>();
+        posts = new HashSet<>();
     }
 }
