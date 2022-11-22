@@ -82,7 +82,7 @@ public class AnnouncementService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (!isLoggedUserEnrolled(announcementId, session)) {
-            foundClient.getAnnouncements().add(foundAnnouncement);
+            foundClient.getPosts().add(foundAnnouncement);
             foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() + 1);
         }
 
@@ -98,7 +98,7 @@ public class AnnouncementService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (isLoggedUserEnrolled(announcementId, session)) {
-            foundClient.getAnnouncements().remove(foundAnnouncement);
+            foundClient.getPosts().remove(foundAnnouncement);
             foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() - 1);
         }
 
