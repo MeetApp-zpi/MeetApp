@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { goto, isActive } from '@roxi/routify';
 
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
@@ -17,13 +17,17 @@
     const logout = () => {
         execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
     };
+
+    const myActivities = () => {
+        $isActive('/myActivities') ? (window.location.href = window.location.href) : $goto('/myActivities');
+    };
 </script>
 
 <div class="z-20 h-screen flex flex-col w-2/3 fixed top-0 left-0" transition:horizontalSlide>
     {#if $userDetails !== null}
         <div class="bg-grass text-ivory flex flex-row h-32 items-end">
             <div class="">
-                <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar" />
+                <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
             </div>
             <div class="flex flex-col mb-2">
                 <div class="text-ivory font-bold">{$userDetails.firstName} {$userDetails.lastName}</div>
@@ -67,7 +71,7 @@
                 </div>
                 <div class="">Moje posty</div>
             </div>
-            <div class="flex flex-row mb-2 items-center">
+            <div class="flex flex-row mb-2 items-center" on:click={myActivities} on:keydown={() => $goto('/myActivities')}>
                 <div class="h-8 w-8 mr-2">
                     <FaHandsHelping />
                 </div>

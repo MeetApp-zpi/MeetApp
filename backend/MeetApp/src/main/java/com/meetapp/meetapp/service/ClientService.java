@@ -55,6 +55,25 @@ public class ClientService {
                 .stream().map(ClientService::postToDto).toList();
     }
     
+    public List<Record> retrieveLoggedInUserActivities(HttpSession session) {
+        Client loggedUser = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return postRepository.findAllByEnrolleesContains(loggedUser).stream().map((Post post) -> {
+            if (post instanceof Announcement casted) {
+                return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled());
+            } else if (post instanceof Meeting casted) {
+                return new MeetingDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled(), casted.getPersonQuota(), new DateTimeDTO(casted.getMeetingDate()));
+            } else {
+                Event casted = (Event) post;
+                return new EventDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled(), casted.getPersonQuota(), casted.getSchedule(),
+                        new DateTimeDTO(casted.getStartDate()), new DateTimeDTO(casted.getEndDate()),
+                        casted.getPicture());
+            }
+        }).toList();
+    }
+
     public boolean isLoggedUserAuthorOfPost(HttpSession session, Integer postId) {
         String loggedUserEmail = SessionManager.retrieveEmailOrThrow(session);
         Post foundPost = findPostOrThrow(postId);
@@ -73,7 +92,7 @@ public class ClientService {
         String pictureUrl = SessionManager.retrievePictureOrThrow(session);
 
         if (clientRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("User with this e-mail address already exists");
+            return findClientOrThrow(email);
         }
 
         return clientRepository.save(new Client(email, givenName, familyName, pictureUrl));

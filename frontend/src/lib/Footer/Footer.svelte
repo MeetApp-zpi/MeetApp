@@ -14,6 +14,7 @@
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'events' ? 'text-ivory' : ''}"
         href={$url('/events')}
+        target="_top"
     >
         <div class="h-full">
             <FaCalendarDay />
@@ -24,6 +25,7 @@
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'announcements' ? 'text-ivory' : ''}"
         href={$url('/announcements')}
+        target="_top"
     >
         <div class="h-full">
             <MdAnnouncement />
@@ -34,6 +36,7 @@
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'meetings' ? 'text-ivory' : ''}"
         href={$url('/meetings')}
+        target="_top"
     >
         <div class="h-full">
             <MeetingSymbol />

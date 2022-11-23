@@ -74,7 +74,7 @@
             </div>
             <div class="text-lg flex flex-row items-center" in:slide={{ delay: 100 }} out:slide>
                 <div class="w-12 h-12 mr-2">
-                    <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" />
+                    <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
                 </div>
                 {data.author.firstName}
                 {data.author.lastName}
