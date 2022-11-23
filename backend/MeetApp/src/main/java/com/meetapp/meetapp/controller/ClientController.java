@@ -5,11 +5,13 @@ import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -70,6 +72,13 @@ public class ClientController {
     @GetMapping("/enrollees/{postId}")
     public List<Client> getEnrolleesOfPost(@PathVariable Integer postId) {
         return clientService.getEnrolleesOfPost(postId);
+    }
+
+    @GetMapping("/users/createAccount")
+    public void createUserAccount(HttpSession session, HttpServletResponse response) throws IOException {
+        clientService.createClientAccount(session);
+        // TODO: change for prod
+        response.sendRedirect("http://localhost:5173");
     }
 
     @PutMapping("/users/categories")

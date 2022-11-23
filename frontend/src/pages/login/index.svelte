@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { goto, url } from '@roxi/routify';
-    import execute from '../../lib/fetchWrapper';
+    import { url } from '@roxi/routify';
 
     const gotoToGoogleLogin = () => {
         window.location.href = 'http://localhost:8080/oauth2/authorization/google';

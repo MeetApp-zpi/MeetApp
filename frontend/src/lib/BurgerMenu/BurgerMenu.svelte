@@ -28,7 +28,7 @@
         <div class="bg-grass text-ivory flex h-32 items-end">
             <a href={$url('/profile')} class="flex flex-row items-end">
                 <div class="">
-                    <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar" />
+                    <img class="rounded-full mx-2 mb-2 h-12 w-12" src={$userDetails.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
                 </div>
                 <div class="flex flex-col mb-2">
                     <div class="text-ivory font-bold">{$userDetails.firstName} {$userDetails.lastName}</div>

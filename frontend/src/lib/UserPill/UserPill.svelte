@@ -10,7 +10,7 @@
     on:keydown={() => $goto(`users/${data.id}`)}
 >
     <div class="h-12 w-12">
-        <img src={data.profilePicture} alt="User avatar" />
+        <img src={data.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
     </div>
     <div class="flex flex-col">
         <div class="font-bold">{data.firstName} {data.lastName}</div>
