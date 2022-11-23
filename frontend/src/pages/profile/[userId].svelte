@@ -56,7 +56,7 @@
             </a>
 
             {#if $currentUserDetails !== null}
-                <Button class="flex flex-row text-xl text-base px-12 py-2 mb-12">
+                <Button class="flex flex-row text-xl text-base px-4 py-2 mb-12">
                     <div class="h-7 w-7 mr-2">
                         <IoIosMail />
                     </div>
