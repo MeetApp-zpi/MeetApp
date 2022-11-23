@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
     List<Category> findByClients_Email(String email);
+    List<Category> findByClients_Id(Integer id);
 }

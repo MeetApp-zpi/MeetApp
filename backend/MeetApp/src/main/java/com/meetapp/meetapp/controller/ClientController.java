@@ -18,7 +18,6 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/api")
 public class ClientController {
-
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
@@ -45,11 +44,21 @@ public class ClientController {
         return clientService.retrieveClientDetails(session);
     }
 
+    @GetMapping("users/{clientId}/details")
+    public Client getUserDetails(@PathVariable Integer clientId) {
+        return clientService.retrieveClientDetails(clientId);
+    }
+
     @GetMapping("/users/categories")
     public List<Category> getClientCategories(HttpSession session) {
         return clientService.retrieveClientCategories(session);
     }
 
+    @GetMapping("/users/{clientId}/categories")
+    public List<Category> getClientCategories(@PathVariable Integer clientId) {
+        return clientService.retrieveClientCategories(clientId);
+    }
+    
     @GetMapping("/users/activities")
     public List<Record> getClientActivities(HttpSession session) {
         return clientService.retrieveLoggedInUserActivities(session);

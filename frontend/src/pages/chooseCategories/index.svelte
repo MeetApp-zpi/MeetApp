@@ -1,6 +1,6 @@
 <script lang="ts">
     import Button from '../../lib/Button/Button.svelte';
-    import SelectablePill from '../../lib/SelectablePill/SelectablePill.svelte';
+    import SelectablePill from '../../lib/Pill/SelectablePill.svelte';
     import execute from '../../lib/fetchWrapper';
 
     let currentUser = null;
