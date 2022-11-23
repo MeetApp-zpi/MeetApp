@@ -1,6 +1,6 @@
 <script lang="ts">
     import execute from '../lib/fetchWrapper';
-    import { userDetails } from '../lib/stores';
+    import {userDetails} from '../lib/stores';
 
     execute('users/details', 'GET')
         .then((r) => (r.status === 200 ? r.json() : null))
@@ -11,4 +11,4 @@
         });
 </script>
 
-<slot />
+<slot/>

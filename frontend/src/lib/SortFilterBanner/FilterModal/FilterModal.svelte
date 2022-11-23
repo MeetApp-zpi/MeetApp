@@ -3,7 +3,7 @@
 
     import Button from '../../../lib/Button/Button.svelte';
     import MultiselectInput from '../../../lib/MultiselectInput/MultiselectInput.svelte';
-    import SelectablePill from '../../../lib/SelectablePill/SelectablePill.svelte';
+    import SelectablePill from '../../Pill/SelectablePill.svelte';
     import execute from '../../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds } from '../../stores';
 
