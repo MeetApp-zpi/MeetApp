@@ -67,6 +67,16 @@ public class AnnouncementController {
         return announcementService.unenrollAnnouncement(announcementId, session);
     }
 
+    @GetMapping("/announcements/deactivate/{announcementId}")
+    public AnnouncementDTO deactivateAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.deactivateAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/activate/{announcementId}")
+    public AnnouncementDTO activateAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.activateAnnouncement(announcementId, session);
+    }
+
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
     public Announcement createAnnouncement(@Valid @RequestBody AnnouncementCreationDTO newAnnouncement,

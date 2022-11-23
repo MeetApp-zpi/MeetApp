@@ -109,6 +109,36 @@ public class AnnouncementService {
                 savedAnnouncement.getDescription(), savedAnnouncement.getEnrolled());
     }
 
+    public AnnouncementDTO deactivateAnnouncement(Integer announcementId, HttpSession session) {
+        Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (foundClient.equals(foundAnnouncement.getAuthor())) {
+            foundAnnouncement.setIsActive(false);
+            foundAnnouncement.setEnrolled(0);
+            foundAnnouncement.setEnrollees(new HashSet<>());
+        }
+
+        Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
+        return new AnnouncementDTO(new PostDTO(new Post(foundClient, savedAnnouncement.getLocation(),
+                savedAnnouncement.getCategories())), savedAnnouncement.getTitle() ,savedAnnouncement.getDescription(),
+                savedAnnouncement.getEnrolled());
+    }
+
+    public AnnouncementDTO activateAnnouncement(Integer announcementId, HttpSession session) {
+        Announcement foundAnnouncement = findAnnouncementOrThrow(announcementId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (foundClient.equals(foundAnnouncement.getAuthor())) {
+            foundAnnouncement.setIsActive(true);
+        }
+
+        Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
+        return new AnnouncementDTO(new PostDTO(new Post(foundClient, savedAnnouncement.getLocation(),
+                savedAnnouncement.getCategories())), savedAnnouncement.getTitle() ,savedAnnouncement.getDescription(),
+                savedAnnouncement.getEnrolled());
+    }
+
     public Announcement createAnnouncement(AnnouncementCreationDTO newAnnouncement, HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         Client foundClient = findClientOrThrow(email);
