@@ -19,6 +19,10 @@
             .then((r) => (isEnrolled = r));
     };
 
+    const checkIsAuthor = () => {
+        return data.author.id === $userDetails.id;
+    };
+
     const enroll = () => {
         execute(`announcements/enroll/${data.id}`, 'GET').then((_) => checkEnrolledStatus());
     };
@@ -59,13 +63,15 @@
                 {data.author.firstName}
                 {data.author.lastName}
             </a>
-            <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
-                {#if isEnrolled}
-                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
-                {:else}
-                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
-                {/if}
-            </div>
+            {#if !checkIsAuthor()}
+                <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
+                    {#if isEnrolled}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
+                    {:else}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
+                    {/if}
+                </div>
+            {/if}
         {/if}
     </div>
 </div>

@@ -58,6 +58,16 @@ public class ClientController {
     public List<Category> getClientCategories(@PathVariable Integer clientId) {
         return clientService.retrieveClientCategories(clientId);
     }
+
+    @GetMapping("/users/{userId}/posts")
+    public List<Record> getClientPosts(@PathVariable Integer userId) {
+        return clientService.retrieveClientPosts(userId);
+    }
+
+    @GetMapping("/users/posts")
+    public List<Record> getClientPosts(HttpSession session) {
+        return clientService.retrieveClientPosts(session);
+    }
     
     @GetMapping("/users/activities")
     public List<Record> getClientActivities(HttpSession session) {

@@ -16,8 +16,8 @@ public class ClientService {
 
     private final ClientRepository clientRepository;
     private final CategoryRepository categoryRepository;
-
     private final PostRepository postRepository;
+
     public ClientService(ClientRepository clientRepository, CategoryRepository categoryRepository,
                          PostRepository postRepository) {
         this.clientRepository = clientRepository;
@@ -25,10 +25,36 @@ public class ClientService {
         this.postRepository = postRepository;
     }
 
+    private static Record postToDto(Post post) {
+        if (post instanceof Announcement casted) {
+            return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                    casted.getEnrolled());
+        } else if (post instanceof Meeting casted) {
+            return new MeetingDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                    casted.getEnrolled(), casted.getPersonQuota(), new DateTimeDTO(casted.getMeetingDate()));
+        } else {
+            Event casted = (Event) post;
+            return new EventDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                    casted.getEnrolled(), casted.getPersonQuota(), casted.getSchedule(),
+                    new DateTimeDTO(casted.getStartDate()), new DateTimeDTO(casted.getEndDate()),
+                    casted.getPicture());
+        }
+    }
+
     public Client retrieveClientDetails(HttpSession session) {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
     }
 
+    public List<Record> retrieveClientPosts(Integer clientId) {
+        return postRepository.findAllByAuthorEmailIs(findClientOrThrow(clientId).getEmail())
+                .stream().map(ClientService::postToDto).toList();
+    }
+
+    public List<Record> retrieveClientPosts(HttpSession session) {
+        return postRepository.findAllByAuthorEmailIs(SessionManager.retrieveEmailOrThrow(session))
+                .stream().map(ClientService::postToDto).toList();
+    }
+    
     public Client retrieveClientDetails(Integer clientId) {
         return findClientOrThrow(clientId);
     }

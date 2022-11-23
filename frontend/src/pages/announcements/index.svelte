@@ -15,7 +15,7 @@
         { id: 3, name: 'Po liczbie zapisanych rosnąco' },
         { id: 4, name: 'Po liczbie zapisanych malejąco' }
     ];
-    let announcementsPromise: Promise<never>;
+    let announcementsPromise: Promise<any>;
 
     clearFilters();
 
@@ -52,11 +52,11 @@
     <Header />
     <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
-      {#await announcementsPromise then _}
-          {#each data as item}
-              <AnnouncementListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />
-          {/each}
-      {/await}
+        {#await announcementsPromise then _}
+            {#each data as item}
+                <AnnouncementListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />
+            {/each}
+        {/await}
     </div>
     <AddPostButton pageType="announcements" />
     <Footer pageType="announcements" />
