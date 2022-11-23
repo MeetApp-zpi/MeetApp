@@ -20,6 +20,16 @@
         }
     };
 
+    const retrievePostType = (postObj) => {
+        if (Object.hasOwn(postObj, 'startDateTime')) {
+            return 'events';
+        } else if (Object.hasOwn(postObj, 'meetingDateTime')) {
+            return 'meetings';
+        } else {
+            return 'announcements';
+        }
+    };
+
     let promise = execute('users/posts', 'GET')
         .then((r) => r.json())
         .then((r) => (userPosts = r));
@@ -29,14 +39,14 @@
     <Header />
     {#await promise then _}
         {#each userPosts as post}
-            {#if Object.hasOwn(post, 'startDateTime')}
+            {#if retrievePostType(post) === 'events'}
                 <EventListElem data={post} clickHandler={() => $goto(`/events/${post.id}`)} />
-            {:else if Object.hasOwn(post, 'meetingDateTime')}
+            {:else if retrievePostType(post) === 'meetings'}
                 <MeetingListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
             {:else}
                 <AnnouncementListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
             {/if}
-            <PostToolbar postId={post.id} />
+            <PostToolbar postId={post.id} postType={retrievePostType(post)} />
         {/each}
     {/await}
 </div>

@@ -61,7 +61,7 @@
                 </div>
                 <div class="">Mój profil</div>
             </div>
-            <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/user/posts')} on:keydown={() => $redirect('/user/posts')}>
+            <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/user/posts')} on:keydown={() => $goto('/user/posts')}>
                 <div class="h-6 w-8 mr-2">
                     <FaCommentAlt />
                 </div>

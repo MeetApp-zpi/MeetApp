@@ -4,6 +4,7 @@
     import FaMapMarkedAlt from 'svelte-icons/fa/FaMapMarkedAlt.svelte';
     import Button from '../../../lib/Button/Button.svelte';
     import execute from '../../../lib/fetchWrapper';
+    import { userDetails } from '../../../lib/stores';
 
     export let data;
     export let areDetailsShown: boolean;
@@ -15,6 +16,10 @@
         execute(`announcements/isEnrolled/${data.id}`, 'GET')
             .then((r) => r.json())
             .then((r) => (isEnrolled = r));
+    };
+
+    const checkIsAuthor = () => {
+        return data.author.id === $userDetails.id;
     };
 
     const enroll = () => {
@@ -52,13 +57,15 @@
                 {data.author.firstName}
                 {data.author.lastName}
             </div>
-            <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
-                {#if isEnrolled}
-                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
-                {:else}
-                    <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
-                {/if}
-            </div>
+            {#if !checkIsAuthor()}
+                <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
+                    {#if isEnrolled}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
+                    {:else}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
+                    {/if}
+                </div>
+            {/if}
         {/if}
     </div>
 </div>
