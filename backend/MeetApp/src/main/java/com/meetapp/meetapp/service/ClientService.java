@@ -66,7 +66,7 @@ public class ClientService {
         String pictureUrl = SessionManager.retrievePictureOrThrow(session);
 
         if (clientRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("User with this e-mail address already exists");
+            return findClientOrThrow(email);
         }
 
         return clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
