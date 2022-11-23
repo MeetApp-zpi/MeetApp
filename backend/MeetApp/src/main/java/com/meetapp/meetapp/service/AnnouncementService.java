@@ -82,7 +82,7 @@ public class AnnouncementService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (!isLoggedUserEnrolled(announcementId, session)) {
-            foundClient.getAnnouncements().add(foundAnnouncement);
+            foundClient.getPosts().add(foundAnnouncement);
             foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() + 1);
         }
 
@@ -98,7 +98,7 @@ public class AnnouncementService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (isLoggedUserEnrolled(announcementId, session)) {
-            foundClient.getAnnouncements().remove(foundAnnouncement);
+            foundClient.getPosts().remove(foundAnnouncement);
             foundAnnouncement.setEnrolled(foundAnnouncement.getEnrolled() - 1);
         }
 
@@ -173,10 +173,10 @@ public class AnnouncementService {
 
     public Sort paramToSortOrThrow(Integer sortOption) {
         return switch (sortOption) {
-            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate").and(Sort.by(Sort.Direction.ASC, "Id"));
             case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
             case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
-            default -> Sort.by(Sort.Direction.DESC, "creationDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate").and(Sort.by(Sort.Direction.DESC, "Id"));
         };
     }
 }

@@ -85,8 +85,8 @@ public class MeetingService {
         Integer personQuota = foundMeeting.getPersonQuota();
         Integer currentlyEnrolled = foundMeeting.getEnrolled();
 
-        if (currentlyEnrolled < personQuota && !isLoggedUserEnrolled(meetingId, session)) {
-            foundClient.getMeetings().add(foundMeeting);
+        if ((personQuota == null || currentlyEnrolled < personQuota) && !isLoggedUserEnrolled(meetingId, session)) {
+            foundClient.getPosts().add(foundMeeting);
             foundMeeting.setEnrolled(foundMeeting.getEnrolled() + 1);
         }
 
@@ -103,7 +103,7 @@ public class MeetingService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (isLoggedUserEnrolled(meetingId, session)) {
-            foundClient.getMeetings().remove(foundMeeting);
+            foundClient.getPosts().remove(foundMeeting);
             foundMeeting.setEnrolled(foundMeeting.getEnrolled() - 1);
         }
 
@@ -188,11 +188,11 @@ public class MeetingService {
 
     public Sort paramToSortOrThrow(Integer sortOption) {
         return switch (sortOption) {
-            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate");
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate").and(Sort.by(Sort.Direction.ASC, "Id"));
             case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
             case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
-            case 5 -> Sort.by(Sort.Direction.DESC, "meetingDate");
-            default -> Sort.by(Sort.Direction.DESC, "creationDate");
+            case 5 -> Sort.by(Sort.Direction.ASC, "meetingDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate").and(Sort.by(Sort.Direction.DESC, "Id"));
         };
     }
 }

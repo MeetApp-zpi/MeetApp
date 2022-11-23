@@ -19,9 +19,7 @@
 
     clearFilters();
 
-    let promise = execute('meetings', 'GET')
-        .then((r) => r.json())
-
+    let meetingsPromise: Promise<never>
 
     const viewDetails = (postId) => {
         if (selected !== postId) {
@@ -46,7 +44,7 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        execute('meetings?' + urlParams.toString(), 'GET')
+        meetingsPromise = execute('meetings?' + urlParams.toString(), 'GET')
             .then((r) => r.json())
             .then((r) => (data = r));
     }
@@ -56,9 +54,9 @@
     <Header />
     <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
-        {#await promise then _}
+        {#await meetingsPromise then _}
             {#each data as item}
-                <MeetingListElem areDetailsShown={selected === item.id ? true : false} data={item} clickHandler={() => viewDetails(item.id)} />
+                <MeetingListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />
             {/each}
         {/await}
     </div>

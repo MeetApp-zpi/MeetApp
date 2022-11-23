@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     import MdAdd from 'svelte-icons/md/MdAdd.svelte';
 
     export let pageType: 'announcements' | 'events' | 'meetings';
 
     const navigateToCreator = () => {
-        $redirect(`/${pageType}/create`);
+        $goto(`/${pageType}/create`);
     };
 </script>
 

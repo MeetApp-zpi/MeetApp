@@ -9,7 +9,7 @@
     import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     // noinspection TypeScriptCheckImport
-    import { redirect } from '@roxi/routify';
+    import { goto } from '@roxi/routify';
 
     export let eventId: number;
 
@@ -24,7 +24,7 @@
 
     execute(`events/${eventId}`, 'GET').then(async (response: Response) => {
         if (response.status != 200) {
-            $redirect('/events');
+            $goto('/events');
         }
 
         data = await response.json();
