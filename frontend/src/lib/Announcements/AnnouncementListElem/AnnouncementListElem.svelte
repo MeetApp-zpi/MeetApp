@@ -5,6 +5,7 @@
     import Button from '../../../lib/Button/Button.svelte';
     import execute from '../../../lib/fetchWrapper';
     import { url } from '@roxi/routify';
+    import { userDetails } from '../../stores';
 
     export let data;
     export let areDetailsShown: boolean;
@@ -46,7 +47,12 @@
             <div transition:slide class="border-t-2 border-shadow">
                 {data.description}
             </div>
-            <a href={$url(`/profile/${data.author.id}`)} class="text-lg flex flex-row items-center" in:slide={{ delay: 100 }} out:slide>
+            <a
+                href={$userDetails.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
+                class="text-lg flex flex-row items-center"
+                in:slide={{ delay: 100 }}
+                out:slide
+            >
                 <div class="w-12 h-12 mr-2">
                     <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" />
                 </div>

@@ -37,7 +37,7 @@
                 <img class="rounded-full" src={userDetails.profilePicture} alt="Profile avatar" />
             </div>
 
-            <div class="text-cocoa text-3xl font-bold pb-12">{userDetails.firstName} {userDetails.lastName}</div>
+            <div class="text-cocoa text-3xl font-bold pb-12 text-center">{userDetails.firstName} {userDetails.lastName}</div>
 
             <div class="flex flex-col items-center pb-12">
                 <p class="text-cocoa text-xl font-bold pb-5">Zainteresowania</p>
