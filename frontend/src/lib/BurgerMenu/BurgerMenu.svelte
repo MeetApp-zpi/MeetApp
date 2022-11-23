@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { goto, isActive } from '@roxi/routify';
 
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
@@ -16,6 +16,10 @@
 
     const logout = () => {
         execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
+    };
+
+    const myActivities = () => {
+        $isActive('/myActivities') ? (window.location.href = window.location.href) : $goto('/myActivities');
     };
 </script>
 
@@ -67,7 +71,7 @@
                 </div>
                 <div class="">Moje posty</div>
             </div>
-            <div class="flex flex-row mb-2 items-center">
+            <div class="flex flex-row mb-2 items-center" on:click={myActivities} on:keydown={() => $goto('/myActivities')}>
                 <div class="h-8 w-8 mr-2">
                     <FaHandsHelping />
                 </div>

@@ -1,9 +1,7 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.CategoryListDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Post;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.PostRepository;
@@ -29,6 +27,25 @@ public class ClientService {
 
     public Client retrieveClientDetails(HttpSession session) {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+    }
+
+    public List<Record> retrieveLoggedInUserActivities(HttpSession session) {
+        Client loggedUser = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return postRepository.findAllByEnrolleesContains(loggedUser).stream().map((Post post) -> {
+            if (post instanceof Announcement casted) {
+                return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled());
+            } else if (post instanceof Meeting casted) {
+                return new MeetingDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled(), casted.getPersonQuota(), new DateTimeDTO(casted.getMeetingDate()));
+            } else {
+                Event casted = (Event) post;
+                return new EventDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
+                        casted.getEnrolled(), casted.getPersonQuota(), casted.getSchedule(),
+                        new DateTimeDTO(casted.getStartDate()), new DateTimeDTO(casted.getEndDate()),
+                        casted.getPicture());
+            }
+        }).toList();
     }
 
     public boolean isLoggedUserAuthorOfPost(HttpSession session, Integer postId) {
