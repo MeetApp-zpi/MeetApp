@@ -1,5 +1,6 @@
 <script lang="ts">
     import execute from '../../lib/fetchWrapper';
+    import { userDetails as currentUserDetails } from '../../lib/stores';
     import { redirect, url } from '@roxi/routify';
     import Button from '../../lib/Button/Button.svelte';
     import Header from '../../lib/Header/Header.svelte';
@@ -54,12 +55,14 @@
                 <p class="text-pine text-2xl hover:opacity-50 transition ease-in-out delay-100 cursor-pointer">Aktywne Posty</p>
             </a>
 
-            <Button class="flex flex-row text-xl text-base px-12 py-2 mb-12">
-                <div class="h-7 w-7 mr-2">
-                    <IoIosMail />
-                </div>
-                Wyślij wiadomość
-            </Button>
+            {#if $currentUserDetails !== null}
+                <Button class="flex flex-row text-xl text-base px-12 py-2 mb-12">
+                    <div class="h-7 w-7 mr-2">
+                        <IoIosMail />
+                    </div>
+                    Wyślij wiadomość
+                </Button>
+            {/if}
         </div>
     {/await}
 </div>
