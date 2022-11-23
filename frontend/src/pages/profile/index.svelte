@@ -30,7 +30,7 @@
             <div class="flex flex-col items-center pb-12">
                 <div class="flex flex-row">
                     <div class="h-6 w-6 mr-4"></div>
-                    <p class="text-cocoa text-xl font-bold pb-5">Moje Zainteresowania</p>
+                    <p class="text-cocoa text-xl font-bold pb-5 text-center">Moje Zainteresowania</p>
                     <a href={$url('/chooseCategories')}
                        class="h-6 w-6 ml-4 hover:opacity-50 transition ease-in-out delay-100 cursor-pointer">
                         <MdEdit/>
