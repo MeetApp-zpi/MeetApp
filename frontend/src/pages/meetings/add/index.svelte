@@ -90,21 +90,25 @@
 
 <div class="h-screen">
     <Header />
-    <form>
-        <PostNameInput />
-        <div class="bg-tea m-4 p-2 rounded-lg">
-            <CityInput />
-            <div class="flex">
-                <div class="py-2 mr-1 object-left flex-1">
-                    <PostDateInput />
+    <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
+        <form>
+            <PostNameInput />
+            <div class="bg-tea m-4 p-2 rounded-lg">
+                <CityInput />
+                <div class="flex">
+                    <div class="py-2 mr-1 object-left flex-1">
+                        <PostDateInput />
+                    </div>
+                    <div class="py-2 ml-1 object-right flex-1">
+                        <PostTimeInput />
+                    </div>
                 </div>
-                <div class="py-2 ml-1 object-right flex-1">
-                    <PostTimeInput />
-                </div>
+                <PeopleLimitInput />
             </div>
-            <PeopleLimitInput />
+            <PostDescription />
+        </form>
+        <div class="">
+            <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
         </div>
-        <PostDescription />
-    </form>
-    <Button class="px-6 py-1 mt-2 mb-4 text-sm" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
+    </div>
 </div>
