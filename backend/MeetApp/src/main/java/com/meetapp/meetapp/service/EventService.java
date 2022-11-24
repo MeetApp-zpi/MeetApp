@@ -1,20 +1,17 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.DateTimeDTO;
-import com.meetapp.meetapp.dto.EventCreationDTO;
-import com.meetapp.meetapp.dto.EventDTO;
-import com.meetapp.meetapp.dto.PostDTO;
-import com.meetapp.meetapp.model.Category;
-import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Event;
-import com.meetapp.meetapp.model.Location;
+import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.EventRepository;
 import com.meetapp.meetapp.repository.LocationRepository;
 import com.meetapp.meetapp.security.SessionManager;
+import com.meetapp.meetapp.specification.EventSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,12 +42,35 @@ public class EventService {
         this.categoryRepository = categoryRepository;
     }
 
-    public List<EventDTO> retrieveEvents() {
-        return eventRepository.findAll().stream()
-                .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
-                        event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
-                        new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
-                        event.getPicture())).toList();
+    public List<EventDTO> retrieveEvents(List<Integer> categoryIds, List<Integer> locationIds,
+                                         Integer sortOption, String nameSearch) {
+        Specification<Event> specification = Specification.where(null);
+
+        if (categoryIds != null) {
+            specification = specification.and(EventSpecifications.hasCategory(categoryIds));
+        }
+
+        if (locationIds != null) {
+            specification = specification.and(EventSpecifications.hasLocation(locationIds));
+        }
+
+        if (nameSearch != null) {
+            specification = specification.and(EventSpecifications.titleContains(nameSearch));
+        }
+
+        if (sortOption != null) {
+            return eventRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+                    .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
+                            event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
+                            new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
+                            event.getPicture())).toList();
+        } else {
+            return eventRepository.findAll(specification).stream()
+                    .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
+                            event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
+                            new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
+                            event.getPicture())).toList();
+        }
     }
 
     public EventDTO retrieveEvent(Integer eventId) {
@@ -59,6 +79,50 @@ public class EventService {
                 foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
                 new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()),
                 foundEvent.getPicture());
+    }
+
+    public Boolean isLoggedUserEnrolled(Integer eventId, HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return eventRepository.existsByIdIsAndEnrolleesContains(eventId, foundClient);
+    }
+
+    public EventDTO enrollEvent(Integer eventId, HttpSession session) {
+        Event foundEvent = findEventOrThrow(eventId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        Integer personQuota = foundEvent.getPersonQuota();
+        Integer currentlyEnrolled = foundEvent.getEnrolled();
+
+        if (!isLoggedUserEnrolled(eventId, session) && (personQuota == null || currentlyEnrolled < personQuota)) {
+            foundClient.getPosts().add(foundEvent);
+            foundEvent.setEnrolled(foundEvent.getEnrolled() + 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Event savedEvent = eventRepository.save(foundEvent);
+        return new EventDTO(new PostDTO(new Post(savedClient,
+                savedEvent.getLocation(), savedEvent.getCategories())), savedEvent.getTitle(),
+                savedEvent.getDescription(), savedEvent.getEnrolled(), savedEvent.getPersonQuota(),
+                savedEvent.getSchedule(), new DateTimeDTO(savedEvent.getStartDate()),
+                new DateTimeDTO(savedEvent.getEndDate()), savedEvent.getPicture());
+    }
+
+    public EventDTO unenrollEvent(Integer eventId, HttpSession session) {
+        Event foundEvent = findEventOrThrow(eventId);
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (isLoggedUserEnrolled(eventId, session)) {
+            foundClient.getPosts().remove(foundEvent);
+            foundEvent.setEnrolled(foundEvent.getEnrolled() - 1);
+        }
+
+        Client savedClient = clientRepository.save(foundClient);
+        Event savedEvent = eventRepository.save(foundEvent);
+        return new EventDTO(new PostDTO(new Post(savedClient,
+                savedEvent.getLocation(), savedEvent.getCategories())), savedEvent.getTitle(),
+                savedEvent.getDescription(), savedEvent.getEnrolled(), savedEvent.getPersonQuota(),
+                savedEvent.getSchedule(), new DateTimeDTO(savedEvent.getStartDate()),
+                new DateTimeDTO(savedEvent.getEndDate()), savedEvent.getPicture());
     }
 
     public Event createEvent(EventCreationDTO newEvent, HttpSession session) {
@@ -156,5 +220,15 @@ public class EventService {
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateString + "' is not in a proper time format");
         }
+    }
+
+    public Sort paramToSortOrThrow(Integer sortOption) {
+        return switch (sortOption) {
+            case 2 -> Sort.by(Sort.Direction.ASC, "creationDate").and(Sort.by(Sort.Direction.ASC, "Id"));
+            case 3 -> Sort.by(Sort.Direction.ASC, "enrolled");
+            case 4 -> Sort.by(Sort.Direction.DESC, "enrolled");
+            case 5 -> Sort.by(Sort.Direction.ASC, "startDate");
+            default -> Sort.by(Sort.Direction.DESC, "creationDate").and(Sort.by(Sort.Direction.DESC, "Id"));
+        };
     }
 }

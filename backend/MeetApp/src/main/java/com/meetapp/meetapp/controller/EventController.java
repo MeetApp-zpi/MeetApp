@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
@@ -42,14 +43,31 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<EventDTO> getEvents(@RequestParam(required = false) List<String> categoryIds,
-                                    @RequestParam(required = false) String locationId) {
-        return eventService.retrieveEvents();
+    public List<EventDTO> getEvents(@RequestParam(required = false) List<Integer> categoryIds,
+                                    @RequestParam(required = false) List<Integer> locationIds,
+                                    @RequestParam(required = false) Integer sortOption,
+                                    @RequestParam(required = false) String nameSearch) {
+        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/events/{eventId}")
     public EventDTO getEvent(@PathVariable Integer eventId) {
         return eventService.retrieveEvent(eventId);
+    }
+
+    @GetMapping("/events/isEnrolled/{eventId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.isLoggedUserEnrolled(eventId, session);
+    }
+
+    @GetMapping("/events/enroll/{eventId}")
+    public EventDTO enrollEvent(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.enrollEvent(eventId, session);
+    }
+
+    @GetMapping("/events/unenroll/{eventId}")
+    public EventDTO unenrollEvent(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.unenrollEvent(eventId, session);
     }
 
     @PostMapping(value = "/events", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,

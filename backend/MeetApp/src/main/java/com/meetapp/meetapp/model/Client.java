@@ -5,13 +5,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "client_generator")
@@ -49,15 +51,9 @@ public class Client {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "ClientMeeting", joinColumns = @JoinColumn(name = "ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "MeetingId"))
-    Set<Meeting> meetings;
-
-    @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "ClientEvents", joinColumns = @JoinColumn(name = "ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "EventId"))
-    Set<Event> events;
+    @JoinTable(name = "ClientPost", joinColumns = @JoinColumn(name="ClientId"),
+            inverseJoinColumns = @JoinColumn(name = "PostId"))
+    Set<Post> posts;
 
     public Client(String email, String firstName, String lastName, String profilePicture) {
         this();
@@ -72,7 +68,6 @@ public class Client {
         id = 0;
         isDeleted = false;
         interests = new HashSet<>();
-        meetings = new HashSet<>();
-        events = new HashSet<>();
+        posts = new HashSet<>();
     }
 }

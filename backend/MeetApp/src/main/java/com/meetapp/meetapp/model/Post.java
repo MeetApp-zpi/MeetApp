@@ -1,15 +1,19 @@
 package com.meetapp.meetapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Post {
     @Id
@@ -42,6 +46,13 @@ public class Post {
     @JoinTable(name = "PostCategory", joinColumns = @JoinColumn(name = "PostId"), inverseJoinColumns = @JoinColumn(name = "CategoryId"))
     private Set<Category> categories;
 
+    @NotNull
+    protected Integer enrolled;
+    @NotNull
+    @JsonIgnore
+    @ManyToMany(targetEntity = Client.class, mappedBy = "posts")
+    Set<Client> enrollees;
+
     public Post(Client author, Location location, Set<Category> categories) {
         this();
 
@@ -54,5 +65,7 @@ public class Post {
         id = 0;
         creationDate = LocalDate.now();
         isActive = true;
+        enrollees = new HashSet<>();
+        enrolled = 0;
     }
 }

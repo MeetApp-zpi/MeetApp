@@ -3,19 +3,21 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
+import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api")
 public class ClientController {
-
     private final ClientService clientService;
 
     public ClientController(ClientService clientService) {
@@ -42,9 +44,51 @@ public class ClientController {
         return clientService.retrieveClientDetails(session);
     }
 
+    @GetMapping("users/{clientId}/details")
+    public Client getUserDetails(@PathVariable Integer clientId) {
+        return clientService.retrieveClientDetails(clientId);
+    }
+
     @GetMapping("/users/categories")
     public List<Category> getClientCategories(HttpSession session) {
         return clientService.retrieveClientCategories(session);
+    }
+
+    @GetMapping("/users/{clientId}/categories")
+    public List<Category> getClientCategories(@PathVariable Integer clientId) {
+        return clientService.retrieveClientCategories(clientId);
+    }
+
+    @GetMapping("/users/{userId}/posts")
+    public List<Record> getClientPosts(@PathVariable Integer userId) {
+        return clientService.retrieveClientPosts(userId);
+    }
+
+    @GetMapping("/users/posts")
+    public List<Record> getClientPosts(HttpSession session) {
+        return clientService.retrieveClientPosts(session);
+    }
+    
+    @GetMapping("/users/activities")
+    public List<Record> getClientActivities(HttpSession session) {
+        return clientService.retrieveLoggedInUserActivities(session);
+    }
+    
+    @GetMapping("/users/isAuthor/{postId}")
+    public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
+        return clientService.isLoggedUserAuthorOfPost(session, postId);
+    }
+
+    @GetMapping("/enrollees/{postId}")
+    public List<Client> getEnrolleesOfPost(@PathVariable Integer postId) {
+        return clientService.getEnrolleesOfPost(postId);
+    }
+
+    @GetMapping("/users/createAccount")
+    public void createUserAccount(HttpSession session, HttpServletResponse response) throws IOException {
+        clientService.createClientAccount(session);
+        // TODO: change for prod
+        response.sendRedirect("http://localhost:5173");
     }
 
     @PutMapping("/users/categories")
@@ -55,6 +99,12 @@ public class ClientController {
     @PostMapping("/users")
     public Client createAccount(HttpSession session) {
         return clientService.createClientAccount(session);
+    }
+
+    @PostMapping("/logout")
+    public void logoutClient(HttpSession session) {
+        session.invalidate();
+        return;
     }
 
     @DeleteMapping("/users/{user_id}")

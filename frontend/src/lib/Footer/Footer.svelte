@@ -11,9 +11,10 @@
 
 <footer class="flex justify-between p-2 bg-grass h-16 lg:hidden">
     <a
-        class="lg:hidden flex flex-col justify-center p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea
+        class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'events' ? 'text-ivory' : ''}"
         href={$url('/events')}
+        target="_top"
     >
         <div class="h-full">
             <FaCalendarDay />
@@ -21,9 +22,10 @@
         <div class="text-center">Wydarzenia</div>
     </a>
     <a
-        class="lg:hidden flex flex-col justify-center p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea 
+        class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'announcements' ? 'text-ivory' : ''}"
         href={$url('/announcements')}
+        target="_top"
     >
         <div class="h-full">
             <MdAnnouncement />
@@ -31,9 +33,10 @@
         <div class="text-center">Ogłoszenia</div>
     </a>
     <a
-        class="lg:hidden flex flex-col justify-center p-2 focus:ring-1 focus:ring-cocoa transition ease-in-out delay-100 text-xs rounded-full hover:bg-tea 
+        class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
             {pageType === 'meetings' ? 'text-ivory' : ''}"
         href={$url('/meetings')}
+        target="_top"
     >
         <div class="h-full">
             <MeetingSymbol />

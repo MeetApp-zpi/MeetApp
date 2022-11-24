@@ -6,13 +6,38 @@
     import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     import Button from '../../lib/Button/Button.svelte';
+    import execute from '../fetchWrapper';
+    import { url } from '@roxi/routify';
+    import { userDetails } from '../stores.js';
 
     export let data;
     export let areDetailsShown: boolean;
     export let clickHandler: () => void;
+
+    let isEnrolled: boolean = false;
+
+    const checkEnrolledStatus = () => {
+        execute(`meetings/isEnrolled/${data.id}`, 'GET')
+            .then((r) => r.json())
+            .then((r) => (isEnrolled = r));
+    };
+
+    const checkIsAuthor = () => {
+        return data.author.id === $userDetails.id;
+    };
+
+    const enroll = () => {
+        execute(`meetings/enroll/${data.id}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    const unenroll = () => {
+        execute(`meetings/unenroll/${data.id}`, 'GET').then((_) => checkEnrolledStatus());
+    };
+
+    checkEnrolledStatus();
 </script>
 
-<div class="bg-olive rounded-2xl m-2 p-2">
+<div class="{isEnrolled ? 'bg-tusk' : 'bg-olive'} rounded-2xl m-2 p-2">
     <div class="flex flex-col">
         <button on:click={clickHandler} class="hover:cursor-pointer">
             <div class="font-bold text-left">
@@ -48,16 +73,27 @@
             <div transition:slide class="border-t-2 border-shadow">
                 {data.description}
             </div>
-            <div class="text-lg flex flex-row items-center" in:slide={{ delay: 100 }} out:slide>
-                <div class="w-12 mr-2">
-                    <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" />
+            <a
+                href={$userDetails.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
+                class="text-lg flex flex-row items-center"
+                in:slide={{ delay: 100 }}
+                out:slide
+            >
+                <div class="w-12 h-12 mr-2">
+                    <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
                 </div>
                 {data.author.firstName}
                 {data.author.lastName}
-            </div>
-            <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
-                <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={() => null}>Zapisuję się!</Button>
-            </div>
+            </a>
+            {#if !checkIsAuthor()}
+                <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
+                    {#if isEnrolled}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
+                    {:else}
+                        <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={enroll}>Zapisuję się!</Button>
+                    {/if}
+                </div>
+            {/if}
         {/if}
     </div>
 </div>

@@ -1,23 +1,20 @@
 package com.meetapp.meetapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
 public class Meeting extends Post {
     @NotNull
     @Size(min = 5, max = 50)
@@ -32,18 +29,10 @@ public class Meeting extends Post {
     private Integer personQuota;
 
     @NotNull
-    private Integer enrolled;
-
-    @NotNull
     @Future
     @Basic
     @Column(nullable = false)
     private Instant meetingDate;
-
-    @NotNull
-    @JsonIgnore
-    @ManyToMany(targetEntity = Client.class, mappedBy = "meetings")
-    Set<Client> enrollees;
 
     public Meeting(Client author, Location location, String title, String description, Instant meetingDate,
                    Set<Category> categories, Integer personQuota) {
@@ -59,9 +48,6 @@ public class Meeting extends Post {
         this.title = title;
         this.description = description;
         this.meetingDate = meetingDate;
-
-        this.enrollees = new HashSet<>();
-        this.enrolled = 0;
     }
 
     public Meeting() {
