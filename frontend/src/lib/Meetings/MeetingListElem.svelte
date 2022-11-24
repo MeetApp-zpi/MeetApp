@@ -23,7 +23,7 @@
     };
 
     const checkIsAuthor = () => {
-        return data.author.id === $userDetails.id;
+        return $userDetails !== null && data.author.id === $userDetails.id;
     };
 
     const enroll = () => {
@@ -74,7 +74,7 @@
                 {data.description}
             </div>
             <a
-                href={$userDetails.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
+                href={$userDetails !== null && $userDetails.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
                 class="text-lg flex flex-row items-center"
                 in:slide={{ delay: 100 }}
                 out:slide
