@@ -1,10 +1,14 @@
 <script lang="ts">
+    import { redirect, url } from '@roxi/routify';
+
     import execute from '../../lib/fetchWrapper';
     import { userDetails as currentUserDetails } from '../../lib/stores';
-    import { redirect, url } from '@roxi/routify';
+
+    import Pill from '../../lib/Pill/Pill.svelte';
     import Button from '../../lib/Button/Button.svelte';
     import Header from '../../lib/Header/Header.svelte';
-    import Pill from '../../lib/Pill/Pill.svelte';
+
+    import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
     import IoIosMail from 'svelte-icons/io/IoIosMail.svelte';
 
     export let userId: number;
@@ -32,7 +36,7 @@
 <div class="h-screen bg-ivory">
     <Header />
     {#await fetchUserInterests() then [userDetails, userInterests]}
-        <div class="flex flex-col items-center px-8 overflow-scroll h-[calc(100%-4rem)]">
+        <div class="flex flex-col items-center px-6 overflow-scroll h-[calc(100%-4rem)]">
             <div class="w-64 h-64 mr-2">
                 <img class="rounded-full" src={userDetails.profilePicture} alt="Profile avatar" />
             </div>
@@ -51,7 +55,10 @@
                 </div>
             </div>
 
-            <a class="mb-12" href={$url('/posts')}>
+            <a class="mb-12 flex flex-row items-center" href={$url('/posts')}>
+                <div class="h-5 w-7 mr-2">
+                    <FaCommentAlt />
+                </div>
                 <p class="text-pine text-2xl hover:opacity-50 transition ease-in-out delay-100 cursor-pointer">Aktywne Posty</p>
             </a>
 
