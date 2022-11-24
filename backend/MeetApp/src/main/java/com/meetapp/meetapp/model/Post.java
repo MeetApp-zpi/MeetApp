@@ -50,7 +50,9 @@ public class Post {
     protected Integer enrolled;
     @NotNull
     @JsonIgnore
-    @ManyToMany(targetEntity = Client.class, mappedBy = "posts")
+    @ManyToMany
+    @JoinTable(name = "ClientPost", joinColumns = @JoinColumn(name = "PostId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "ClientId", nullable = false, unique = true))
     Set<Client> enrollees;
 
     public Post(Client author, Location location, Set<Category> categories) {

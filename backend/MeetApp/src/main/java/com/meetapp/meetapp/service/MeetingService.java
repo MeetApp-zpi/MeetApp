@@ -1,6 +1,9 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.dto.DateTimeDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
+import com.meetapp.meetapp.dto.MeetingDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;

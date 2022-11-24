@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface PostRepository extends JpaRepository<Post, Integer> {
     List<Post> findAllByAuthorEmailIs(String email);
+
     List<Post> findAllByEnrolleesContains(Client enrollee);
 }
