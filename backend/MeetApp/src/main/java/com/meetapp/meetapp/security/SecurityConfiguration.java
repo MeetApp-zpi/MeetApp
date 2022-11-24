@@ -21,7 +21,7 @@ public class SecurityConfiguration {
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                 ))
                 .oauth2Login()
-                    .loginPage("/login")
+                    .defaultSuccessUrl("/api/users/createAccount", true)
                 .and()
                 .cors().disable()
                 .csrf().disable();

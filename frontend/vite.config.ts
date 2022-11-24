@@ -10,8 +10,14 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         ws: true
+      },
+      "/oauth2/authorization/google": {
+        target: "http://localhost:8080",
+        changeOrigin: true,
+        secure: false,
+        ws: true
       }
-    }
+    },
   },
   plugins: [svelte()]
 })

@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.service.AnnouncementService;
@@ -39,26 +40,53 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements")
-    public List<Announcement> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
-                                               @RequestParam(required = false) Integer locationId) {
-        return announcementService.retrieveAnnouncements();
+    public List<AnnouncementDTO> getAnnouncements(@RequestParam(required = false) List<Integer> categoryIds,
+                                                  @RequestParam(required = false) List<Integer> locationIds,
+                                                  @RequestParam(required = false) Integer sortOption,
+                                                  @RequestParam(required = false) String nameSearch) {
+        return announcementService.retrieveAnnouncements(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/announcements/{announcementId}")
-    public Announcement getAnnouncementInfo(@PathVariable Integer announcementId) {
+    public AnnouncementDTO getAnnouncement(@PathVariable Integer announcementId) {
         return announcementService.retrieveAnnouncement(announcementId);
+    }
+
+    @GetMapping("/announcements/isEnrolled/{announcementId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.isLoggedUserEnrolled(announcementId, session);
+    }
+
+    @GetMapping("/announcements/enroll/{announcementId}")
+    public AnnouncementDTO enrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.enrollAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/unenroll/{announcementId}")
+    public AnnouncementDTO unenrollAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.unenrollAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/deactivate/{announcementId}")
+    public AnnouncementDTO deactivateAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.deactivateAnnouncement(announcementId, session);
+    }
+
+    @GetMapping("/announcements/activate/{announcementId}")
+    public AnnouncementDTO activateAnnouncement(@PathVariable Integer announcementId, HttpSession session) {
+        return announcementService.activateAnnouncement(announcementId, session);
     }
 
     @PostMapping("/announcements")
     @ResponseStatus(HttpStatus.CREATED)
-    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementDTO newAnnouncement,
+    public Announcement createAnnouncement(@Valid @RequestBody AnnouncementCreationDTO newAnnouncement,
                                            HttpSession session) {
         return announcementService.createAnnouncement(newAnnouncement, session);
     }
 
     @PutMapping("/announcements/{announcementId}")
     public Announcement updateAnnouncement(@PathVariable Integer announcementId,
-                                           @Valid @RequestBody AnnouncementDTO updatedAnnouncement,
+                                           @Valid @RequestBody AnnouncementCreationDTO updatedAnnouncement,
                                            HttpSession session) {
         return announcementService.updateAnnouncement(announcementId, updatedAnnouncement, session);
     }

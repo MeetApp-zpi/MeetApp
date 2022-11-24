@@ -1,5 +1,7 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
 import com.meetapp.meetapp.service.EventService;
@@ -7,6 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +31,8 @@ public class EventController {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class, DataIntegrityViolationException.class})
+    @ExceptionHandler({IllegalArgumentException.class, MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class})
     public ResponseEntity<String> handleIllegalArg(Exception e) {
         return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -39,24 +43,43 @@ public class EventController {
     }
 
     @GetMapping("/events")
-    public List<Event> getEvents(@RequestParam(required = false) List<String> categoryIds,
-                                 @RequestParam(required = false) String locationId) {
-        return eventService.retrieveEvents();
+    public List<EventDTO> getEvents(@RequestParam(required = false) List<Integer> categoryIds,
+                                    @RequestParam(required = false) List<Integer> locationIds,
+                                    @RequestParam(required = false) Integer sortOption,
+                                    @RequestParam(required = false) String nameSearch) {
+        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/events/{eventId}")
-    public Event getEventInfo(@PathVariable Integer eventId) {
+    public EventDTO getEvent(@PathVariable Integer eventId) {
         return eventService.retrieveEvent(eventId);
     }
 
-    @PostMapping("/events")
+    @GetMapping("/events/isEnrolled/{eventId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.isLoggedUserEnrolled(eventId, session);
+    }
+
+    @GetMapping("/events/enroll/{eventId}")
+    public EventDTO enrollEvent(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.enrollEvent(eventId, session);
+    }
+
+    @GetMapping("/events/unenroll/{eventId}")
+    public EventDTO unenrollEvent(@PathVariable Integer eventId, HttpSession session) {
+        return eventService.unenrollEvent(eventId, session);
+    }
+
+    @PostMapping(value = "/events", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public Event createEvent(@Valid @RequestBody EventDTO newEvent, HttpSession session) {
+    public Event createEvent(@Valid @ModelAttribute EventCreationDTO newEvent, HttpSession session) {
         return eventService.createEvent(newEvent, session);
     }
 
-    @PutMapping("/events/{eventId}")
-    public Event updateMeeting(@PathVariable Integer eventId, @Valid @RequestBody EventDTO updatedEvent,
+    @PutMapping(value = "/events/{eventId}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_JSON_VALUE})
+    public Event updateMeeting(@PathVariable Integer eventId, @Valid @ModelAttribute EventCreationDTO updatedEvent,
                                HttpSession session) {
         return eventService.updateEvent(eventId, updatedEvent, session);
     }

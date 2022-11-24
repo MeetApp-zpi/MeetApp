@@ -4,12 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "category_generator")
@@ -22,9 +25,12 @@ public class Category {
     private String name;
 
     @JsonIgnore
-    @ManyToMany
-    @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "CategoryId"), inverseJoinColumns = @JoinColumn(name = "ClientId"))
+    @ManyToMany(targetEntity = Client.class, mappedBy = "interests")
     Set<Client> clients;
+
+    @JsonIgnore
+    @ManyToMany(targetEntity = Post.class, mappedBy = "categories")
+    Set<Post> posts;
 
     public Category(String name) {
         id = 0;
@@ -34,5 +40,7 @@ public class Category {
     public Category() {
         id = 0;
         name = "";
+        clients = new HashSet<>();
+        posts = new HashSet<>();
     }
 }

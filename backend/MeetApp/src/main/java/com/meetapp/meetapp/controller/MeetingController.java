@@ -1,5 +1,7 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.dto.MeetingDTO;
 import com.meetapp.meetapp.model.Meeting;
 import com.meetapp.meetapp.service.MeetingService;
@@ -39,24 +41,41 @@ public class MeetingController {
     }
 
     @GetMapping("/meetings")
-    public List<Meeting> getMeetings(@RequestParam(required = false) List<String> categoryIds,
-                                     @RequestParam(required = false) String locationId) {
-        return meetingService.retrieveMeetings();
+    public List<MeetingDTO> getMeetings(@RequestParam(required = false) List<Integer> categoryIds,
+                                        @RequestParam(required = false) List<Integer> locationIds,
+                                        @RequestParam(required = false) Integer sortOption,
+                                        @RequestParam(required = false) String nameSearch) {
+        return meetingService.retrieveMeetings(categoryIds, locationIds, sortOption, nameSearch);
     }
 
     @GetMapping("/meetings/{meetingId}")
-    public Meeting getMeetingInfo(@PathVariable Integer meetingId) {
+    public MeetingDTO getMeeting(@PathVariable Integer meetingId) {
         return meetingService.retrieveMeeting(meetingId);
+    }
+
+    @GetMapping("/meetings/isEnrolled/{meetingId}")
+    public Boolean isLoggedUserEnrolled(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.isLoggedUserEnrolled(meetingId, session);
+    }
+
+    @GetMapping("/meetings/enroll/{meetingId}")
+    public MeetingDTO enrollMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.enrollMeeting(meetingId, session);
+    }
+
+    @GetMapping("/meetings/unenroll/{meetingId}")
+    public MeetingDTO unenrollMeeting(@PathVariable Integer meetingId, HttpSession session) {
+        return meetingService.unenrollMeeting(meetingId, session);
     }
 
     @PostMapping("/meetings")
     @ResponseStatus(HttpStatus.CREATED)
-    public Meeting createMeeting(@Valid @RequestBody MeetingDTO newMeeting, HttpSession session) {
+    public Meeting createMeeting(@Valid @RequestBody MeetingCreationDTO newMeeting, HttpSession session) {
         return meetingService.createMeeting(newMeeting, session);
     }
 
     @PutMapping("/meetings/{meetingId}")
-    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingDTO updatedMeeting,
+    public Meeting updateMeeting(@PathVariable Integer meetingId, @Valid @RequestBody MeetingCreationDTO updatedMeeting,
                                  HttpSession session) {
         return meetingService.updateMeeting(meetingId, updatedMeeting, session);
     }
