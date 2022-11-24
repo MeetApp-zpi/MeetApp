@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.dto;
 
 import jakarta.persistence.Basic;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -29,10 +30,12 @@ public class EventCreationDTO {
 
     @NotEmpty
     @Basic
+    @Future
     private String startDate;
 
     @NotEmpty
     @Basic
+    @Future
     private String endDate;
 
     @Size(min = 0, max = 5_000)

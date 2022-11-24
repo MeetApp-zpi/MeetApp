@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.dto;
 
 import jakarta.persistence.Basic;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -27,6 +28,7 @@ public class MeetingCreationDTO {
     private Integer personQuota;
 
     @NotEmpty
+    @Future
     @Basic
     private String meetingDate;
 }

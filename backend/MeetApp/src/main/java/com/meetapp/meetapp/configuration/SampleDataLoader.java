@@ -138,7 +138,7 @@ public class SampleDataLoader implements ApplicationRunner {
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
                         "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Sobotę 7 stycznia!!! 💪💪🚩💯 " +
                                 "Zaczynamy o 18:00. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
-                        Instant.parse("2023-01-07T18:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
+                        Instant.parse("2022-11-24T18:43:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
                 new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         getLocationOrThrow("Białystok", "podlaskie"), "Wiec Wyborczy! W grudniu",
                         "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +
