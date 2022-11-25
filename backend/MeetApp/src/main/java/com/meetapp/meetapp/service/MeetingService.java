@@ -125,6 +125,8 @@ public class MeetingService {
         Client foundClient = findClientOrThrow(email);
         List<Category> foundCategories = findCategories(newMeeting.getCategoryIds());
 
+        timeInFutureOrThrow(castedDate);
+
         Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getDescription(),
                 newMeeting.getTitle(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
 
@@ -137,6 +139,8 @@ public class MeetingService {
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
         Instant parsedDate = parseDateOrThrow(updatedMeeting.getMeetingDate());
+
+        timeInFutureOrThrow(parsedDate);
 
         if (foundMeeting.getAuthor().equals(supposedAuthor)) {
             foundMeeting.setTitle(updatedMeeting.getTitle());
@@ -186,6 +190,12 @@ public class MeetingService {
             return Instant.parse(dateTime);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateTime + "' is not in a valid time format");
+        }
+    }
+
+    public void timeInFutureOrThrow(Instant timeToCheck) {
+        if (Instant.now().isAfter(timeToCheck)) {
+            throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
         }
     }
 
