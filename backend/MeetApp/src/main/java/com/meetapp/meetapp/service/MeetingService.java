@@ -39,7 +39,7 @@ public class MeetingService {
     public List<MeetingDTO> retrieveMeetings(List<Integer> categoryIds, List<Integer> locationIds,
                                              Integer sortOption, String nameSearch) {
 
-        Specification<Meeting> specification = Specification.where(null);
+        Specification<Meeting> specification = Specification.where(MeetingSpecifications.isActive());
 
         if (categoryIds != null) {
             specification = specification.and(MeetingSpecifications.hasCategory(categoryIds));

@@ -43,8 +43,15 @@ public class EventService {
     }
 
     public List<EventDTO> retrieveEvents(List<Integer> categoryIds, List<Integer> locationIds,
-                                         Integer sortOption, String nameSearch) {
-        Specification<Event> specification = Specification.where(null);
+                                         Integer sortOption, String nameSearch, Boolean shouldDisplayActive) {
+
+        Specification<Event> specification;
+
+        if (shouldDisplayActive) {
+            specification = Specification.where(EventSpecifications.isActive());
+        } else {
+            specification = Specification.where(EventSpecifications.isInactive());
+        }
 
         if (categoryIds != null) {
             specification = specification.and(EventSpecifications.hasCategory(categoryIds));

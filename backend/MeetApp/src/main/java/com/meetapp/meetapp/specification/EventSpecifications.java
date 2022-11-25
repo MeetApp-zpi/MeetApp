@@ -29,4 +29,12 @@ public class EventSpecifications {
     public static Specification<Event> titleContains(String searchedPhrase) {
         return (event, cq, cb) -> cb.like(cb.lower(event.get("title")), "%" + searchedPhrase.toLowerCase() + "%");
     }
+
+    public static Specification<Event> isActive() {
+        return (event, cq, cb) -> cb.isTrue(event.get("isActive"));
+    }
+
+    public static Specification<Event> isInactive() {
+        return (event, cq, cb) -> cb.isFalse(event.get("isActive"));
+    }
 }

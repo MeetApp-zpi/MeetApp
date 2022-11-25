@@ -39,7 +39,7 @@ public class AnnouncementService {
     public List<AnnouncementDTO> retrieveAnnouncements(List<Integer> categoryIds, List<Integer> locationIds,
                                                        Integer sortOption, String nameSearch) {
 
-        Specification<Announcement> specification = Specification.where(null);
+        Specification<Announcement> specification = Specification.where(AnnouncementSpecifications.isActive());
 
         if (categoryIds != null) {
             specification = specification.and(AnnouncementSpecifications.hasCategory(categoryIds));
