@@ -9,7 +9,7 @@
     import MdAccessTime from 'svelte-icons/md/MdAccessTime.svelte';
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     // noinspection TypeScriptCheckImport
-    import { goto } from '@roxi/routify';
+    import { goto, url } from '@roxi/routify';
 
     export let eventId: number;
 
@@ -73,7 +73,7 @@
                         <div class="w-6 mx-2">
                             <FaCalendarAlt />
                         </div>
-                        <div class="self-center">
+                        <div class="self-center w-1/3">
                             {data.startDateTime.date}
                         </div>
                         <div class="w-6 mx-2">
@@ -86,8 +86,8 @@
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarCheck />
-                        </div>
-                        <div class="self-center">
+                        </div>q
+                        <div class="self-center w-1/3">
                             {data.endDateTime.date}
                         </div>
                         <div class="w-6 mx-2">
@@ -103,6 +103,19 @@
                         </div>
                         <div class="text-orange">{data.enrolled} &nbsp;</div>
                         {data.personQuota !== null ? '/ ' + data.personQuota : ''}
+                    </div>
+
+                    <div class="flex flex-row">
+                        <a
+                            href={data.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
+                            class="text-lg flex flex-row items-center"
+                        >
+                            <div class="w-12 h-12 mr-2">
+                                <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
+                            </div>
+                            {data.author.firstName}
+                            {data.author.lastName}
+                        </a>
                     </div>
                 </div>
                 <div class="m-4">
