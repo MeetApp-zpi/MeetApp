@@ -1,11 +1,11 @@
 <script lang="ts">
-    import Svelecte, { addFormatter } from 'svelecte';
     import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
 
     import Button from '../../../lib/Button/Button.svelte';
     import Header from '../../../lib/Header/Header.svelte';
-    import MultiselectInput from '../../../lib/MultiselectInput/MultiselectInput.svelte';
+    import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import execute from '../../../lib/fetchWrapper';
+    import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
 
     let categoryValue = null;
     let cityValue = null;
@@ -15,31 +15,7 @@
     let titleInput = null;
     let descriptionInput = null;
 
-    let locations = [];
     let categories = [];
-
-    function cityRenderer(item, isSelected) {
-        return `${item.city}<span class='text-gray'>, ${item.voivodeship}</span>`;
-    }
-
-    addFormatter('city-render', cityRenderer);
-
-    execute('locations', 'GET')
-        .then((r) => r.json())
-        .then((r) => {
-            for (const [index, location] of r.entries()) {
-                locations = [
-                    ...locations,
-                    {
-                        id: location.id,
-                        name: location.city.name + ', ' + location.voivodeship.name,
-                        city: location.city.name,
-                        voivodeship: location.voivodeship.name,
-                        sortNum: index
-                    }
-                ];
-            }
-        });
 
     execute('categories', 'GET')
         .then((r) => r.json())
@@ -112,8 +88,7 @@
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
             <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
-                <MultiselectInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
-                <!-- <Svelecte options={categories} placeholder="Kategoria" inputId="categorySelect" multiple="true" bind:value={categoryValue} /> -->
+                <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
             <div class="mx-4">
@@ -127,15 +102,12 @@
                 <p class="hidden peer-invalid:block text-red-500 text-sm mb-2">Tytuł musi mieć między 5 a 50 znaków</p>
             </div>
             <div class="bg-tea mx-4 py-4 rounded-xl" id="cityInputBox">
-                <Svelecte
-                    style="margin-left: 1rem; margin-right: 1rem"
-                    searchField="city"
-                    sortField="sortNum"
-                    renderer="city-render"
-                    options={locations}
+                <SelectCityInput
+                    fetch="http://localhost:5173/api/locations?nameSearch=[query]"
                     placeholder="Miasto"
                     inputId="citySelect"
-                    bind:value={cityValue}
+                    style="margin-left: 1rem; margin-right: 1rem"
+                    bind:selected={cityValue}
                 />
                 <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
             </div>

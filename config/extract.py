@@ -8,13 +8,6 @@ if __name__ == "__main__":
     with open("countryExtract.tsv", encoding='UTF-8') as f:
         records = f.readlines()
 
-    # cities_voivodeships = set()
-    # for record in records[1:]:
-    #     splitted = record.split('\t')
-    #     if splitted[5] != '':
-    #         cities_voivodeships.add(
-    #             splitted[5] + "," + splitted[6].strip().split(' ')[1])
-
     newLines = []
     cities_voivodeships = set()
     for record in records[1:]:
@@ -32,7 +25,7 @@ if __name__ == "__main__":
                 cities_voivodeships.add(testPair)
 
     for re in newLines:
-        if ',' in re[3]:
+        if ',' in re[0]:
             print(re)
 
     with open("cities.csv", "w", newline='') as f:

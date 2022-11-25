@@ -14,7 +14,8 @@ public class LocationService {
         this.locationRepository = locationRepository;
     }
 
-    public List<Location> retrieveLocations() {
-        return locationRepository.findAllByOrderByCityNameAscVoivodeshipNameAsc();
+    public List<Location> retrieveLocations(String nameSearch) {
+        List<Location> foundLocs = locationRepository.findDistinctTop10ByCityNameContainingIgnoreCaseOrderById(nameSearch);
+        return foundLocs;
     }
 }
