@@ -86,7 +86,7 @@
                     <div class="flex flex-row">
                         <div class="w-6 mx-2">
                             <FaCalendarCheck />
-                        </div>q
+                        </div>
                         <div class="self-center w-1/3">
                             {data.endDateTime.date}
                         </div>
