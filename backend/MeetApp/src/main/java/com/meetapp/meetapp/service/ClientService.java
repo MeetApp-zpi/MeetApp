@@ -46,19 +46,24 @@ public class ClientService {
     }
 
     public List<Record> retrieveClientPosts(Integer clientId) {
-        return postRepository.findAllByAuthorEmailIs(findClientOrThrow(clientId).getEmail())
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(findClientOrThrow(clientId).getEmail(), true)
                 .stream().map(ClientService::postToDto).toList();
     }
 
     public List<Record> retrieveClientPosts(HttpSession session) {
-        return postRepository.findAllByAuthorEmailIs(SessionManager.retrieveEmailOrThrow(session))
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session), true)
                 .stream().map(ClientService::postToDto).toList();
     }
-    
+
+    public List<Record> retrieveClientInactivePosts(HttpSession session) {
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session), false)
+                .stream().map(ClientService::postToDto).toList();
+    }
+
     public Client retrieveClientDetails(Integer clientId) {
         return findClientOrThrow(clientId);
     }
-    
+
     public List<Record> retrieveLoggedInUserActivities(HttpSession session) {
         Client loggedUser = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         return postRepository.findAllByEnrolleesContains(loggedUser).stream().map((Post post) -> {
