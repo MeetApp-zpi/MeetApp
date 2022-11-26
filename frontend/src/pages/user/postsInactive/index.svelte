@@ -35,7 +35,7 @@
         newPosts.then((r) => (userPosts = r));
     };
 
-    let promise = execute('users/posts', 'GET')
+    let promise = execute('users/postsInactive', 'GET')
         .then((r) => r.json())
         .then((r) => (userPosts = r));
 </script>
@@ -52,9 +52,9 @@
                 {:else}
                     <AnnouncementListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => viewDetails(post.id)} />
                 {/if}
-                <PostToolbar postId={post.id} postType={retrievePostType(post)} isPostActive={true} {updatePosts} />
+                <PostToolbar postId={post.id} postType={retrievePostType(post)} isPostActive={false} {updatePosts} />
             {/each}
         {/await}
     </div>
-    <MyPostsFooter pageType="active" />
+    <MyPostsFooter pageType="inactive" />
 </div>
