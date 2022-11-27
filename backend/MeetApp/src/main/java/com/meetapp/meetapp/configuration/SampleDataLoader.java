@@ -52,7 +52,7 @@ public class SampleDataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        locationRepository.saveAll(readCitiesFromCsv());
+        locationRepository.saveAll(getLocations());
         System.out.println(Instant.now());
         categories = categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
