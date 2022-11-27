@@ -3,7 +3,6 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -68,12 +67,17 @@ public class ClientController {
     public List<Record> getClientPosts(HttpSession session) {
         return clientService.retrieveClientPosts(session);
     }
-    
+
+    @GetMapping("/users/postsInactive")
+    public List<Record> getClientInactivePosts(HttpSession session) {
+        return clientService.retrieveClientInactivePosts(session);
+    }
+
     @GetMapping("/users/activities")
     public List<Record> getClientActivities(HttpSession session) {
         return clientService.retrieveLoggedInUserActivities(session);
     }
-    
+
     @GetMapping("/users/isAuthor/{postId}")
     public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
         return clientService.isLoggedUserAuthorOfPost(session, postId);
