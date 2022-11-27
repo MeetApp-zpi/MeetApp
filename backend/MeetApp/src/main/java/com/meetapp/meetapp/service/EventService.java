@@ -1,6 +1,9 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.dto.DateTimeDTO;
+import com.meetapp.meetapp.dto.EventCreationDTO;
+import com.meetapp.meetapp.dto.EventDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -140,6 +143,9 @@ public class EventService {
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
         String pictureUri = newEvent.getPicture() != null ? savePictureAndGetPath(newEvent.getPicture()) : null;
 
+        timeInFutureOrThrow(startDate);
+        timeInFutureOrThrow(endDate);
+
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
@@ -158,6 +164,9 @@ public class EventService {
         Instant endDate = parseDateOrThrow(updatedEvent.getEndDate());
         Event foundEvent = findEventOrThrow(eventId);
         String pictureUri = updatedEvent.getPicture() != null ? savePictureAndGetPath(updatedEvent.getPicture()) : null;
+
+        timeInFutureOrThrow(startDate);
+        timeInFutureOrThrow(endDate);
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
@@ -226,6 +235,12 @@ public class EventService {
             return Instant.parse(dateString);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateString + "' is not in a proper time format");
+        }
+    }
+
+    public void timeInFutureOrThrow(Instant timeToCheck) {
+        if (Instant.now().isAfter(timeToCheck)) {
+            throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
         }
     }
 
