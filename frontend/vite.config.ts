@@ -17,6 +17,11 @@ export default defineConfig({
         secure: false,
         ws: true
       }
+      // "/websockets": {
+      //   target: "http://localhost:8080",
+      //   ws: true,
+      //   changeOrigin: true
+      // }
     },
   },
   plugins: [svelte()]
