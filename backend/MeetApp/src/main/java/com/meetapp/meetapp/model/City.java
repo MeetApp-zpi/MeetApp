@@ -16,8 +16,8 @@ public class City {
     private Integer id;
 
     @NotNull
-    @Size(min = 1, max = 50)
-    @Column(nullable = false, unique = true, length = 50)
+    @Size(min = 1, max = 56)
+    @Column(nullable = false, unique = true, length = 56)
     private String name;
 
     public City() {

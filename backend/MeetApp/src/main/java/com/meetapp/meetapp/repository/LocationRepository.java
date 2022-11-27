@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface LocationRepository extends JpaRepository<Location, Integer> {
     Optional<Location> findByCityNameAndVoivodeshipName(String cityName, String voivodeshipName);
 
-    List<Location> findAllByOrderByCityNameAscVoivodeshipNameAsc();
+    List<Location> findDistinctTop10ByCityNameContainingIgnoreCaseOrderById(String cityName);
 }
