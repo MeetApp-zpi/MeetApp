@@ -8,7 +8,7 @@
     import SortFilterBanner from '../../lib/SortFilterBanner/SortFilterBanner.svelte';
     import execute from '../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
-    import ShowInactiveButton from '../../lib/ShowInactiveButton/ShowInactiveButton.svelte';
+    import ShowActiveButton from '../../lib/ShowActiveButton/ShowActiveButton.svelte';
 
     let data = [];
     let sortOptions = [
@@ -40,7 +40,7 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        execute('events?' + urlParams.toString(), 'GET')
+        execute('eventsInactive?' + urlParams.toString(), 'GET')
             .then((r) => r.json())
             .then((r) => (data = r));
     }
@@ -54,7 +54,7 @@
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
-    <ShowInactiveButton />
+    <ShowActiveButton />
     <AddPostButton pageType="events" />
     <Footer pageType="events" />
 </div>
