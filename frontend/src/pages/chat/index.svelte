@@ -2,12 +2,19 @@
     import { Client, Stomp } from '@stomp/stompjs';
     import SockJS from 'sockjs-client/dist/sockjs';
 
-    const sock = new SockJS('http://localhost:8080/websockets');
+    // const sock = new SockJS('http://localhost:8080/websockets');
     // const wsClient = new Client();
 
-    const stomp = Stomp.over(sock);
+    const stomp = Stomp.over(() => new SockJS('http://localhost:8080/websockets'));
 
+    stomp.debug = (str) => console.log(str);
     stomp.activate();
+    // stomp.connect(
+    //     {
+    //         'Access-Control-Allow-Origin': '*'
+    //     },
+    //     () => console.log('Connected')
+    // );
 
     // stomp.onConnect = () => {
     //     console.log(stomp.active, stomp);
