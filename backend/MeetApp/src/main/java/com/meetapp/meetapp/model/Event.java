@@ -30,12 +30,10 @@ public class Event extends Post {
 
     @NotNull
     @Basic
-    @Future
     @Column(nullable = false)
     private Instant startDate;
 
     @NotNull
-    @Future
     @Basic
     @Column(nullable = false)
     private Instant endDate;

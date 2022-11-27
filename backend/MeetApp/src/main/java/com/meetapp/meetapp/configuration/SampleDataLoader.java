@@ -136,9 +136,9 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
-                        "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Sobotę 7 stycznia!!! 💪💪🚩💯 " +
-                                "Zaczynamy o 18:00. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
-                        Instant.parse("2023-01-07T18:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
+                        "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Czwartek 24 listopada!!! 💪💪🚩💯 " +
+                                "Zaczynamy o 20:50. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
+                        Instant.parse("2022-11-24T20:50:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
                 new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         getLocationOrThrow("Białystok", "podlaskie"), "Wiec Wyborczy! W grudniu",
                         "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +

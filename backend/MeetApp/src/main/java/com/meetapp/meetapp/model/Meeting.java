@@ -29,7 +29,6 @@ public class Meeting extends Post {
     private Integer personQuota;
 
     @NotNull
-    @Future
     @Basic
     @Column(nullable = false)
     private Instant meetingDate;
