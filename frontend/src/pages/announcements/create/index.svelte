@@ -72,12 +72,11 @@
     const handleSubmit = () => {
         if (validateCategory() && validateTitle() && validateCity() && validateDescription()) {
             let requestBody = {
-                locationId: cityValue,
+                locationId: cityValue.id,
                 title: titleValue,
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
-
             execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173'));
         }
     };
