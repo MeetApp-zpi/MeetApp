@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
@@ -55,14 +56,14 @@ public class AnnouncementService {
         }
 
         if (sortOption != null) {
-            PageRequest nextPage = PageRequest.of(page, 10, paramToSortOrThrow(sortOption));
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
 
             return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();
         } else {
-            PageRequest nextPage = PageRequest.of(page, 10);
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
 
             return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),

@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.MeetingCreationDTO;
 import com.meetapp.meetapp.dto.MeetingDTO;
@@ -58,14 +59,14 @@ public class MeetingService {
         }
 
         if (sortOption != null) {
-            PageRequest nextPage = PageRequest.of(page, 10, paramToSortOrThrow(sortOption));
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
 
             return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
                             meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
                             new DateTimeDTO(meeting.getMeetingDate()))).toList();
         } else {
-            PageRequest nextPage = PageRequest.of(page, 10);
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
 
             return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),

@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.*;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
@@ -47,21 +48,21 @@ public class ClientService {
     }
 
     public List<Record> retrieveClientPosts(Integer clientId, Integer page) {
-        PageRequest nextPage = PageRequest.of(page, 10);
+        PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
         return postRepository.findAllByAuthorEmailIsAndIsActiveIs(findClientOrThrow(clientId).getEmail(),
                         true, nextPage)
                 .stream().map(ClientService::postToDto).toList();
     }
 
     public List<Record> retrieveClientPosts(HttpSession session, Integer page) {
-        PageRequest nextPage = PageRequest.of(page, 10);
+        PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
         return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session),
                         true, nextPage)
                 .stream().map(ClientService::postToDto).toList();
     }
 
     public List<Record> retrieveClientInactivePosts(HttpSession session, Integer page) {
-        PageRequest nextPage = PageRequest.of(page, 10);
+        PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
         return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session),
                         false, nextPage)
                 .stream().map(ClientService::postToDto).toList();
@@ -73,7 +74,7 @@ public class ClientService {
 
     public List<Record> retrieveLoggedInUserActivities(HttpSession session, Integer page) {
         Client loggedUser = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
-        PageRequest nextPage = PageRequest.of(page, 10);
+        PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
 
         return postRepository.findAllByEnrolleesContains(loggedUser, nextPage).stream().map((Post post) -> {
             if (post instanceof Announcement casted) {
@@ -100,8 +101,8 @@ public class ClientService {
 
     public List<Client> getEnrolleesOfPost(Integer postId, Integer page) {
         Post foundPost = findPostOrThrow(postId);
-        PageRequest nextPage = PageRequest.of(page, 10);
-        return foundPost.getEnrollees().stream().skip(page * 10).limit(10).toList();
+        PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
+        return foundPost.getEnrollees().stream().skip(page * Constants.PAGE_SIZE).limit(Constants.PAGE_SIZE).toList();
     }
 
     public Client createClientAccount(HttpSession session) {

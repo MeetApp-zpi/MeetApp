@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
@@ -71,7 +72,7 @@ public class EventService {
         }
 
         if (sortOption != null) {
-            PageRequest nextPage = PageRequest.of(page, 10, paramToSortOrThrow(sortOption));
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
 
             return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
@@ -79,7 +80,7 @@ public class EventService {
                             new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
                             event.getPicture())).toList();
         } else {
-            PageRequest nextPage = PageRequest.of(page, 10);
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
 
             return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
