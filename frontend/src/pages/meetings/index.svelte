@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
@@ -46,6 +44,15 @@
     };
 
     $: {
+        $filteredCategoryIds;
+        $filteredLocationIds;
+        $sortingOption;
+        $nameSearchParam;
+        data = [];
+        page = 0;
+    }
+
+    $: {
         let urlParams = new URLSearchParams();
         for (let categoryId of $filteredCategoryIds) {
             urlParams.append('categoryIds', categoryId);
@@ -62,10 +69,6 @@
 
         retrieveMeetings(page, urlParams);
     }
-
-    onMount(() => {
-        window.addEventListener('scroll', infiniteScroll);
-    });
 </script>
 
 <div class="h-screen">

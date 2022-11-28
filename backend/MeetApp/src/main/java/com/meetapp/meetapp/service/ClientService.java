@@ -7,6 +7,7 @@ import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.repository.PostRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -45,18 +46,24 @@ public class ClientService {
         return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
     }
 
-    public List<Record> retrieveClientPosts(Integer clientId) {
-        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(findClientOrThrow(clientId).getEmail(), true)
+    public List<Record> retrieveClientPosts(Integer clientId, Integer page) {
+        PageRequest nextPage = PageRequest.of(page, 10);
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(findClientOrThrow(clientId).getEmail(),
+                        true, nextPage)
                 .stream().map(ClientService::postToDto).toList();
     }
 
-    public List<Record> retrieveClientPosts(HttpSession session) {
-        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session), true)
+    public List<Record> retrieveClientPosts(HttpSession session, Integer page) {
+        PageRequest nextPage = PageRequest.of(page, 10);
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session),
+                        true, nextPage)
                 .stream().map(ClientService::postToDto).toList();
     }
 
-    public List<Record> retrieveClientInactivePosts(HttpSession session) {
-        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session), false)
+    public List<Record> retrieveClientInactivePosts(HttpSession session, Integer page) {
+        PageRequest nextPage = PageRequest.of(page, 10);
+        return postRepository.findAllByAuthorEmailIsAndIsActiveIs(SessionManager.retrieveEmailOrThrow(session),
+                        false, nextPage)
                 .stream().map(ClientService::postToDto).toList();
     }
 
@@ -64,9 +71,11 @@ public class ClientService {
         return findClientOrThrow(clientId);
     }
 
-    public List<Record> retrieveLoggedInUserActivities(HttpSession session) {
+    public List<Record> retrieveLoggedInUserActivities(HttpSession session, Integer page) {
         Client loggedUser = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
-        return postRepository.findAllByEnrolleesContains(loggedUser).stream().map((Post post) -> {
+        PageRequest nextPage = PageRequest.of(page, 10);
+
+        return postRepository.findAllByEnrolleesContains(loggedUser, nextPage).stream().map((Post post) -> {
             if (post instanceof Announcement casted) {
                 return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
                         casted.getEnrolled());
@@ -89,9 +98,10 @@ public class ClientService {
         return foundPost.getAuthor().getEmail().equals(loggedUserEmail);
     }
 
-    public List<Client> getEnrolleesOfPost(Integer postId) {
+    public List<Client> getEnrolleesOfPost(Integer postId, Integer page) {
         Post foundPost = findPostOrThrow(postId);
-        return foundPost.getEnrollees().stream().toList();
+        PageRequest nextPage = PageRequest.of(page, 10);
+        return foundPost.getEnrollees().stream().skip(page * 10).limit(10).toList();
     }
 
     public Client createClientAccount(HttpSession session) {

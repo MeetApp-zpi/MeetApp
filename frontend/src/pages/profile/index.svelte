@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <a class="mb-4 flex flex-row items-center" href={$url('/posts')}>
+            <a class="mb-4 flex flex-row items-center" href={$url('/user/posts')}>
                 <div class="h-5 w-7 mr-2">
                     <FaCommentAlt />
                 </div>

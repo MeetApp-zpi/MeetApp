@@ -8,25 +8,38 @@
     export let postId: number;
 
     let users = [];
+    let page: number = 0;
 
     let promise = execute(`users/isAuthor/${postId}`, 'GET')
         .then((r) => r.text())
         .then((r) => (r === 'false' ? $redirect('/') : null));
 
-    promise = promise.then((_) =>
-        execute(`enrollees/${postId}`, 'GET')
+    const retrieveUsers = (page: number) => {
+        execute(`enrollees/${postId}?page=${page}`, 'GET')
             .then((r) => r.json())
-            .then((r) => (users = r))
-    );
+            .then((r) => (users = [...users, ...r]));
+    };
 
-    $: console.log(users);
+    $: {
+        retrieveUsers(page);
+    }
+
+    const infiniteScroll = () => {
+        const usersContainer = document.getElementById('usersContainer');
+
+        if (usersContainer.offsetHeight + usersContainer.scrollTop === usersContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
 </script>
 
 <div class="h-screen">
     <Header />
-    {#await promise then _}
-        {#each users as user}
-            <UserPill data={user} />
-        {/each}
-    {/await}
+    <div on:scroll={infiniteScroll} id="usersContainer">
+        {#await promise then _}
+            {#each users as user}
+                <UserPill data={user} />
+            {/each}
+        {/await}
+    </div>
 </div>

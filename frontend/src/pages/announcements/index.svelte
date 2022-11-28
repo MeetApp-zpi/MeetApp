@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
-
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import AnnouncementListElem from '../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
@@ -31,19 +29,27 @@
     };
 
     const infiniteScroll = () => {
-        const annContainer = document.getElementById('postsContainer');
+        const postsContainer = document.getElementById('postsContainer');
 
-        if (annContainer.offsetHeight + annContainer.scrollTop === annContainer.scrollHeight) {
+        if (postsContainer.offsetHeight + postsContainer.scrollTop === postsContainer.scrollHeight) {
             page = page + 1;
         }
     };
 
     const retrieveAnnouncements = (page: number, urlParams: URLSearchParams) => {
-        console.log(page);
         execute(`announcements?page=${page}&` + urlParams.toString(), 'GET')
             .then((r) => r.json())
             .then((r) => (data = [...data, ...r]));
     };
+
+    $: {
+        $filteredCategoryIds;
+        $filteredLocationIds;
+        $sortingOption;
+        $nameSearchParam;
+        data = [];
+        page = 0;
+    }
 
     $: {
         let urlParams = new URLSearchParams();
@@ -62,10 +68,6 @@
 
         retrieveAnnouncements(page, urlParams);
     }
-
-    onMount(() => {
-        window.addEventListener('scroll', infiniteScroll);
-    });
 </script>
 
 <div class="h-screen">

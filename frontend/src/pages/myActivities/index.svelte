@@ -9,11 +9,12 @@
 
     let posts = [];
     let selected: number | null = null;
+    let page: number = 0;
 
-    const getActivities = () => {
-        return execute('users/activities', 'GET')
+    const retrieveActivities = (page: number) => {
+        execute(`users/activities?page=${page}`, 'GET')
             .then((r) => r.json())
-            .then((r) => (posts = r));
+            .then((r) => (posts = [...posts, ...r]));
     };
 
     const clickBubble = (postId) => {
@@ -24,12 +25,22 @@
         }
     };
 
-    let promise = getActivities();
+    $: {
+        retrieveActivities(page);
+    }
+
+    const infiniteScroll = () => {
+        const postsContainer = document.getElementById('postsContainer');
+
+        if (postsContainer.offsetHeight + postsContainer.scrollTop === postsContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
 </script>
 
 <div class="h-screen">
     <Header />
-    {#await promise then _}
+    <div class="" on:scroll={infiniteScroll} id="postsContainer">
         {#each posts as post}
             {#if Object.hasOwn(post, 'meetingDateTime')}
                 <MeetingListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => clickBubble(post.id)} />
@@ -39,5 +50,5 @@
                 <AnnouncementListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => clickBubble(post.id)} />
             {/if}
         {/each}
-    {/await}
+    </div>
 </div>

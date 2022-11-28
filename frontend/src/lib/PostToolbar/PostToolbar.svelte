@@ -15,7 +15,7 @@
     export let updatePosts: (newPosts: any) => void;
 
     const getUpdatedPosts = () => {
-        return execute(`users/posts${isPostActive ? '' : 'Inactive'}`, 'GET').then((r) => r.json());
+        return execute(`users/posts${isPostActive ? '' : 'Inactive'}?page=0`, 'GET').then((r) => r.json());
     };
 
     const deletePost = () => {
