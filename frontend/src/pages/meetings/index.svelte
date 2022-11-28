@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
@@ -16,10 +18,10 @@
         { id: 4, name: 'Po liczbie zapisanych malejąco' },
         { id: 5, name: 'Najbliżej daty rozpoczęcia' }
     ];
+    let meetingsPromise: Promise<any>;
+    let page: number = 0;
 
     clearFilters();
-
-    let meetingsPromise: Promise<never>
 
     const viewDetails = (postId) => {
         if (selected !== postId) {
@@ -27,6 +29,20 @@
         } else {
             selected = null;
         }
+    };
+
+    const infiniteScroll = () => {
+        const meetingsContainer = document.getElementById('postsContainer');
+
+        if (meetingsContainer.offsetHeight + meetingsContainer.scrollTop === meetingsContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
+
+    const retrieveMeetings = (page: number, urlParams: URLSearchParams) => {
+        execute(`meetings?page=${page}&` + urlParams.toString(), 'GET')
+            .then((r) => r.json())
+            .then((r) => (data = r));
     };
 
     $: {
@@ -44,16 +60,18 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        meetingsPromise = execute('meetings?' + urlParams.toString(), 'GET')
-            .then((r) => r.json())
-            .then((r) => (data = r));
+        retrieveMeetings(page, urlParams);
     }
+
+    onMount(() => {
+        window.addEventListener('scroll', infiniteScroll);
+    });
 </script>
 
 <div class="h-screen">
     <Header />
     <SortFilterBanner {sortOptions} />
-    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#await meetingsPromise then _}
             {#each data as item}
                 <MeetingListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />

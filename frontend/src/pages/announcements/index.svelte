@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+
     import AddPostButton from '../../lib/AddPostButton/AddPostButton.svelte';
     import AnnouncementListElem from '../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import Footer from '../../lib/Footer/Footer.svelte';
@@ -16,6 +18,7 @@
         { id: 4, name: 'Po liczbie zapisanych malejąco' }
     ];
     let announcementsPromise: Promise<any>;
+    let page: number = 0;
 
     clearFilters();
 
@@ -25,6 +28,21 @@
         } else {
             selected = null;
         }
+    };
+
+    const infiniteScroll = () => {
+        const annContainer = document.getElementById('postsContainer');
+
+        if (annContainer.offsetHeight + annContainer.scrollTop === annContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
+
+    const retrieveAnnouncements = (page: number, urlParams: URLSearchParams) => {
+        console.log(page);
+        execute(`announcements?page=${page}&` + urlParams.toString(), 'GET')
+            .then((r) => r.json())
+            .then((r) => (data = [...data, ...r]));
     };
 
     $: {
@@ -42,16 +60,18 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        announcementsPromise = execute('announcements?' + urlParams.toString(), 'GET')
-            .then((r) => r.json())
-            .then((r) => (data = r));
+        retrieveAnnouncements(page, urlParams);
     }
+
+    onMount(() => {
+        window.addEventListener('scroll', infiniteScroll);
+    });
 </script>
 
 <div class="h-screen">
     <Header />
     <SortFilterBanner {sortOptions} />
-    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#await announcementsPromise then _}
             {#each data as item}
                 <AnnouncementListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />
