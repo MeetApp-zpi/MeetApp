@@ -6,13 +6,14 @@
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import execute from '../../../lib/fetchWrapper';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
+    import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
+
+    let title = null;
 
     let categoryValue = null;
     let cityValue = null;
-    let titleValue = null;
     let descriptionValue = null;
 
-    let titleInput = null;
     let descriptionInput = null;
 
     let categories = [];
@@ -33,15 +34,6 @@
         errorMsg.classList.remove('block');
         errorMsg.className += ' hidden';
         svControl.classList.remove('!border-red-500');
-        return true;
-    };
-
-    const validateTitle = () => {
-        if (titleValue === null || titleValue.length < 5 || titleValue.length > 50) {
-            titleInput.setCustomValidity('Tytuł musi mieć między 5 a 50 znaków');
-            return false;
-        }
-        titleInput.setCustomValidity('');
         return true;
     };
 
@@ -70,10 +62,10 @@
     };
 
     const handleSubmit = () => {
-        if (validateCategory() && validateTitle() && validateCity() && validateDescription()) {
+        if (title.getIsValid() && validateCategory() && validateCity() && validateDescription()) {
             let requestBody = {
                 locationId: cityValue.id,
-                title: titleValue,
+                title: title.data,
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
@@ -86,20 +78,11 @@
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
+            <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} />
             <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-            <div class="mx-4">
-                <input
-                    bind:value={titleValue}
-                    bind:this={titleInput}
-                    class="border-grass border-2 rounded-lg w-full px-4 py-1 mr-2 my-2 focus:outline-none invalid:border-red-500 peer"
-                    type="text"
-                    placeholder="Nazwa ogłoszenia"
-                />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mb-2">Tytuł musi mieć między 5 a 50 znaków</p>
-            </div>
             <div class="bg-tea mx-4 py-4 rounded-xl" id="cityInputBox">
                 <SelectCityInput
                     fetch="http://localhost:5173/api/locations?nameSearch=[query]"
@@ -131,11 +114,3 @@
         </div>
     </div>
 </div>
-
-<style>
-    .categorySvelecteBox :global(.sv-control) {
-        border-color: var(--grass);
-        border-width: 2px;
-        padding-left: 0.5rem;
-    }
-</style>

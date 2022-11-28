@@ -19,7 +19,7 @@
 
     .categorySvelecteControl :global(.sv-control) {
         border-color: var(--pickle);
-        background-color: var(--ivory);
+        background-color: var(--white);
         border-width: 2px;
         padding: 0.5rem 0.5rem 0.5rem 0.5rem;
         color: var(--gray);
