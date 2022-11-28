@@ -42,7 +42,7 @@
     const retrieveMeetings = (page: number, urlParams: URLSearchParams) => {
         execute(`meetings?page=${page}&` + urlParams.toString(), 'GET')
             .then((r) => r.json())
-            .then((r) => (data = r));
+            .then((r) => (data = [...data, ...r]));
     };
 
     $: {

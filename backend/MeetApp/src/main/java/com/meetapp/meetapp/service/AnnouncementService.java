@@ -55,16 +55,16 @@ public class AnnouncementService {
         }
 
         if (sortOption != null) {
-            PageRequest nextTen = PageRequest.of(page, 3, paramToSortOrThrow(sortOption));
+            PageRequest nextPage = PageRequest.of(page, 10, paramToSortOrThrow(sortOption));
 
-            return announcementRepository.findAll(specification, nextTen).stream()
+            return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();
         } else {
-            PageRequest nextTen = PageRequest.of(page, 3);
+            PageRequest nextPage = PageRequest.of(page, 10);
 
-            return announcementRepository.findAll(specification, nextTen).stream()
+            return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();

@@ -44,8 +44,9 @@ public class MeetingController {
     public List<MeetingDTO> getMeetings(@RequestParam(required = false) List<Integer> categoryIds,
                                         @RequestParam(required = false) List<Integer> locationIds,
                                         @RequestParam(required = false) Integer sortOption,
-                                        @RequestParam(required = false) String nameSearch) {
-        return meetingService.retrieveMeetings(categoryIds, locationIds, sortOption, nameSearch);
+                                        @RequestParam(required = false) String nameSearch,
+                                        @RequestParam Integer page) {
+        return meetingService.retrieveMeetings(categoryIds, locationIds, sortOption, nameSearch, page);
     }
 
     @GetMapping("/meetings/{meetingId}")

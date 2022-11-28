@@ -13,6 +13,7 @@ import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.MeetingSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class MeetingService {
     }
 
     public List<MeetingDTO> retrieveMeetings(List<Integer> categoryIds, List<Integer> locationIds,
-                                             Integer sortOption, String nameSearch) {
+                                             Integer sortOption, String nameSearch, Integer page) {
 
         Specification<Meeting> specification = Specification.where(MeetingSpecifications.isActive());
 
@@ -57,12 +58,16 @@ public class MeetingService {
         }
 
         if (sortOption != null) {
-            return meetingRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+            PageRequest nextPage = PageRequest.of(page, 10, paramToSortOrThrow(sortOption));
+
+            return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
                             meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
                             new DateTimeDTO(meeting.getMeetingDate()))).toList();
         } else {
-            return meetingRepository.findAll(specification).stream()
+            PageRequest nextPage = PageRequest.of(page, 10);
+
+            return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
                             meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
                             new DateTimeDTO(meeting.getMeetingDate()))).toList();
