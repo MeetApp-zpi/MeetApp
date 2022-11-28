@@ -8,6 +8,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -50,11 +53,24 @@ public class SampleDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         locationRepository.saveAll(getLocations());
+        System.out.println(Instant.now());
         categories = categoryRepository.saveAll(getCategories());
         clientRepository.saveAll(getClients());
         announcementRepository.saveAll(getAnnouncements());
         meetingRepository.saveAll(getMeetings());
         eventRepository.saveAll(getEvents());
+    }
+
+    private List<Location> readCitiesFromCsv() {
+        try {
+            List<String[]> readCities = Files.lines(Paths.get("src/main/java/com/meetapp/meetapp/configuration/cities.csv"))
+                    .map(line -> line.split(",")).toList();
+            return readCities.stream().map(line -> newLocation(line[0], line[1], Double.parseDouble(line[2]),
+                    Double.parseDouble(line[3]))).toList();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return getLocations();
+        }
     }
 
     private List<Location> getLocations() {
@@ -136,9 +152,9 @@ public class SampleDataLoader implements ApplicationRunner {
                 new Meeting(getClientOrThrow("fanatyk.rolkarstwa@rolki.pl"),
                         getLocationOrThrow("Wrocław", "dolnośląskie"),
                         "Nocny przejazd przez centrum Wrocławia w styczniu.",
-                        "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Sobotę 7 stycznia!!! 💪💪🚩💯 " +
-                                "Zaczynamy o 18:00. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
-                        Instant.parse("2023-01-07T18:00:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
+                        "Kochani zapraszam Was na epicki przejazd centrum Wrocławia w Czwartek 24 listopada!!! 💪💪🚩💯 " +
+                                "Zaczynamy o 20:50. Czołówki obowiązkowe ;) Zbiórka przed NFM.",
+                        Instant.parse("2022-11-24T20:50:00.000Z"), getCategories(new HashSet<>(Arrays.asList(3))), 35),
                 new Meeting(getClientOrThrow("prawdziwy.polityk@prawdziwysejm.gov.pl"),
                         getLocationOrThrow("Białystok", "podlaskie"), "Wiec Wyborczy! W grudniu",
                         "Po pierwsze: policja na ulice. I koniecznie zmienię im mundury, bo te niebieskie nie " +

@@ -47,7 +47,15 @@ public class EventController {
                                     @RequestParam(required = false) List<Integer> locationIds,
                                     @RequestParam(required = false) Integer sortOption,
                                     @RequestParam(required = false) String nameSearch) {
-        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch);
+        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch, true);
+    }
+
+    @GetMapping("/eventsInactive")
+    public List<EventDTO> getInactiveEvents(@RequestParam(required = false) List<Integer> categoryIds,
+                                    @RequestParam(required = false) List<Integer> locationIds,
+                                    @RequestParam(required = false) Integer sortOption,
+                                    @RequestParam(required = false) String nameSearch) {
+        return eventService.retrieveEvents(categoryIds, locationIds, sortOption, nameSearch, false);
     }
 
     @GetMapping("/events/{eventId}")

@@ -19,8 +19,8 @@
             .then((r) => (isEnrolled = r));
     };
 
-    const checkIsAuthor = () => {
-        return data.author.id === $userDetails.id;
+    const isAuthor = () => {
+        return $userDetails !== null && $userDetails.id === data.author.id;
     };
 
     const enroll = () => {
@@ -52,7 +52,7 @@
                 {data.description}
             </div>
             <a
-                href={$userDetails.id === data.author.id ? $url('/profile') : $url(`/profile/${data.author.id}`)}
+                href={isAuthor() ? $url('/profile') : $url(`/profile/${data.author.id}`)}
                 class="text-lg flex flex-row items-center"
                 in:slide={{ delay: 100 }}
                 out:slide
@@ -63,7 +63,7 @@
                 {data.author.firstName}
                 {data.author.lastName}
             </a>
-            {#if !checkIsAuthor()}
+            {#if !isAuthor()}
                 <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
                     {#if isEnrolled}
                         <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>

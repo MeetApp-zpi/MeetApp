@@ -29,4 +29,8 @@ public class MeetingSpecifications {
     public static Specification<Meeting> titleContains(String searchedPhrase) {
         return (meeting, cq, cb) -> cb.like(cb.lower(meeting.get("title")), "%" + searchedPhrase.toLowerCase() + "%");
     }
+
+    public static Specification<Meeting> isActive() {
+        return (meeting, cq, cb) -> cb.isTrue(meeting.get("isActive"));
+    }
 }

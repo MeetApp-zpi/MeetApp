@@ -8,6 +8,7 @@
     import SortFilterBanner from '../../lib/SortFilterBanner/SortFilterBanner.svelte';
     import execute from '../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
+    import ShowInactiveButton from '../../lib/ShowInactiveButton/ShowInactiveButton.svelte';
 
     let data = [];
     let sortOptions = [
@@ -53,6 +54,7 @@
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
+    <ShowInactiveButton />
     <AddPostButton pageType="events" />
     <Footer pageType="events" />
 </div>
