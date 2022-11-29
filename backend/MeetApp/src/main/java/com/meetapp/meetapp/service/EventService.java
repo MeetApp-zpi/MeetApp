@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.DateTimeDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
@@ -13,6 +14,7 @@ import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.EventSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -46,7 +48,8 @@ public class EventService {
     }
 
     public List<EventDTO> retrieveEvents(List<Integer> categoryIds, List<Integer> locationIds,
-                                         Integer sortOption, String nameSearch, Boolean shouldDisplayActive) {
+                                         Integer sortOption, String nameSearch, Boolean shouldDisplayActive,
+                                         Integer page) {
 
         Specification<Event> specification;
 
@@ -69,13 +72,17 @@ public class EventService {
         }
 
         if (sortOption != null) {
-            return eventRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
+
+            return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
                             event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
                             new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
                             event.getPicture())).toList();
         } else {
-            return eventRepository.findAll(specification).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
+
+            return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
                             event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
                             new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),

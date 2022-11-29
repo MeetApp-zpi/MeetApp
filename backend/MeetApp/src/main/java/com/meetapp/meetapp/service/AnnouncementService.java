@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
@@ -12,6 +13,7 @@ import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.AnnouncementSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,7 @@ public class AnnouncementService {
     }
 
     public List<AnnouncementDTO> retrieveAnnouncements(List<Integer> categoryIds, List<Integer> locationIds,
-                                                       Integer sortOption, String nameSearch) {
+                                                       Integer sortOption, String nameSearch, Integer page) {
 
         Specification<Announcement> specification = Specification.where(AnnouncementSpecifications.isActive());
 
@@ -54,12 +56,16 @@ public class AnnouncementService {
         }
 
         if (sortOption != null) {
-            return announcementRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
+
+            return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();
         } else {
-            return announcementRepository.findAll(specification).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
+
+            return announcementRepository.findAll(specification, nextPage).stream()
                     .map((Announcement announcement) -> new AnnouncementDTO(new PostDTO(announcement),
                             announcement.getTitle(), announcement.getDescription(),
                             announcement.getEnrolled())).toList();
@@ -121,7 +127,7 @@ public class AnnouncementService {
 
         Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
         return new AnnouncementDTO(new PostDTO(new Post(foundClient, savedAnnouncement.getLocation(),
-                savedAnnouncement.getCategories())), savedAnnouncement.getTitle() ,savedAnnouncement.getDescription(),
+                savedAnnouncement.getCategories())), savedAnnouncement.getTitle(), savedAnnouncement.getDescription(),
                 savedAnnouncement.getEnrolled());
     }
 
@@ -135,7 +141,7 @@ public class AnnouncementService {
 
         Announcement savedAnnouncement = announcementRepository.save(foundAnnouncement);
         return new AnnouncementDTO(new PostDTO(new Post(foundClient, savedAnnouncement.getLocation(),
-                savedAnnouncement.getCategories())), savedAnnouncement.getTitle() ,savedAnnouncement.getDescription(),
+                savedAnnouncement.getCategories())), savedAnnouncement.getTitle(), savedAnnouncement.getDescription(),
                 savedAnnouncement.getEnrolled());
     }
 
