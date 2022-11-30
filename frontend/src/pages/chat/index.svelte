@@ -5,16 +5,12 @@
     // const sock = new SockJS('http://localhost:8080/websockets');
     // const wsClient = new Client();
 
+    // const stomp = Stomp.client('wss://192.168.0.66:8080/websockets');
+
+    // const stomp = Stomp.over(() => new WebSocket('ws://localhost:8080/websockets'));
     const stomp = Stomp.over(() => new SockJS('http://localhost:8080/websockets'));
 
-    stomp.debug = (str) => console.log(str);
     stomp.activate();
-    // stomp.connect(
-    //     {
-    //         'Access-Control-Allow-Origin': '*'
-    //     },
-    //     () => console.log('Connected')
-    // );
 
     // stomp.onConnect = () => {
     //     console.log(stomp.active, stomp);
@@ -26,14 +22,6 @@
     //         console.log('Errors: ' + message.body);
     //     });
     // };
-
-    // // Create WebSocket connection.
-    // const socket = new WebSocket('ws://localhost:5173/websockets');
-
-    // // Connection opened
-    // socket.addEventListener('open', (event) => {
-    //     socket.send('Hello Server!');
-    // });
 
     const sendMessage = () => {
         stomp.publish({ destination: '/ws/message/1', body: 'Hello STOMP' });

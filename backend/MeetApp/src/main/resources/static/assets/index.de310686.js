@@ -1,1 +1,0 @@
-import{S as o,i as r,s as l,p as i,k as c,n as s,l as p}from"./index.2cbac520.js";function u(n){let e;return{c(){e=i("h1"),e.textContent="Hello"},m(t,a){c(t,e,a)},p:s,i:s,o:s,d(t){t&&p(e)}}}class m extends o{constructor(e){super(),r(this,e,null,u,l,{})}}export{m as default};
