@@ -35,6 +35,18 @@ public class ChatroomService {
         return chatroomRepository.findAllByFirstClientOrSecondClient(client, client);
     }
 
+    public Chatroom createChatroom(String firstClientEmail, String secondClientEmail) {
+        Client firstClient = findClientOrThrow(firstClientEmail);
+        Client secondClient = findClientOrThrow(secondClientEmail);
+
+        if (!existsChatroomBetweenClients(firstClientEmail, secondClientEmail)) {
+            return chatroomRepository.save(new Chatroom(firstClient, secondClient));
+        } else {
+            throw new IllegalArgumentException("A chatroom between " + firstClientEmail + " and " + secondClientEmail +
+                    " already exists");
+        }
+    }
+
     public Client findClientOrThrow(String email) {
         return clientRepository.findClientByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("A client with email: " + email + " does not exist"));

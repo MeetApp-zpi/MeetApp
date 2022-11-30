@@ -3,10 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.model.Chatroom;
 import com.meetapp.meetapp.service.ChatroomService;
 import jakarta.servlet.http.HttpSession;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,5 +25,10 @@ public class ChatroomController {
     @GetMapping("/chatrooms/forClient")
     public List<Chatroom> retrieveChatroomsForLoggedInClient(HttpSession session) {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
+    }
+
+    @PostMapping("/chatrooms/{firstClientEmail}/{secondClientEmail}")
+    public Chatroom createChatroom(@PathVariable String firstClientEmail, @PathVariable String secondClientEmail) {
+        return chatroomService.createChatroom(firstClientEmail, secondClientEmail);
     }
 }
