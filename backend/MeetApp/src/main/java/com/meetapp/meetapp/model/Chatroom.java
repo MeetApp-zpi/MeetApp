@@ -24,6 +24,14 @@ public class Chatroom {
     @ManyToOne(optional = false)
     private Client secondClient;
 
+    @NotNull
+    @Column(name = "hasFirstClientRead", nullable = false)
+    private Boolean hasFirstClientRead;
+
+    @NotNull
+    @Column(name = "hasSecondClientRead", nullable = false)
+    private Boolean hasSecondClientRead;
+
     public Chatroom(Client first, Client second) {
         this();
 
@@ -33,5 +41,7 @@ public class Chatroom {
 
     public Chatroom() {
         this.id = 0;
+        this.hasFirstClientRead = true;
+        this.hasSecondClientRead = true;
     }
 }

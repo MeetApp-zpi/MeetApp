@@ -31,6 +31,26 @@ public class ChatroomController {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
     }
 
+    @GetMapping("/chatrooms/markAsUnread/{chatroomId}")
+    public void markChatroomAsUnread(HttpSession session, @PathVariable Integer chatroomId) {
+        chatroomService.markChatroomAsUnread(session, chatroomId);
+    }
+
+    @GetMapping("/chatrooms/markAsRead/{chatroomId}")
+    public void markChatroomAsRead(HttpSession session, @PathVariable Integer chatroomId) {
+        chatroomService.markChatroomAsRead(session, chatroomId);
+    }
+
+    @GetMapping("/chatrooms/haveUnreadMessage")
+    public Boolean haveUnreadMessage(HttpSession session) {
+        return chatroomService.haveUnreadMessage(session);
+    }
+
+    @GetMapping("/chatrooms/retrieveUnreadChatrooms")
+    public List<Chatroom> retrieveUnreadChatrooms(HttpSession session) {
+        return chatroomService.retrieveUnreadChatrooms(session);
+    }
+
     @PostMapping("/chatrooms/{anotherClientEmail}")
     public Chatroom createChatroom(HttpSession session, @PathVariable String anotherClientEmail) {
         return chatroomService.createChatroom(session, anotherClientEmail);

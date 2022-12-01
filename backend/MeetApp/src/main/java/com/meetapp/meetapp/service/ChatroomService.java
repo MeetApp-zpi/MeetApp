@@ -54,6 +54,48 @@ public class ChatroomService {
         }
     }
 
+    public void markChatroomAsUnread(HttpSession session, Integer chatroomId) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Chatroom foundChatroom = findChatroomOrThrow(chatroomId);
+
+        if (foundChatroom.getFirstClient().equals(foundClient)) {
+            foundChatroom.setHasSecondClientRead(false);
+            chatroomRepository.save(foundChatroom);
+        } else if (foundChatroom.getSecondClient().equals(foundClient)) {
+            foundChatroom.setHasFirstClientRead(false);
+            chatroomRepository.save(foundChatroom);
+        }
+    }
+
+    public void markChatroomAsRead(HttpSession session, Integer chatroomId) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Chatroom foundChatroom = findChatroomOrThrow(chatroomId);
+
+        if (foundChatroom.getFirstClient().equals(foundClient)) {
+            foundChatroom.setHasSecondClientRead(true);
+            chatroomRepository.save(foundChatroom);
+        } else if (foundChatroom.getSecondClient().equals(foundClient)) {
+            foundChatroom.setHasFirstClientRead(true);
+            chatroomRepository.save(foundChatroom);
+        }
+    }
+
+    public Boolean haveUnreadMessage(HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        return chatroomRepository.existsChatroomByFirstClientAndHasFirstClientRead(foundClient, false)
+                || chatroomRepository.existsChatroomBySecondClientAndHasSecondClientRead(foundClient, false);
+    }
+
+    public List<Chatroom> retrieveUnreadChatrooms(HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+         List<Chatroom> chatrooms = new java.util.ArrayList<>(chatroomRepository.findAllByFirstClientAndAndHasFirstClientRead(foundClient, false)
+                 .stream().toList());
+         chatrooms.addAll(chatroomRepository.findAllBySecondClientAndAndHasSecondClientRead(foundClient, false));
+        return chatrooms;
+    }
+
     public Chatroom findChatroomOrThrow(Integer chatroomId) {
         return chatroomRepository.findById(chatroomId).orElseThrow(
                 () -> new NoSuchElementException("A chatroom with id: " + chatroomId + " does not exist"));
