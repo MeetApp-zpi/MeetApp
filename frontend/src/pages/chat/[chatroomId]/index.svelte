@@ -1,16 +1,16 @@
 <script lang="ts">
     import io from 'socket.io-client';
     import { goto } from '@roxi/routify';
-    import { onMount, tick } from 'svelte';
-
+    import { tick } from 'svelte';
     import execute from '../../../lib/fetchWrapper';
 
     export let chatroomId: number;
 
     let chatInputValue;
     let chatMessages = [];
-    let page: number = 0;
+    let page: number = 1;
     let messagesContainer;
+    let tickCalled: number = 0;
 
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))
@@ -31,6 +31,7 @@
     const infiniteScroll = () => {
         const messagesContainer = document.getElementById('messagesContainer');
         if (messagesContainer.scrollTop === 0) {
+            console.log('called');
             page = page + 1;
         }
     };
@@ -40,8 +41,7 @@
     }
 
     const scrollToBottom = (node) => {
-        if (node !== null) {
-            // console.log(node);
+        if (node !== null && (node.scrollHeight - (node.scrollTop + node.offsetHeight) < 50 || tickCalled === 2)) {
             node.scroll({
                 top: node.scrollHeight,
                 behavior: 'smooth'
@@ -51,6 +51,7 @@
 
     const updateScroll = async () => {
         await tick();
+        tickCalled += 1;
         scrollToBottom(messagesContainer);
     };
 
