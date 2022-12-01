@@ -21,9 +21,9 @@ public class ChatroomService {
         this.clientRepository = clientRepository;
     }
 
-    public Boolean existsChatroomBetweenClients(String firstClientEmail, String secondClientEmail) {
-        Client firstClient = findClientOrThrow(firstClientEmail);
-        Client secondClient = findClientOrThrow(secondClientEmail);
+    public Boolean existsChatroomBetweenClients(HttpSession session, String anotherClientEmail) {
+        Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Client secondClient = findClientOrThrow(anotherClientEmail);
 
         return chatroomRepository.existsChatroomByFirstClientAndSecondClient(firstClient, secondClient) ||
                 chatroomRepository.existsChatroomByFirstClientAndSecondClient(secondClient, firstClient);
@@ -35,14 +35,14 @@ public class ChatroomService {
         return chatroomRepository.findAllByFirstClientOrSecondClient(client, client);
     }
 
-    public Chatroom createChatroom(String firstClientEmail, String secondClientEmail) {
-        Client firstClient = findClientOrThrow(firstClientEmail);
-        Client secondClient = findClientOrThrow(secondClientEmail);
+    public Chatroom createChatroom(HttpSession session, String anotherClientEmail) {
+        Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Client secondClient = findClientOrThrow(anotherClientEmail);
 
-        if (!existsChatroomBetweenClients(firstClientEmail, secondClientEmail)) {
+        if (!existsChatroomBetweenClients(session, anotherClientEmail)) {
             return chatroomRepository.save(new Chatroom(firstClient, secondClient));
         } else {
-            throw new IllegalArgumentException("A chatroom between " + firstClientEmail + " and " + secondClientEmail +
+            throw new IllegalArgumentException("A chatroom between " + firstClient.getEmail() + " and " + anotherClientEmail +
                     " already exists");
         }
     }

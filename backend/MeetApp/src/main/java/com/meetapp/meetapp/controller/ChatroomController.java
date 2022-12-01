@@ -16,10 +16,9 @@ public class ChatroomController {
         this.chatroomService = chatroomService;
     }
 
-    @GetMapping("/chatrooms/exists/{firstClientEmail}/{secondClientEmail}")
-    public Boolean existsChatroomBetweenClients(@PathVariable String firstClientEmail,
-                                                @PathVariable String secondClientEmail) {
-        return chatroomService.existsChatroomBetweenClients(firstClientEmail, secondClientEmail);
+    @GetMapping("/chatrooms/exists/{anotherClientEmail}")
+    public Boolean existsChatroomBetweenClients(HttpSession session, @PathVariable String anotherClientEmail) {
+        return chatroomService.existsChatroomBetweenClients(session, anotherClientEmail);
     }
 
     @GetMapping("/chatrooms/forClient")
@@ -27,8 +26,8 @@ public class ChatroomController {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
     }
 
-    @PostMapping("/chatrooms/{firstClientEmail}/{secondClientEmail}")
-    public Chatroom createChatroom(@PathVariable String firstClientEmail, @PathVariable String secondClientEmail) {
-        return chatroomService.createChatroom(firstClientEmail, secondClientEmail);
+    @PostMapping("/chatrooms/{anotherClientEmail}")
+    public Chatroom createChatroom(HttpSession session, @PathVariable String anotherClientEmail) {
+        return chatroomService.createChatroom(session, anotherClientEmail);
     }
 }

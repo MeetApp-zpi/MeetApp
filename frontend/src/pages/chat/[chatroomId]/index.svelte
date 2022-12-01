@@ -1,12 +1,13 @@
 <script lang="ts">
     import io from 'socket.io-client';
     import { goto } from '@roxi/routify';
+    import execute from '../../../lib/fetchWrapper';
 
-    import execute from '../../lib/fetchWrapper';
+    export let anotherClientEmail: string;
 
-    execute('chatrooms/exists/fanatyk.rolkarstwa@rolki.pl', 'GET')
+    execute(`chatrooms/exists/${anotherClientEmail}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))
-        .then((r) => console.log(r))
+        .then((r) => (r === false ? $goto('/') : null))
         .catch((err) => $goto('/'));
 
     const socket = io('http://localhost:3000', {
