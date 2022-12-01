@@ -24,6 +24,11 @@ public class MessageController {
         return messageService.retrieveMessages(chatroomId, session, page);
     }
 
+    @GetMapping("/messages/{messageId}")
+    public Message markMessageAsRead(@PathVariable Integer messageId, HttpSession session) {
+        return messageService.markMessageAsRead(messageId, session);
+    }
+
     @PostMapping("/messages/{chatroomId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Message createMessage(HttpSession session, @PathVariable Integer chatroomId, @RequestBody String content) {
