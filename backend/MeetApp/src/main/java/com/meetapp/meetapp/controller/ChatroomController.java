@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.meetapp.meetapp.dto.ChatroomDTO;
 import com.meetapp.meetapp.model.Chatroom;
 import com.meetapp.meetapp.service.ChatroomService;
 import jakarta.servlet.http.HttpSession;
@@ -27,7 +28,7 @@ public class ChatroomController {
     }
 
     @GetMapping("/chatrooms/forClient")
-    public List<Chatroom> retrieveChatroomsForLoggedInClient(HttpSession session) {
+    public List<ChatroomDTO> retrieveChatroomsForLoggedInClient(HttpSession session) {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
     }
 
@@ -44,11 +45,6 @@ public class ChatroomController {
     @GetMapping("/chatrooms/haveUnreadMessage")
     public Boolean haveUnreadMessage(HttpSession session) {
         return chatroomService.haveUnreadMessage(session);
-    }
-
-    @GetMapping("/chatrooms/retrieveUnreadChatrooms")
-    public List<Chatroom> retrieveUnreadChatrooms(HttpSession session) {
-        return chatroomService.retrieveUnreadChatrooms(session);
     }
 
     @PostMapping("/chatrooms/{anotherClientEmail}")

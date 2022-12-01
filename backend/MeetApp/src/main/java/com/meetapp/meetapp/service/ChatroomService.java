@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.service;
 
+import com.meetapp.meetapp.dto.ChatroomDTO;
 import com.meetapp.meetapp.model.Chatroom;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.repository.ChatroomRepository;
@@ -36,10 +37,12 @@ public class ChatroomService {
         return foundClient.equals(foundChatroom.getFirstClient()) || foundClient.equals(foundChatroom.getSecondClient());
     }
 
-    public List<Chatroom> retrieveChatroomsForLoggedInClient(HttpSession session) {
+    public List<ChatroomDTO> retrieveChatroomsForLoggedInClient(HttpSession session) {
         Client client = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
-        return chatroomRepository.findAllByFirstClientOrSecondClient(client, client);
+        return chatroomRepository.findAllByFirstClientOrSecondClient(client, client)
+                .stream().map((Chatroom cr) -> new ChatroomDTO(cr.getId(), getPartner(client, cr),
+                        hasUnreadMessageInChatroom(client, cr))).toList();
     }
 
     public Chatroom createChatroom(HttpSession session, String anotherClientEmail) {
@@ -87,15 +90,6 @@ public class ChatroomService {
                 || chatroomRepository.existsChatroomBySecondClientAndHasSecondClientRead(foundClient, false);
     }
 
-    public List<Chatroom> retrieveUnreadChatrooms(HttpSession session) {
-        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
-
-         List<Chatroom> chatrooms = new java.util.ArrayList<>(chatroomRepository.findAllByFirstClientAndAndHasFirstClientRead(foundClient, false)
-                 .stream().toList());
-         chatrooms.addAll(chatroomRepository.findAllBySecondClientAndAndHasSecondClientRead(foundClient, false));
-        return chatrooms;
-    }
-
     public Chatroom findChatroomOrThrow(Integer chatroomId) {
         return chatroomRepository.findById(chatroomId).orElseThrow(
                 () -> new NoSuchElementException("A chatroom with id: " + chatroomId + " does not exist"));
@@ -104,5 +98,21 @@ public class ChatroomService {
     public Client findClientOrThrow(String email) {
         return clientRepository.findClientByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("A client with email: " + email + " does not exist"));
+    }
+
+    public Client getPartner(Client currentClient, Chatroom chatroom) {
+        if (chatroom.getFirstClient().equals(currentClient)) {
+            return chatroom.getSecondClient();
+        } else {
+            return chatroom.getFirstClient();
+        }
+    }
+
+    public Boolean hasUnreadMessageInChatroom(Client currentClient, Chatroom chatroom) {
+        if (chatroom.getFirstClient().equals(currentClient)) {
+            return chatroom.getHasFirstClientRead();
+        } else {
+            return chatroom.getHasSecondClientRead();
+        }
     }
 }
