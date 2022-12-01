@@ -31,6 +31,11 @@ public class ChatroomController {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
     }
 
+    @GetMapping("/chatrooms/with/{anotherClientId}")
+    public Chatroom retrieveChatroomWithClient(HttpSession session, @PathVariable Integer anotherClientId) {
+        return chatroomService.retrieveChatroomWithClient(session, anotherClientId);
+    }
+
     @PostMapping("/chatrooms/{anotherClientEmail}")
     public Chatroom createChatroom(HttpSession session, @PathVariable String anotherClientEmail) {
         return chatroomService.createChatroom(session, anotherClientEmail);

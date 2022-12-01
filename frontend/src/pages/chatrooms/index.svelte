@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { redirect } from '@roxi/routify';
     import execute from '../../lib/fetchWrapper';
     import { userDetails } from '../../lib/stores';
 
@@ -9,7 +9,7 @@
     let chatrooms = [];
 
     let promise = execute('chatrooms/forClient', 'GET')
-        .then((r) => (r.status === 500 ? $goto('/') : r.json()))
+        .then((r) => (r.status === 500 ? $redirect('/login') : r.json()))
         .then((r) => (chatrooms = r));
 </script>
 

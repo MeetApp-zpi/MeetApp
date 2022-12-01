@@ -42,6 +42,18 @@ public class ChatroomService {
         return chatroomRepository.findAllByFirstClientOrSecondClient(client, client);
     }
 
+    public Chatroom retrieveChatroomWithClient(HttpSession session, Integer anotherClientId) {
+        Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Client secondClient = findClientOrThrow(anotherClientId);
+
+        if (existsChatroomBetweenClients(session, secondClient.getEmail())) {
+            return chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
+        } else {
+            throw new IllegalArgumentException("A chatroom between " + firstClient.getEmail() + " and " + secondClient.getEmail() +
+                    " does not exist");
+        }
+    }
+
     public Chatroom createChatroom(HttpSession session, String anotherClientEmail) {
         Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         Client secondClient = findClientOrThrow(anotherClientEmail);
@@ -57,6 +69,11 @@ public class ChatroomService {
     public Chatroom findChatroomOrThrow(Integer chatroomId) {
         return chatroomRepository.findById(chatroomId).orElseThrow(
                 () -> new NoSuchElementException("A chatroom with id: " + chatroomId + " does not exist"));
+    }
+
+    public Client findClientOrThrow(Integer id) {
+        return clientRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("A client with id: " + id + " does not exist"));
     }
 
     public Client findClientOrThrow(String email) {
