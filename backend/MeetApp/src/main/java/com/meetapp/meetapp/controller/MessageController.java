@@ -3,6 +3,7 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.model.Message;
 import com.meetapp.meetapp.service.MessageService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,5 +22,11 @@ public class MessageController {
     public List<Message> retrieveChatroomMessages(@PathVariable Integer chatroomId, @RequestParam Integer page,
                                                   HttpSession session) {
         return messageService.retrieveMessages(chatroomId, session, page);
+    }
+
+    @PostMapping("/messages/{chatroomId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Message createMessage(HttpSession session, @PathVariable Integer chatroomId, @RequestBody String content) {
+        return messageService.createMessage(chatroomId, session, content);
     }
 }
