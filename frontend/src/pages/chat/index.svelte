@@ -4,10 +4,10 @@
 
     import execute from '../../lib/fetchWrapper';
 
-    execute('chatrooms/exists/fanatyk.rolkarstwa@rolki.pl', 'GET')
-        .then((r) => (r.status === 500 ? $goto('/') : r.json()))
-        .then((r) => console.log(r))
-        .catch((err) => $goto('/'));
+    // execute('chatrooms/exists/fanatyk.rolkarstwa@rolki.pl', 'GET')
+    //     .then((r) => (r.status === 500 ? $goto('/') : r.json()))
+    //     .then((r) => console.log(r))
+    //     .catch((err) => $goto('/'));
 
     const socket = io('http://localhost:3000', {
         path: '/websockets',

@@ -21,6 +21,11 @@ public class ChatroomController {
         return chatroomService.existsChatroomBetweenClients(session, anotherClientEmail);
     }
 
+    @GetMapping("/chatrooms/existsById/{chatroomId}")
+    public Boolean existsChatroom(HttpSession session, @PathVariable Integer chatroomId) {
+        return chatroomService.existsChatroom(session, chatroomId);
+    }
+
     @GetMapping("/chatrooms/forClient")
     public List<Chatroom> retrieveChatroomsForLoggedInClient(HttpSession session) {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);

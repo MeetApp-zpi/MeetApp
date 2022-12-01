@@ -13,26 +13,23 @@ const io = new Server(server, {
 });
 
 io.use((socket, next) => {
-    const sessId = socket.id;
+    socket.chatroomId = socket.handshake.auth.chatroomId;
 
     next();
-})
+});
 
 io.on('connection', (socket) => {
     console.log('a user connected');
 
-    socket.join('room1');
+    socket.join(socket.chatroomId);
 
     socket.on('priv msg', ({ content, to }) => {
-        console.log(content, to);
         socket.to(to).emit('priv msg', {
             content,
             from: to
         })
     });
 });
-
-
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
