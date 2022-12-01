@@ -3,7 +3,6 @@ package com.meetapp.meetapp.controller;
 import com.meetapp.meetapp.dto.CategoryListDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
-import com.meetapp.meetapp.model.Post;
 import com.meetapp.meetapp.service.ClientService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -60,28 +59,33 @@ public class ClientController {
     }
 
     @GetMapping("/users/{userId}/posts")
-    public List<Record> getClientPosts(@PathVariable Integer userId) {
-        return clientService.retrieveClientPosts(userId);
+    public List<Record> getClientPosts(@PathVariable Integer userId, @RequestParam Integer page) {
+        return clientService.retrieveClientPosts(userId, page);
     }
 
     @GetMapping("/users/posts")
-    public List<Record> getClientPosts(HttpSession session) {
-        return clientService.retrieveClientPosts(session);
+    public List<Record> getClientPosts(HttpSession session, @RequestParam Integer page) {
+        return clientService.retrieveClientPosts(session, page);
     }
-    
+
+    @GetMapping("/users/postsInactive")
+    public List<Record> getClientInactivePosts(HttpSession session, @RequestParam Integer page) {
+        return clientService.retrieveClientInactivePosts(session, page);
+    }
+
     @GetMapping("/users/activities")
-    public List<Record> getClientActivities(HttpSession session) {
-        return clientService.retrieveLoggedInUserActivities(session);
+    public List<Record> getClientActivities(HttpSession session, @RequestParam Integer page) {
+        return clientService.retrieveLoggedInUserActivities(session, page);
     }
-    
+
     @GetMapping("/users/isAuthor/{postId}")
     public boolean isLoggedUserAuthorOfPost(HttpSession session, @PathVariable Integer postId) {
         return clientService.isLoggedUserAuthorOfPost(session, postId);
     }
 
     @GetMapping("/enrollees/{postId}")
-    public List<Client> getEnrolleesOfPost(@PathVariable Integer postId) {
-        return clientService.getEnrolleesOfPost(postId);
+    public List<Client> getEnrolleesOfPost(@PathVariable Integer postId, @RequestParam Integer page) {
+        return clientService.getEnrolleesOfPost(postId, page);
     }
 
     @GetMapping("/users/createAccount")

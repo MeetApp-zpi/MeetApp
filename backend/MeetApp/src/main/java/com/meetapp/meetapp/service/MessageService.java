@@ -55,6 +55,25 @@ public class MessageService {
         }
     }
 
+    public Message markMessageAsRead(Integer messageId, HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Message foundMessage = findMessageOrThrow(messageId);
+        Chatroom messageChatroom = foundMessage.getRoom();
+
+        if (messageChatroom.getFirstClient().equals(foundMessage.getAuthor())) {
+            if (messageChatroom.getSecondClient().equals(foundClient)) {
+                foundMessage.setHasBeenRead(true);
+                return messageRepository.save(foundMessage);
+            }
+        } else if (messageChatroom.getSecondClient().equals(foundMessage.getAuthor())) {
+            if (messageChatroom.getFirstClient().equals(foundClient)) {
+                foundMessage.setHasBeenRead(true);
+                return messageRepository.save(foundMessage);
+            }
+        }
+        return foundMessage;
+    }
+
     public Client findClientOrThrow(String email) {
         return clientRepository.findClientByEmail(email).orElseThrow(
                 () -> new NoSuchElementException("A client with email: " + email + " does not exist."));
@@ -63,5 +82,10 @@ public class MessageService {
     public Chatroom findChatroomOrThrow(Integer chatroomId) {
         return chatroomRepository.findById(chatroomId).orElseThrow(
                 () -> new NoSuchElementException("A chatroom with id: " + chatroomId + " does not exist."));
+    }
+
+    public Message findMessageOrThrow(Integer messageId) {
+        return messageRepository.findById(messageId).orElseThrow(
+                () -> new NoSuchElementException("A message with id: " + messageId + " does not exist."));
     }
 }

@@ -29,4 +29,8 @@ public class AnnouncementSpecifications {
     public static Specification<Announcement> titleContains(String searchedPhrase) {
         return (announcement, cq, cb) -> cb.like(cb.lower(announcement.get("title")), "%" + searchedPhrase.toLowerCase() + "%");
     }
+
+    public static Specification<Announcement> isActive() {
+        return (announcement, cq, cb) -> cb.isTrue(announcement.get("isActive"));
+    }
 }

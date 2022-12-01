@@ -1,6 +1,10 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.configuration.Constants;
+import com.meetapp.meetapp.dto.DateTimeDTO;
+import com.meetapp.meetapp.dto.EventCreationDTO;
+import com.meetapp.meetapp.dto.EventDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -10,6 +14,7 @@ import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.EventSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -43,8 +48,16 @@ public class EventService {
     }
 
     public List<EventDTO> retrieveEvents(List<Integer> categoryIds, List<Integer> locationIds,
-                                         Integer sortOption, String nameSearch) {
-        Specification<Event> specification = Specification.where(null);
+                                         Integer sortOption, String nameSearch, Boolean shouldDisplayActive,
+                                         Integer page) {
+
+        Specification<Event> specification;
+
+        if (shouldDisplayActive) {
+            specification = Specification.where(EventSpecifications.isActive());
+        } else {
+            specification = Specification.where(EventSpecifications.isInactive());
+        }
 
         if (categoryIds != null) {
             specification = specification.and(EventSpecifications.hasCategory(categoryIds));
@@ -59,13 +72,17 @@ public class EventService {
         }
 
         if (sortOption != null) {
-            return eventRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
+
+            return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
                             event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
                             new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
                             event.getPicture())).toList();
         } else {
-            return eventRepository.findAll(specification).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
+
+            return eventRepository.findAll(specification, nextPage).stream()
                     .map((Event event) -> new EventDTO(new PostDTO(event), event.getTitle(), event.getDescription(),
                             event.getEnrolled(), event.getPersonQuota(), event.getSchedule(),
                             new DateTimeDTO(event.getStartDate()), new DateTimeDTO(event.getEndDate()),
@@ -133,6 +150,9 @@ public class EventService {
         Instant endDate = parseDateOrThrow(newEvent.getEndDate());
         String pictureUri = newEvent.getPicture() != null ? savePictureAndGetPath(newEvent.getPicture()) : null;
 
+        timeInFutureOrThrow(startDate);
+        timeInFutureOrThrow(endDate);
+
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
@@ -151,6 +171,9 @@ public class EventService {
         Instant endDate = parseDateOrThrow(updatedEvent.getEndDate());
         Event foundEvent = findEventOrThrow(eventId);
         String pictureUri = updatedEvent.getPicture() != null ? savePictureAndGetPath(updatedEvent.getPicture()) : null;
+
+        timeInFutureOrThrow(startDate);
+        timeInFutureOrThrow(endDate);
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
@@ -219,6 +242,12 @@ public class EventService {
             return Instant.parse(dateString);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateString + "' is not in a proper time format");
+        }
+    }
+
+    public void timeInFutureOrThrow(Instant timeToCheck) {
+        if (Instant.now().isAfter(timeToCheck)) {
+            throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
         }
     }
 

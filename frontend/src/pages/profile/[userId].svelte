@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <a class="mb-12 flex flex-row items-center" href={$url('/posts')}>
+            <a class="mb-12 flex flex-row items-center" href={$url(`/user/${userId}/posts`)}>
                 <div class="h-5 w-7 mr-2">
                     <FaCommentAlt />
                 </div>

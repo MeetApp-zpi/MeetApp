@@ -51,8 +51,8 @@ public class Client {
 
     @JsonIgnore
     @ManyToMany
-    @JoinTable(name = "ClientPost", joinColumns = @JoinColumn(name="ClientId"),
-            inverseJoinColumns = @JoinColumn(name = "PostId"))
+    @JoinTable(name = "ClientPost", joinColumns = @JoinColumn(name = "ClientId", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "PostId", nullable = false, unique = true))
     Set<Post> posts;
 
     public Client(String email, String firstName, String lastName, String profilePicture) {

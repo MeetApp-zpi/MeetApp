@@ -16,6 +16,7 @@
         { id: 4, name: 'Po liczbie zapisanych malejąco' }
     ];
     let announcementsPromise: Promise<any>;
+    let page: number = 0;
 
     clearFilters();
 
@@ -26,6 +27,29 @@
             selected = null;
         }
     };
+
+    const infiniteScroll = () => {
+        const postsContainer = document.getElementById('postsContainer');
+
+        if (postsContainer.offsetHeight + postsContainer.scrollTop === postsContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
+
+    const retrieveAnnouncements = (page: number, urlParams: URLSearchParams) => {
+        execute(`announcements?page=${page}&` + urlParams.toString(), 'GET')
+            .then((r) => r.json())
+            .then((r) => (data = [...data, ...r]));
+    };
+
+    $: {
+        $filteredCategoryIds;
+        $filteredLocationIds;
+        $sortingOption;
+        $nameSearchParam;
+        data = [];
+        page = 0;
+    }
 
     $: {
         let urlParams = new URLSearchParams();
@@ -42,16 +66,14 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        announcementsPromise = execute('announcements?' + urlParams.toString(), 'GET')
-            .then((r) => r.json())
-            .then((r) => (data = r));
+        retrieveAnnouncements(page, urlParams);
     }
 </script>
 
 <div class="h-screen">
     <Header />
     <SortFilterBanner {sortOptions} />
-    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#await announcementsPromise then _}
             {#each data as item}
                 <AnnouncementListElem areDetailsShown={selected === item.id} data={item} clickHandler={() => viewDetails(item.id)} />

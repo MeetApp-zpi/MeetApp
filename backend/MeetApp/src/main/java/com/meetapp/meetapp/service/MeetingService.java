@@ -1,6 +1,10 @@
 package com.meetapp.meetapp.service;
 
-import com.meetapp.meetapp.dto.*;
+import com.meetapp.meetapp.configuration.Constants;
+import com.meetapp.meetapp.dto.DateTimeDTO;
+import com.meetapp.meetapp.dto.MeetingCreationDTO;
+import com.meetapp.meetapp.dto.MeetingDTO;
+import com.meetapp.meetapp.dto.PostDTO;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -10,6 +14,7 @@ import com.meetapp.meetapp.security.SessionManager;
 import com.meetapp.meetapp.specification.MeetingSpecifications;
 import jakarta.servlet.http.HttpSession;
 import lombok.val;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -37,9 +42,9 @@ public class MeetingService {
     }
 
     public List<MeetingDTO> retrieveMeetings(List<Integer> categoryIds, List<Integer> locationIds,
-                                             Integer sortOption, String nameSearch) {
+                                             Integer sortOption, String nameSearch, Integer page) {
 
-        Specification<Meeting> specification = Specification.where(null);
+        Specification<Meeting> specification = Specification.where(MeetingSpecifications.isActive());
 
         if (categoryIds != null) {
             specification = specification.and(MeetingSpecifications.hasCategory(categoryIds));
@@ -54,12 +59,16 @@ public class MeetingService {
         }
 
         if (sortOption != null) {
-            return meetingRepository.findAll(specification, paramToSortOrThrow(sortOption)).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE, paramToSortOrThrow(sortOption));
+
+            return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
                             meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
                             new DateTimeDTO(meeting.getMeetingDate()))).toList();
         } else {
-            return meetingRepository.findAll(specification).stream()
+            PageRequest nextPage = PageRequest.of(page, Constants.PAGE_SIZE);
+
+            return meetingRepository.findAll(specification, nextPage).stream()
                     .map((Meeting meeting) -> new MeetingDTO(new PostDTO(meeting), meeting.getTitle(),
                             meeting.getDescription(), meeting.getEnrolled(), meeting.getPersonQuota(),
                             new DateTimeDTO(meeting.getMeetingDate()))).toList();
@@ -122,6 +131,8 @@ public class MeetingService {
         Client foundClient = findClientOrThrow(email);
         List<Category> foundCategories = findCategories(newMeeting.getCategoryIds());
 
+        timeInFutureOrThrow(castedDate);
+
         Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getDescription(),
                 newMeeting.getTitle(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
 
@@ -134,6 +145,8 @@ public class MeetingService {
         Location foundLocation = findLocationOrThrow(updatedMeeting.getLocationId());
         Meeting foundMeeting = findMeetingOrThrow(meetingId);
         Instant parsedDate = parseDateOrThrow(updatedMeeting.getMeetingDate());
+
+        timeInFutureOrThrow(parsedDate);
 
         if (foundMeeting.getAuthor().equals(supposedAuthor)) {
             foundMeeting.setTitle(updatedMeeting.getTitle());
@@ -183,6 +196,12 @@ public class MeetingService {
             return Instant.parse(dateTime);
         } catch (DateTimeParseException e) {
             throw new IllegalArgumentException("A string '" + dateTime + "' is not in a valid time format");
+        }
+    }
+
+    public void timeInFutureOrThrow(Instant timeToCheck) {
+        if (Instant.now().isAfter(timeToCheck)) {
+            throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
         }
     }
 
