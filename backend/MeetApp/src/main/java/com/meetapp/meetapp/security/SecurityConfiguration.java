@@ -16,15 +16,14 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll().and()
+        http.authorizeRequests()
+                .anyRequest().permitAll().and()
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                 ))
                 .oauth2Login()
-                    .defaultSuccessUrl("/api/users/createAccount", true)
-                .and()
-                .cors().disable()
-                .csrf().disable();
+                .defaultSuccessUrl("/api/users/createAccount", true)
+                .and().cors().disable().csrf().disable();
 
         return http.build();
     }
