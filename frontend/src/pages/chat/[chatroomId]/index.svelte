@@ -1,7 +1,7 @@
 <script lang="ts">
     import io from 'socket.io-client';
     import { goto } from '@roxi/routify';
-    import { onMount } from 'svelte';
+    import { onMount, tick } from 'svelte';
 
     import execute from '../../../lib/fetchWrapper';
 
@@ -11,7 +11,6 @@
     let chatMessages = [];
     let page: number = 0;
     let messagesContainer;
-    let isScrolled: boolean = false;
 
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))
@@ -23,15 +22,10 @@
             .then((r) => r.json())
             .then((r) => {
                 r.reverse();
-                chatMessages = [...r, ...chatMessages];
+                if (r.length > 0) {
+                    chatMessages = [...r, ...chatMessages];
+                }
             });
-    };
-
-    const scrollToBottom = (node) => {
-        node.scroll({
-            top: node.scrollHeight,
-            behavior: 'smooth'
-        });
     };
 
     const infiniteScroll = () => {
@@ -41,13 +35,29 @@
         }
     };
 
-    const updateScroll = () => {
-        setTimeout(() => scrollToBottom(messagesContainer), 1000);
+    $: {
+        retrieveMessages(page);
+    }
+
+    const scrollToBottom = (node) => {
+        if (node !== null) {
+            // console.log(node);
+            node.scroll({
+                top: node.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
     };
 
-    onMount(() => {
+    const updateScroll = async () => {
+        await tick();
+        scrollToBottom(messagesContainer);
+    };
+
+    $: {
+        chatMessages;
         updateScroll();
-    });
+    }
 
     const socket = io('http://localhost:3000', {
         path: '/websockets',
@@ -57,6 +67,11 @@
     socket.auth = { chatroomId };
 
     socket.connect();
+
+    socket.on('priv msg', ({ content, from }) => {
+        chatMessages = [...chatMessages, content];
+        updateScroll();
+    });
 
     const sendMessage = () => {
         if (chatInputValue.length > 0) {
@@ -71,24 +86,15 @@
                 content: r,
                 to: chatroomId
             });
-        });
+        }).then(async () => await updateScroll());
     };
-
-    $: {
-        retrieveMessages(page);
-    }
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             sendMessage();
             chatInputValue = '';
-            updateScroll();
         }
     };
-
-    socket.on('priv msg', ({ content, from }) => {
-        chatMessages = [...chatMessages, content];
-    });
 </script>
 
 <svelte:head>
