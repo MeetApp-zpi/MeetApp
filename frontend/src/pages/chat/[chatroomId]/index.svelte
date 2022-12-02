@@ -122,7 +122,7 @@
         <div class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl overflow-auto break-words">
             <textarea
                 use:autoresize
-                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4"
+                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
                 placeholder="Type your message here"
                 bind:value={chatInputValue}
                 on:keydown={handleKeyDown}
