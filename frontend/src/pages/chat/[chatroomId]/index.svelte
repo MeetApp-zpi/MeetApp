@@ -8,7 +8,7 @@
 
     let chatInputValue;
     let chatMessages = [];
-    let page: number = 1;
+    let page: number = 0;
     let messagesContainer;
     let tickCalled: number = 0;
 
@@ -72,6 +72,7 @@
     socket.on('priv msg', ({ content, from }) => {
         chatMessages = [...chatMessages, content];
         updateScroll();
+        execute(`chatrooms/markAsRead/${chatroomId}`, 'GET');
     });
 
     const sendMessage = () => {
@@ -87,6 +88,7 @@
                 content: r,
                 to: chatroomId
             });
+            execute(`chatrooms/markAsUnread/${chatroomId}`, 'GET');
         }).then(async () => await updateScroll());
     };
 
