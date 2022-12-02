@@ -3,6 +3,9 @@
     import { goto } from '@roxi/routify';
     import { tick } from 'svelte';
     import execute from '../../../lib/fetchWrapper';
+    import Header from '../../../lib/Header/Header.svelte';
+    import MdSend from 'svelte-icons/md/MdSend.svelte';
+    import { autoresize } from 'svelte-textarea-autoresize';
 
     export let chatroomId: number;
 
@@ -79,6 +82,8 @@
         if (chatInputValue.length > 0) {
             execute(`messages/${chatroomId}`, 'POST', chatInputValue).then((r) => (r.status === 201 ? addNewMessage(r.json()) : null));
         }
+
+        chatInputValue = '';
     };
 
     const addNewMessage = async (msg) => {
@@ -104,12 +109,28 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 </svelte:head>
 
-<div class="h-40 overflow-auto" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
-    {#await promise then _}
-        {#each chatMessages as chatMessage}
-            <div class="h-6">{chatMessage.content}</div>
-        {/each}
-    {/await}
+<div class="h-screen">
+    <Header />
+    <div class="flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-10rem)]">
+        <div class="flex-auto overflow-auto mx-5 mt-5" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
+            {#await promise then _}
+                {#each chatMessages as chatMessage}
+                    <div class="h-6">{chatMessage.content}</div>
+                {/each}
+            {/await}
+        </div>
+        <div class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl overflow-auto break-words">
+            <textarea
+                use:autoresize
+                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4"
+                placeholder="Type your message here"
+                bind:value={chatInputValue}
+                on:keydown={handleKeyDown}
+            />
+
+            <button class="flex self-center h-6 w-6" on:click={sendMessage}>
+                <MdSend />
+            </button>
+        </div>
+    </div>
 </div>
-<input type="text" bind:value={chatInputValue} on:keydown={handleKeyDown} />
-<button class="h-10 w-10" on:click={sendMessage}>Send message!</button>
