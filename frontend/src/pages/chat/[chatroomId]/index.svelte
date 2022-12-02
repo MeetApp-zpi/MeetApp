@@ -1,6 +1,6 @@
 <script lang="ts">
     import io from 'socket.io-client';
-    import { goto } from '@roxi/routify';
+    import { goto, node } from '@roxi/routify';
     import { tick } from 'svelte';
     import execute from '../../../lib/fetchWrapper';
     import Header from '../../../lib/Header/Header.svelte';
@@ -17,6 +17,7 @@
     let page: number = 0;
     let messagesContainer;
     let tickCalled: number = 0;
+    let previousScrollHeight: number = 0;
 
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))
@@ -31,7 +32,8 @@
                 if (r.length > 0) {
                     chatMessages = [...r, ...chatMessages];
                 }
-            });
+            })
+            .then((_) => scrollAfterLoading());
     };
 
     const infiniteScroll = () => {
@@ -42,12 +44,23 @@
         }
     };
 
+    const scrollAfterLoading = async () => {
+        await tick();
+        if (messagesContainer !== undefined) {
+            messagesContainer.scroll({
+                top: messagesContainer.scrollHeight - previousScrollHeight
+            });
+            console.log(messagesContainer.scrollHeight, messagesContainer.offsetHeight, messagesContainer.scrollTop);
+            previousScrollHeight = messagesContainer.scrollHeight;
+        }
+    };
+
     $: {
         retrieveMessages(page);
     }
 
-    const scrollToBottom = (node) => {
-        if (node !== null && (node.scrollHeight - (node.scrollTop + node.offsetHeight) < 250 || tickCalled === 2)) {
+    const scrollForViewers = (node) => {
+        if (node !== null && (node.scrollHeight - (node.scrollTop + node.offsetHeight) < 50 || tickCalled === 2)) {
             node.scroll({
                 top: node.scrollHeight,
                 behavior: 'smooth'
@@ -55,16 +68,20 @@
         }
     };
 
-    const updateScroll = async () => {
+    const updateScrollViewer = async () => {
         await tick();
         tickCalled += 1;
-        scrollToBottom(messagesContainer);
+        scrollForViewers(messagesContainer);
     };
 
-    $: {
-        chatMessages;
-        updateScroll();
-    }
+    const updateScrollAuthor = async () => {
+        await tick();
+        tickCalled += 1;
+        messagesContainer.scroll({
+            top: messagesContainer.scrollHeight,
+            behavior: 'smooth'
+        });
+    };
 
     const socket = io('http://localhost:3000', {
         path: '/websockets',
@@ -77,7 +94,7 @@
 
     socket.on('priv msg', ({ content, from }) => {
         chatMessages = [...chatMessages, content];
-        updateScroll();
+        updateScrollViewer();
         execute(`chatrooms/markAsRead/${chatroomId}`, 'GET');
     });
 
@@ -87,8 +104,6 @@
         }
 
         chatInputValue = '';
-        console.log(chatInput.style);
-        console.log(chatInput);
         chatInput.style.setProperty('height', `24px`, 'important');
     };
 
@@ -100,7 +115,7 @@
                 to: chatroomId
             });
             execute(`chatrooms/markAsUnread/${chatroomId}`, 'GET');
-        }).then(async () => await updateScroll());
+        }).then(async () => await updateScrollAuthor());
     };
 
     const handleKeyDown = (e) => {
@@ -110,8 +125,8 @@
         }
     };
 
-    const fetchPartner = async () => {
-        return await execute(`chatrooms/clientOf/${chatroomId}`, 'GET')
+    const fetchPartner = () => {
+        return execute(`chatrooms/clientOf/${chatroomId}`, 'GET')
             .then(async (r) => (r.status !== 200 ? $goto('/login') : await r.json()))
             .catch((err) => $goto('/login'));
     };
@@ -154,7 +169,7 @@
         <form class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl justify-between" on:submit={(e) => e.preventDefault()}>
             <textarea
                 use:autoresize
-                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
+                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage flex-1"
                 placeholder="Type your message here"
                 bind:value={chatInputValue}
                 on:keydown={handleKeyDown}
