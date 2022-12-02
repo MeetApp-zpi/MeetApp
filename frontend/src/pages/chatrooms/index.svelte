@@ -17,11 +17,7 @@
     <Header />
     {#await promise then _}
         {#each chatrooms as chatroom}
-            {#if $userDetails.email !== chatroom.firstClient.email}
-                <UserChatPill data={chatroom.firstClient} chatroomId={chatroom.id} />
-            {:else}
-                <UserChatPill data={chatroom.secondClient} chatroomId={chatroom.id} />
-            {/if}
+            <UserChatPill data={chatroom.chatPartner} chatroomId={chatroom.id} />
         {/each}
     {/await}
 </div>
