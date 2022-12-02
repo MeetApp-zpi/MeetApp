@@ -13,8 +13,8 @@
     <div class="h-12 w-12">
         <img src={data.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
     </div>
-    <div class="flex flex-col">
-        <div class="font-bold">{data.firstName} {data.lastName}</div>
-        <div class="">{data.email}</div>
+    <div class="flex flex-col break-words flex-wrap">
+        <div class="flex-1 w-52 font-bold">{data.firstName} {data.lastName}</div>
+        <div class="flex-1 w-52">{data.email}</div>
     </div>
 </div>
