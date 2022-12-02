@@ -45,7 +45,7 @@
     }
 
     const scrollToBottom = (node) => {
-        if (node !== null && (node.scrollHeight - (node.scrollTop + node.offsetHeight) < 50 || tickCalled === 2)) {
+        if (node !== null && (node.scrollHeight - (node.scrollTop + node.offsetHeight) < 250 || tickCalled === 2)) {
             node.scroll({
                 top: node.scrollHeight,
                 behavior: 'smooth'
@@ -109,7 +109,7 @@
         return await execute(`chatrooms/clientOf/${chatroomId}`, 'GET')
             .then(async (r) => (r.status !== 200 ? $goto('/login') : await r.json()))
             .catch((err) => $goto('/login'));
-    }
+    };
 </script>
 
 <svelte:head>
@@ -130,10 +130,10 @@
                 </div>
             </div>
         {/await}
-        <div class="flex-auto overflow-auto mx-5 mt-5 break-words" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
+        <div class="flex-auto overflow-auto mx-5 mt-5" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
             {#await promise then _}
                 {#each chatMessages as chatMessage}
-                    <div class="flex flex-row justify-between">
+                    <div class="flex flex-row justify-between break-all">
                         {#if chatMessage.author.id === $userDetails.id}
                             <div class="flex w-1/3" />
                             <div class="bg-grass rounded-xl mb-4 py-1 px-3">{chatMessage.content}</div>
@@ -146,18 +146,18 @@
             {/await}
         </div>
 
-        <div class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl">
+        <form class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl justify-between" on:submit={(e) => e.preventDefault()}>
             <textarea
                 use:autoresize
-                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
-                placeholder="Type your message here"
+                class="flex-1 resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
+                placeholder="Wpisz swoją wiadomość"
                 bind:value={chatInputValue}
                 on:keydown={handleKeyDown}
             />
 
-            <button class="flex self-center h-6 w-6" on:click={sendMessage}>
+            <button type="submit" class="flex self-center h-6 w-6" on:click={sendMessage}>
                 <MdSend />
             </button>
-        </div>
+        </form>
     </div>
 </div>

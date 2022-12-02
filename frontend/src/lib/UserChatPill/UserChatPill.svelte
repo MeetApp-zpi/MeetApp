@@ -11,7 +11,7 @@
     on:keydown={$goto(`/chat/${chatroomId}`)}
 >
     <div class="h-12 w-12">
-        <img src={data.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
+        <img class="rounded-full" src={data.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
     </div>
     <div class="flex flex-col break-words flex-wrap">
         <div class="flex-1 w-52 font-bold">{data.firstName} {data.lastName}</div>
