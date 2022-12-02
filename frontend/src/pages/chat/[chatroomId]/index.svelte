@@ -10,7 +10,9 @@
 
     export let chatroomId: number;
 
-    let chatInputValue;
+    let chatInputValue: string = '';
+    let chatInput;
+
     let chatMessages = [];
     let page: number = 0;
     let messagesContainer;
@@ -85,6 +87,9 @@
         }
 
         chatInputValue = '';
+        console.log(chatInput.style);
+        console.log(chatInput);
+        chatInput.style.setProperty('height', `24px`, 'important');
     };
 
     const addNewMessage = async (msg) => {
@@ -100,8 +105,8 @@
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
+            e.preventDefault();
             sendMessage();
-            chatInputValue = '';
         }
     };
 
@@ -149,10 +154,11 @@
         <form class="flex flex-row bg-tea py-3 px-3 my-5 mx-5 rounded-2xl justify-between" on:submit={(e) => e.preventDefault()}>
             <textarea
                 use:autoresize
-                class="flex-1 resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
-                placeholder="Wpisz swoją wiadomość"
+                class="resize-none max-h-[6rem] bg-tea border-none outline-none pr-4 placeholder-sage"
+                placeholder="Type your message here"
                 bind:value={chatInputValue}
                 on:keydown={handleKeyDown}
+                bind:this={chatInput}
             />
 
             <button type="submit" class="flex self-center h-6 w-6" on:click={sendMessage}>
