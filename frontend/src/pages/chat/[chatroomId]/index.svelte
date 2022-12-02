@@ -104,6 +104,12 @@
             chatInputValue = '';
         }
     };
+
+    const fetchPartner = async () => {
+        return await execute(`chatrooms/clientOf/${chatroomId}`, 'GET')
+            .then(async (r) => (r.status !== 200 ? $goto('/login') : await r.json()))
+            .catch((err) => $goto('/login'));
+    }
 </script>
 
 <svelte:head>
@@ -113,13 +119,24 @@
 <div class="h-screen">
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-10rem)]">
+        {#await fetchPartner() then partner}
+            <div class="rounded-2xl m-2 py-2 justify-around flex flex-row bg-olive text-cocoa items-center">
+                <div class="h-12 w-12">
+                    <img class="rounded-full" src={partner.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
+                </div>
+                <div class="flex flex-col">
+                    <div class="flex-1 w-52 font-bold">{partner.firstName} {partner.lastName}</div>
+                    <div class="flex-1 w-52 overflow-auto">{partner.email}</div>
+                </div>
+            </div>
+        {/await}
         <div class="flex-auto overflow-auto mx-5 mt-5 break-words" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
             {#await promise then _}
                 {#each chatMessages as chatMessage}
                     <div class="flex flex-row justify-between">
                         {#if chatMessage.author.id === $userDetails.id}
                             <div class="flex w-1/3" />
-                            <div class="bg-grass rounded-xl mb-4g py-1 px-3">{chatMessage.content}</div>
+                            <div class="bg-grass rounded-xl mb-4 py-1 px-3">{chatMessage.content}</div>
                         {:else}
                             <div class="bg-orange bg-opacity-75 rounded-xl mb-4 py-1 px-3">{chatMessage.content}</div>
                             <div class="flex w-1/3" />

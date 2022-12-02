@@ -10,7 +10,6 @@
 
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
     import IoIosMail from 'svelte-icons/io/IoIosMail.svelte';
-    import chat from '../chat/index.svelte';
 
     export let userId: number;
 
