@@ -31,10 +31,6 @@ public class Message {
     private String content;
 
     @NotNull
-    @Column(name = "hasBeenRead", nullable = false)
-    private Boolean hasBeenRead;
-
-    @NotNull
     @Basic
     @Column(nullable = false)
     private Instant creationDate;
@@ -49,7 +45,6 @@ public class Message {
 
     public Message() {
         this.id = 0;
-        this.hasBeenRead = false;
         this.creationDate = Instant.now();
     }
 }
