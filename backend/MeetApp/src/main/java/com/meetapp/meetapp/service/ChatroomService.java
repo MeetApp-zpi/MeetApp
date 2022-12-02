@@ -46,12 +46,7 @@ public class ChatroomService {
         Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         Client secondClient = findClientOrThrow(anotherClientId);
 
-        if (existsChatroomBetweenClients(session, secondClient.getEmail())) {
-            return chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
-        } else {
-            throw new IllegalArgumentException("A chatroom between " + firstClient.getEmail() + " and " + secondClient.getEmail() +
-                    " does not exist");
-        }
+        return chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
     }
 
     public Chatroom createChatroom(HttpSession session, String anotherClientEmail) {

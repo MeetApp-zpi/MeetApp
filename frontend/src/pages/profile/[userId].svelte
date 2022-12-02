@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto, redirect, url } from "@roxi/routify";
+    import { goto, redirect, url } from '@roxi/routify';
 
     import execute from '../../lib/fetchWrapper';
     import { userDetails as currentUserDetails } from '../../lib/stores';
@@ -10,7 +10,7 @@
 
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
     import IoIosMail from 'svelte-icons/io/IoIosMail.svelte';
-    import chat from "../chat/index.svelte";
+    import chat from '../chat/index.svelte';
 
     export let userId: number;
 
@@ -41,12 +41,16 @@
         }
 
         const chatroom = await execute(`chatrooms/with/${userId}`, 'GET').then(async (response) => {
-            if (!response.ok) {
-                console.log('new chatroom')
+            let retrievedChatroom = null;
+            try {
+                retrievedChatroom = await response.json();
+            } catch (e) {}
+
+            if (retrievedChatroom === null) {
                 return await execute(`chatrooms/${userDetails.email}`, 'POST').then(async (response) => await response.json());
             }
 
-            return await response.json();
+            return retrievedChatroom;
         });
         $goto(`/chat/${chatroom.id}`);
     }
