@@ -1,5 +1,6 @@
 package com.meetapp.meetapp.controller;
 
+import com.fasterxml.jackson.databind.node.TextNode;
 import com.meetapp.meetapp.model.Message;
 import com.meetapp.meetapp.service.MessageService;
 import jakarta.servlet.http.HttpSession;
@@ -25,7 +26,7 @@ public class MessageController {
 
     @PostMapping("/messages/{chatroomId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Message createMessage(HttpSession session, @PathVariable Integer chatroomId, @RequestBody String content) {
-        return messageService.createMessage(chatroomId, session, content);
+    public Message createMessage(HttpSession session, @PathVariable Integer chatroomId, @RequestBody TextNode content) {
+        return messageService.createMessage(chatroomId, session, content.asText());
     }
 }
