@@ -6,6 +6,7 @@
     import Header from '../../../lib/Header/Header.svelte';
     import MdSend from 'svelte-icons/md/MdSend.svelte';
     import { autoresize } from 'svelte-textarea-autoresize';
+    import { userDetails } from '../../../lib/stores.js';
 
     export let chatroomId: number;
 
@@ -115,7 +116,15 @@
         <div class="flex-auto overflow-auto mx-5 mt-5 break-words" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
             {#await promise then _}
                 {#each chatMessages as chatMessage}
-                    <div>{chatMessage.content}</div>
+                    <div class="flex flex-row justify-between">
+                        {#if chatMessage.author.id === $userDetails.id}
+                            <div class="flex w-1/3" />
+                            <div class="bg-grass rounded-xl mb-4g py-1 px-3">{chatMessage.content}</div>
+                        {:else}
+                            <div class="bg-orange bg-opacity-75 rounded-xl mb-4 py-1 px-3">{chatMessage.content}</div>
+                            <div class="flex w-1/3" />
+                        {/if}
+                    </div>
                 {/each}
             {/await}
         </div>
