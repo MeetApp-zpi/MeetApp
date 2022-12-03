@@ -47,7 +47,7 @@ public class Client {
     @JsonIgnore
     @ManyToMany
     @JoinTable(name = "ClientInterest", joinColumns = @JoinColumn(name = "ClientId"), inverseJoinColumns = @JoinColumn(name = "CategoryId"))
-    Set<Category> interests; // TODO add endpoints etc
+    Set<Category> interests;
 
     @JsonIgnore
     @ManyToMany

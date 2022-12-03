@@ -111,8 +111,8 @@ public class ClientController {
         return;
     }
 
-    @DeleteMapping("/users/{user_id}")
-    public Client deleteAccount(@PathVariable Integer user_id, HttpSession session) {
-        return clientService.deleteClientAccount(user_id, session);
+    @DeleteMapping("/users")
+    public Client deleteAccount(HttpSession session) {
+        return clientService.deleteClientAccount(session);
     }
 }
