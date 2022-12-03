@@ -10,11 +10,12 @@
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
     // noinspection TypeScriptCheckImport
     import { goto, url } from '@roxi/routify';
+    import { userDetails } from '../../lib/stores';
 
     export let eventId: number;
 
     let data = null;
-    let isEnrolled: boolean = false;
+    let isEnrolled = false;
 
     const checkEnrolledStatus = () => {
         execute(`events/isEnrolled/${eventId}`, 'GET')
@@ -29,6 +30,10 @@
 
         data = await response.json();
     });
+
+    const isAuthor = () => {
+        return $userDetails !== null && $userDetails.id === data.author.id;
+    };
 
     const enroll = () => {
         execute(`events/enroll/${eventId}`, 'GET').then((_) => checkEnrolledStatus());
@@ -131,10 +136,12 @@
             </div>
             <div class="py-8" />
         </div>
-    {/if}
-    {#if isEnrolled}
-        <Button clickHandler={unenroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Wypisuję się!</Button>
-    {:else}
-        <Button clickHandler={enroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Zapisuję się!</Button>
+        {#if $userDetails !== null && !isAuthor()}
+            {#if isEnrolled}
+                <Button clickHandler={unenroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Wypisuję się!</Button>
+            {:else}
+                <Button clickHandler={enroll} class="font-xl fixed w-64 bottom-4 left-0 right-0 mx-auto py-2 px-10">Zapisuję się!</Button>
+            {/if}
+        {/if}
     {/if}
 </div>
