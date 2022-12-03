@@ -18,12 +18,36 @@
         { id: 4, name: 'Po liczbie zapisanych malejąco' },
         { id: 5, name: 'Najbliżej daty rozpoczęcia' }
     ];
+    let page: number = 0;
 
     clearFilters();
+
+    const infiniteScroll = () => {
+        const eventsContainer = document.getElementById('postsContainer');
+
+        if (eventsContainer.offsetHeight + eventsContainer.scrollTop === eventsContainer.scrollHeight) {
+            page = page + 1;
+        }
+    };
 
     const viewDetails = (postId) => {
         $goto(`/events/${postId}`);
     };
+
+    const retrieveEvents = (page: number, urlParams: URLSearchParams) => {
+        execute(`eventsInactive?page=${page}&` + urlParams.toString(), 'GET')
+            .then((r) => r.json())
+            .then((r) => (data = [...data, ...r]));
+    };
+
+    $: {
+        $filteredCategoryIds;
+        $filteredLocationIds;
+        $sortingOption;
+        $nameSearchParam;
+        data = [];
+        page = 0;
+    }
 
     $: {
         let urlParams = new URLSearchParams();
@@ -40,16 +64,14 @@
             urlParams.append('nameSearch', $nameSearchParam);
         }
 
-        execute('eventsInactive?' + urlParams.toString(), 'GET')
-            .then((r) => r.json())
-            .then((r) => (data = r));
+        retrieveEvents(page, urlParams);
     }
 </script>
 
 <div class="h-screen">
     <Header />
     <SortFilterBanner {sortOptions} />
-    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto">
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#each data as item}
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
