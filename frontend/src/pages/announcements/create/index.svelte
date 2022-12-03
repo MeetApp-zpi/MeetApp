@@ -15,8 +15,6 @@
     let cityValue = null;
     let descriptionValue = null;
 
-    let descriptionInput = null;
-
     let categories = [];
 
     execute('categories', 'GET')
@@ -95,7 +93,7 @@
                 <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
             </div>
             <div class="">
-                <PostDescription bind:this={descriptionInput} bind:value={descriptionValue} maxLength="200" />
+                <PostDescription bind:value={descriptionValue} maxLength="200" />
                 <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
             </div>
             <div class="flex flex-row text-cocoa items-center mx-8">
