@@ -2,6 +2,7 @@ package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.ChatroomDTO;
 import com.meetapp.meetapp.model.Chatroom;
+import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.service.ChatroomService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,16 @@ public class ChatroomController {
     @GetMapping("/chatrooms/forClient")
     public List<ChatroomDTO> retrieveChatroomsForLoggedInClient(HttpSession session) {
         return chatroomService.retrieveChatroomsForLoggedInClient(session);
+    }
+
+    @GetMapping("/chatrooms/with/{anotherClientId}")
+    public Chatroom retrieveChatroomWithClient(HttpSession session, @PathVariable Integer anotherClientId) {
+        return chatroomService.retrieveChatroomWithClient(session, anotherClientId);
+    }
+
+    @GetMapping("/chatrooms/clientOf/{chatroomId}")
+    public Client retrieveOtherClient(HttpSession session, @PathVariable Integer chatroomId) {
+        return chatroomService.retrieveOtherClient(session, chatroomId);
     }
 
     @GetMapping("/chatrooms/markAsUnread/{chatroomId}")

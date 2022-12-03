@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { redirect, url } from '@roxi/routify';
+    import { goto, redirect, url } from '@roxi/routify';
 
     import execute from '../../lib/fetchWrapper';
     import { userDetails as currentUserDetails } from '../../lib/stores';
@@ -13,8 +13,10 @@
 
     export let userId: number;
 
+    let userDetails = null;
+
     async function fetchUserInterests() {
-        const userDetails = await execute(`users/${userId}/details`, 'GET').then(async (response) => {
+        userDetails = await execute(`users/${userId}/details`, 'GET').then(async (response) => {
             if (!response.ok) {
                 $redirect('/login');
             }
@@ -30,6 +32,26 @@
         });
 
         return [userDetails, userInterests];
+    }
+
+    async function sendMessage() {
+        if ($currentUserDetails === null) {
+            $redirect('/login');
+        }
+
+        const chatroom = await execute(`chatrooms/with/${userId}`, 'GET').then(async (response) => {
+            let retrievedChatroom = null;
+            try {
+                retrievedChatroom = await response.json();
+            } catch (e) {}
+
+            if (retrievedChatroom === null) {
+                return await execute(`chatrooms/${userDetails.email}`, 'POST').then(async (response) => await response.json());
+            }
+
+            return retrievedChatroom;
+        });
+        $goto(`/chat/${chatroom.id}`);
     }
 </script>
 
@@ -63,7 +85,7 @@
             </a>
 
             {#if $currentUserDetails !== null}
-                <Button class="flex flex-row text-xl text-base px-4 py-2 mb-12">
+                <Button class="flex flex-row text-xl text-base px-4 py-2 mb-12" clickHandler={sendMessage}>
                     <div class="h-7 w-7 mr-2">
                         <IoIosMail />
                     </div>

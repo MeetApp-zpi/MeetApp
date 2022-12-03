@@ -7,6 +7,7 @@ import com.meetapp.meetapp.repository.ChatroomRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
+import lombok.val;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,7 +35,8 @@ public class ChatroomService {
         Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         Chatroom foundChatroom = findChatroomOrThrow(chatroomId);
 
-        return foundClient.equals(foundChatroom.getFirstClient()) || foundClient.equals(foundChatroom.getSecondClient());
+        return foundClient.equals(foundChatroom.getFirstClient()) ||
+                foundClient.equals(foundChatroom.getSecondClient());
     }
 
     public List<ChatroomDTO> retrieveChatroomsForLoggedInClient(HttpSession session) {
@@ -45,6 +47,26 @@ public class ChatroomService {
                         hasUnreadMessageInChatroom(client, cr))).toList();
     }
 
+    public Chatroom retrieveChatroomWithClient(HttpSession session, Integer anotherClientId) {
+        Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        Client secondClient = findClientOrThrow(anotherClientId);
+
+        return chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
+    }
+
+    public Client retrieveOtherClient(HttpSession session, Integer chatroomId) {
+        val chatroom = findChatroomOrThrow(chatroomId);
+        val currentClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+
+        if (currentClient == chatroom.getFirstClient()) {
+            return chatroom.getSecondClient();
+        } else if (currentClient == chatroom.getSecondClient()) {
+            return chatroom.getFirstClient();
+        }
+
+        throw new IllegalArgumentException(currentClient.getEmail() + " is not a member of chat with id " + chatroomId);
+    }
+
     public Chatroom createChatroom(HttpSession session, String anotherClientEmail) {
         Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         Client secondClient = findClientOrThrow(anotherClientEmail);
@@ -52,8 +74,9 @@ public class ChatroomService {
         if (!existsChatroomBetweenClients(session, anotherClientEmail)) {
             return chatroomRepository.save(new Chatroom(firstClient, secondClient));
         } else {
-            throw new IllegalArgumentException("A chatroom between " + firstClient.getEmail() + " and " + anotherClientEmail +
-                    " already exists");
+            throw new IllegalArgumentException(
+                    "A chatroom between " + firstClient.getEmail() + " and " + anotherClientEmail +
+                            " already exists");
         }
     }
 
@@ -93,6 +116,11 @@ public class ChatroomService {
     public Chatroom findChatroomOrThrow(Integer chatroomId) {
         return chatroomRepository.findById(chatroomId).orElseThrow(
                 () -> new NoSuchElementException("A chatroom with id: " + chatroomId + " does not exist"));
+    }
+
+    public Client findClientOrThrow(Integer id) {
+        return clientRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("A client with id: " + id + " does not exist"));
     }
 
     public Client findClientOrThrow(String email) {

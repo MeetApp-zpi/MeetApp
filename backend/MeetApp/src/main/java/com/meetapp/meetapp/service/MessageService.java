@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import static com.meetapp.meetapp.configuration.Constants.MESSAGE_BATCH;
+
 @Service
 public class MessageService {
 
@@ -34,9 +36,9 @@ public class MessageService {
         Client foundChatter = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
 
         if (foundChatter.equals(foundChatroom.getSecondClient()) || foundChatter.equals(foundChatroom.getFirstClient())) {
-            PageRequest nextPage = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "creationDate"));
+            PageRequest nextPage = PageRequest.of(page, MESSAGE_BATCH, Sort.by(Sort.Direction.DESC, "creationDate"));
 
-            return messageRepository.findAll(nextPage).stream().toList();
+            return messageRepository.findAllByRoomId(chatroomId, nextPage).stream().toList();
         } else {
             throw new IllegalArgumentException("A client with id: " + foundChatter.getId() + " is not a part of" +
                     " chatroom with id: " + foundChatroom.getId());
