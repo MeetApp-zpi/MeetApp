@@ -14,12 +14,14 @@
     export let areDetailsShown: boolean;
     export let clickHandler: () => void;
 
-    let isEnrolled: boolean = false;
+    let isEnrolled = false;
 
     const checkEnrolledStatus = () => {
-        execute(`meetings/isEnrolled/${data.id}`, 'GET')
-            .then((r) => r.json())
-            .then((r) => (isEnrolled = r));
+        if ($userDetails !== null) {
+            execute(`meetings/isEnrolled/${data.id}`, 'GET')
+                .then((r) => r.json())
+                .then((r) => (isEnrolled = r));
+        }
     };
 
     const isAuthor = () => {

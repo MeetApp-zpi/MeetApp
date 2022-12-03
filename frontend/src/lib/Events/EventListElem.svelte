@@ -4,16 +4,19 @@
     import MdPeople from 'svelte-icons/md/MdPeople.svelte';
 
     import execute from '../fetchWrapper';
+    import { userDetails } from '../stores';
 
     export let data;
     export let clickHandler: () => void;
 
-    let isEnrolled: boolean = false;
+    let isEnrolled = false;
 
     const checkEnrolledStatus = () => {
-        execute(`events/isEnrolled/${data.id}`, 'GET')
-            .then((r) => r.json())
-            .then((r) => (isEnrolled = r));
+        if ($userDetails !== null) {
+            execute(`events/isEnrolled/${data.id}`, 'GET')
+                .then((r) => r.json())
+                .then((r) => (isEnrolled = r));
+        }
     };
 
     checkEnrolledStatus();
