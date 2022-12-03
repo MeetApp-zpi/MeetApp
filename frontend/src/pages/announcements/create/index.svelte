@@ -80,7 +80,7 @@
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
-            <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} />
+            <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} maxLength="50" />
             <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
@@ -95,8 +95,8 @@
                 <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
             </div>
             <div class="">
-                <PostDescription bind:this={descriptionInput} bind:value={descriptionValue} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis musi mieć między 1 a 200 znaków</p>
+                <PostDescription bind:this={descriptionInput} bind:value={descriptionValue} maxLength="200" />
+                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
             </div>
             <div class="flex flex-row text-cocoa items-center mx-8">
                 <div class="w-10 mx-2">

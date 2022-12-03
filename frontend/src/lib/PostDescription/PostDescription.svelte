@@ -1,5 +1,12 @@
 <script>
     export let value;
+    export let maxLength = 0;
+
+    $: {
+        if (value !== null && value.length > maxLength) {
+            value = value.slice(0, maxLength);
+        }
+    }
 </script>
 
 <div class="bg-ivory mt-2 mr-2 ml-2 p-2">

@@ -4,6 +4,7 @@
 
     export let postName = null;
     export let isValid = true;
+    export let maxLength = 0;
 
     let errorMessage = null;
 
@@ -18,6 +19,10 @@
 
     $: {
         if (errorMessage !== null) {
+            if (postName !== null && postName.length > maxLength) {
+                postName = postName.slice(0, maxLength);
+            }
+
             if (postName === null || postName.length < 5) {
                 isValid = false;
 
