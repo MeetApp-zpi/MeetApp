@@ -51,13 +51,13 @@
             </div>
 
             <a class="mb-4 flex flex-row items-center" href={$url('/user/posts')}>
-                <div class="h-5 w-7 mr-2">
+                <div class="h-5 w-7 mr-2 text-cocoa">
                     <FaCommentAlt />
                 </div>
                 <p class="text-pine text-2xl hover:opacity-50 transition ease-in-out delay-100 cursor-pointer">Moje Posty</p>
             </a>
             <a class="mb-8 flex flex-row items-center" href={$url('/myActivities')}>
-                <div class="h-6 w-6 mr-2">
+                <div class="h-6 w-6 mr-2 text-cocoa">
                     <FaHandsHelping />
                 </div>
                 <p class="text-pine text-2xl hover:opacity-50 transition ease-in-out delay-100 cursor-pointer">Biorę udział</p>
