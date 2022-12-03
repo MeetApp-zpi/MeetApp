@@ -77,6 +77,5 @@
         {/each}
     </div>
     <ShowActiveButton />
-    <AddPostButton pageType="events" />
     <Footer pageType="events" />
 </div>
