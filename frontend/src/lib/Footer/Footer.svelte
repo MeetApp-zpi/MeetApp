@@ -12,7 +12,7 @@
 <footer class="flex justify-between p-2 bg-grass h-16 lg:hidden">
     <a
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
-            {pageType === 'events' ? 'text-ivory' : ''}"
+            {pageType === 'events' ? 'text-ivory' : 'text-cocoa'}"
         href={$url('/events')}
         target="_top"
     >
@@ -23,7 +23,7 @@
     </a>
     <a
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
-            {pageType === 'announcements' ? 'text-ivory' : ''}"
+            {pageType === 'announcements' ? 'text-ivory' : 'text-cocoa'}"
         href={$url('/announcements')}
         target="_top"
     >
@@ -34,7 +34,7 @@
     </a>
     <a
         class="lg:hidden flex flex-col justify-center p-2 text-xs rounded-full
-            {pageType === 'meetings' ? 'text-ivory' : ''}"
+            {pageType === 'meetings' ? 'text-ivory' : 'text-cocoa'}"
         href={$url('/meetings')}
         target="_top"
     >

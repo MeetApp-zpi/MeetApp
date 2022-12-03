@@ -29,27 +29,31 @@
             {/if}
         </div>
         <div class="flex flex-col w-2/3 pl-2">
-            <div class="font-bold text-left">
+            <div class="font-bold text-left text-cocoa">
                 {data.title}
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <FaMapMarkedAlt />
                 </div>
-                {data.location.city.name}
+                <div class="text-cocoa">
+                    {data.location.city.name}
+                </div>
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <FaCalendarAlt />
                 </div>
-                {data.startDateTime.date}
+                <div class="text-cocoa">
+                    {data.startDateTime.date}
+                </div>
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <MdPeople />
                 </div>
                 <div class="text-orange">{data.enrolled} &nbsp;</div>
-                <div>{data.personQuota !== null ? '/ ' + data.personQuota : ''}</div>
+                <div class="text-cocoa">{data.personQuota !== null ? '/ ' + data.personQuota : ''}</div>
             </div>
         </div>
     </div>
