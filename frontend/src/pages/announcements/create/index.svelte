@@ -7,6 +7,7 @@
     import execute from '../../../lib/fetchWrapper';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
+    import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
 
     let title = null;
 
@@ -53,11 +54,12 @@
     };
 
     const validateDescription = () => {
+        let errorMessage = document.getElementById('descriptionErrorMsg');
         if (descriptionValue === null || descriptionValue.length < 1 || descriptionValue.length > 200) {
-            descriptionInput.setCustomValidity('Opis musi mieć między 1 a 200 znaków');
+            errorMessage.classList.remove('hidden');
             return false;
         }
-        descriptionInput.setCustomValidity('');
+        errorMessage.className += ' hidden';
         return true;
     };
 
@@ -65,11 +67,11 @@
         if (title.getIsValid() && validateCategory() && validateCity() && validateDescription()) {
             let requestBody = {
                 locationId: cityValue.id,
-                title: title.data,
+                title: title.getPostName(),
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
-            execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173'));
+            execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173/announcements'));
         }
     };
 </script>
@@ -83,24 +85,18 @@
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-            <div class="bg-tea mx-4 py-4 rounded-xl" id="cityInputBox">
+            <div class="bg-tea m-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
                 <SelectCityInput
                     fetch="http://localhost:5173/api/locations?nameSearch=[query]"
                     placeholder="Miasto"
                     inputId="citySelect"
-                    style="margin-left: 1rem; margin-right: 1rem"
                     bind:selected={cityValue}
                 />
                 <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
             </div>
-            <div class="mx-4">
-                <textarea
-                    bind:this={descriptionInput}
-                    bind:value={descriptionValue}
-                    class="px-4 py-1 my-2 border-grass border-2 rounded-lg w-full h-40 focus:outline-none invalid:border-red-500 peer"
-                    placeholder="Opis"
-                />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mb-2">Opis musi mieć między 1 a 200 znaków</p>
+            <div class="">
+                <PostDescription bind:this={descriptionInput} bind:value={descriptionValue} />
+                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis musi mieć między 1 a 200 znaków</p>
             </div>
             <div class="flex flex-row text-cocoa items-center mx-8">
                 <div class="w-10 mx-2">

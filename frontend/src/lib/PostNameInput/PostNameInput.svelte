@@ -12,6 +12,10 @@
         return isValid;
     };
 
+    export const getPostName = () => {
+        return postName;
+    };
+
     $: {
         if (errorMessage !== null) {
             if (postName === null || postName.length < 5) {
