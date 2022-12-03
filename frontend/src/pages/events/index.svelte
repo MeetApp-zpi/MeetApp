@@ -9,6 +9,7 @@
     import execute from '../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
     import ShowInactiveButton from '../../lib/ShowInactiveButton/ShowInactiveButton.svelte';
+    import { userDetails } from '../../lib/stores.js';
 
     let data = [];
     let sortOptions = [
@@ -76,7 +77,11 @@
             <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
         {/each}
     </div>
-    <ShowInactiveButton />
-    <AddPostButton pageType="events" />
+    {#if $userDetails !== null}
+        <ShowInactiveButton class="bottom-36" />
+        <AddPostButton pageType="events" />
+    {:else}
+        <ShowInactiveButton class="bottom-20" />
+    {/if}
     <Footer pageType="events" />
 </div>
