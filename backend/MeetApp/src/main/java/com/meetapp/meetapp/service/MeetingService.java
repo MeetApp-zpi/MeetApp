@@ -127,8 +127,8 @@ public class MeetingService {
 
         timeInFutureOrThrow(castedDate);
 
-        Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getDescription(),
-                newMeeting.getTitle(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
+        Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getTitle(),
+                newMeeting.getDescription(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
 
         return meetingRepository.save(meetingToSave);
     }

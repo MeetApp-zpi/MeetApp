@@ -66,6 +66,7 @@
                     dateTimeErrorMessage.className += ' hidden';
                 }
 
+                date.setUTCHours(date.getUTCHours() + 1) // it's complicated
                 isoDateTime = date.toISOString();
                 return true;
             }
@@ -105,13 +106,13 @@
 <div class="h-screen">
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
-        <form>
+        <div class="w-full">
             <PostNameInput postname="Nazwa spotkania" bind:this={title} maxLength="50" />
-            <div class="mx-4 mt-2" id="categoryInputBox">
+            <div class="mx-1.5 mt-2" id="categoryInputBox">
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
             <p class="text-red-500 text-sm mt-1 mx-8 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-            <div class="bg-tea m-4 p-2 rounded-lg">
+            <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                 <div id="cityInputBox">
                     <SelectCityInput
                         fetch="http://localhost:5173/api/locations?nameSearch=[query]"
@@ -122,10 +123,10 @@
                     <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
                 </div>
                 <div class="flex">
-                    <div class="py-2 mr-1 object-left flex-1">
+                    <div class="py-2 mr-0.5 object-left flex-1">
                         <PostDateInput bind:value={dateValue} />
                     </div>
-                    <div class="py-2 ml-1 object-right flex-1">
+                    <div class="py-2 ml-0.5 object-right flex-1">
                         <PostTimeInput bind:value={timeValue} />
                     </div>
                 </div>
@@ -134,7 +135,7 @@
             </div>
             <PostDescription bind:value={descriptionValue} maxLength="250" />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
-        </form>
+        </div>
         <div class="">
             <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz spotkanie</Button>
         </div>

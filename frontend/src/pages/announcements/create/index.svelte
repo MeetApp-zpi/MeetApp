@@ -79,11 +79,11 @@
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
             <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} maxLength="50" />
-            <div class="mx-4 mt-2 categorySvelecteBox" id="categoryInputBox">
+            <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-            <div class="bg-tea m-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
+            <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
                 <SelectCityInput
                     fetch="http://localhost:5173/api/locations?nameSearch=[query]"
                     placeholder="Miasto"
@@ -96,7 +96,7 @@
                 <PostDescription bind:value={descriptionValue} maxLength="200" />
                 <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
             </div>
-            <div class="flex flex-row text-cocoa items-center mx-8">
+            <div class="flex flex-row text-cocoa items-center mx-8 my-4">
                 <div class="w-10 mx-2">
                     <MdInfoOutline />
                 </div>

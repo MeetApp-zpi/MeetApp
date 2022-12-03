@@ -38,7 +38,7 @@
     }
 </script>
 
-<div class="bg-ivory m-2 p-2">
+<div class="bg-ivory mx-1.5 my-4">
     <input
         type="text"
         id="post-name"

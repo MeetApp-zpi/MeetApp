@@ -9,7 +9,7 @@
     }
 </script>
 
-<div class="bg-ivory mt-2 mr-2 ml-2 p-2">
+<div class="bg-ivory mt-2 mx-1.5">
     <textarea
         id="post-name"
         class="bg-ivory border-2 border-pickle text-gray 
