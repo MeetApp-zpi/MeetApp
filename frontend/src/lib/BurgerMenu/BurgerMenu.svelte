@@ -3,6 +3,7 @@
 
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
+    import FaHandshake from 'svelte-icons/fa/FaHandshake.svelte';
     import FaHandsHelping from 'svelte-icons/fa/FaHandsHelping.svelte';
     import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte';
     import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
@@ -89,6 +90,12 @@
                     <MdMessage />
                 </div>
                 <div class="text-cocoa">Wiadomości</div>
+            </div>
+            <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/termsOfUse')} on:keydown={() => $goto('/chatrooms')}>
+                <div class="h-8 w-8 mr-2 text-cocoa">
+                    <FaHandshake />
+                </div>
+                <div class="text-cocoa">Regulamin</div>
             </div>
             <div class="flex flex-row items-center" on:click={logout} on:keydown={logout}>
                 <div class="h-8 w-8 mr-2 text-cocoa">
