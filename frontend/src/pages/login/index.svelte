@@ -19,7 +19,7 @@
             <div class="align-middle text-cocoa text-sm">Sign in with Google</div>
         </button>
         <div class="self-center text-sage">
-            <a href={$url('/regulamin')}>Regulamin</a>
+            <a href={$url('/termsOfUse')}>Regulamin</a>
         </div>
     </div>
 </div>
