@@ -6,6 +6,7 @@
     import SortFilterBanner from '../../lib/SortFilterBanner/SortFilterBanner.svelte';
     import execute from '../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../../lib/stores';
+    import { userDetails } from "../../lib/stores.js";
 
     let data = [];
     let selected: number | null = null;
@@ -80,6 +81,8 @@
             {/each}
         {/await}
     </div>
-    <AddPostButton pageType="announcements" />
+    {#if $userDetails !== null}
+        <AddPostButton pageType="announcements" />
+    {/if}
     <Footer pageType="announcements" />
 </div>

@@ -95,7 +95,7 @@
                     {data.author.lastName}
                 </div>
             </a>
-            {#if !isAuthor()}
+            {#if $userDetails !== null && !isAuthor()}
                 <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
                     {#if isEnrolled}
                         <Button class="text-base px-10 py-1 mx-12 my-2" clickHandler={unenroll}>Wypisuję się!</Button>
