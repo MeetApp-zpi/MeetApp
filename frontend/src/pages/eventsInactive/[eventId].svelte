@@ -107,12 +107,12 @@
                 </div>
                 <div class="m-4">
                     <h3 class="text-pine text-2xl">Opis</h3>
-                    <p>{data.description}</p>
+                    <p class="text-cocoa">{data.description}</p>
                 </div>
                 {#if data.schedule !== null}
                     <div class="m-4">
                         <h3 class="text-pine text-2xl">Harmonogram</h3>
-                        <p>{data.schedule}</p>
+                        <p class="text-cocoa">{data.schedule}</p>
                     </div>
                 {/if}
             </div>

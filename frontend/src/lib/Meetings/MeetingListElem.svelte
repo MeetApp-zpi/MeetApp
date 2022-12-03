@@ -40,37 +40,45 @@
 <div class="{isEnrolled ? 'bg-tusk' : 'bg-olive'} rounded-2xl m-2 p-2">
     <div class="flex flex-col">
         <button on:click={clickHandler} class="hover:cursor-pointer">
-            <div class="font-bold text-left">
+            <div class="font-bold text-left text-cocoa">
                 {data.title}
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <FaMapMarkedAlt />
                 </div>
-                {data.location.city.name}
+                <div class="text-cocoa">
+                    {data.location.city.name}
+                </div>
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <FaCalendarAlt />
                 </div>
-                {data.meetingDateTime.date}
-                <div class="w-6 mx-2">
+                <div class="text-cocoa">
+                    {data.meetingDateTime.date}
+                </div>
+                <div class="w-6 mx-2 text-cocoa">
                     <MdAccessTime />
                 </div>
-                {data.meetingDateTime.time}
+                <div class="text-cocoa">
+                    {data.meetingDateTime.time}
+                </div>
             </div>
             <div class="flex flex-row">
-                <div class="w-6 mx-2">
+                <div class="w-6 mx-2 text-cocoa">
                     <MdPeople />
                 </div>
                 <div class="text-orange">
                     {data.enrolled} &nbsp;
                 </div>
-                {data.personQuota !== null ? '/ ' + data.personQuota : ''}
+                <div class="text-cocoa">
+                    {data.personQuota !== null ? '/ ' + data.personQuota : ''}
+                </div>
             </div>
         </button>
         {#if areDetailsShown}
-            <div transition:slide class="border-t-2 border-shadow">
+            <div transition:slide class="border-t-2 border-shadow text-cocoa">
                 {data.description}
             </div>
             <a
@@ -82,8 +90,10 @@
                 <div class="w-12 h-12 mr-2">
                     <img class="rounded-full" src={data.author.profilePicture} alt="Profile avatar" referrerpolicy="no-referrer" />
                 </div>
-                {data.author.firstName}
-                {data.author.lastName}
+                <div class="text-cocoa">
+                    {data.author.firstName}
+                    {data.author.lastName}
+                </div>
             </a>
             {#if !isAuthor()}
                 <div class="self-center my-2" in:slide={{ delay: 100 }} out:slide>
