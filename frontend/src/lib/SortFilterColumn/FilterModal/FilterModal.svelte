@@ -1,18 +1,15 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
 
-    import Button from '../../../lib/Button/Button.svelte';
     import MultiselectCityInput from '../../MultiselectCityInput/MultiselectCityInput.svelte';
     import SelectablePill from '../../Pill/SelectablePill.svelte';
     import execute from '../../../lib/fetchWrapper';
     import { filteredCategoryIds, filteredLocationIds } from '../../stores';
 
-    export let modalCloser;
-
     let categories = [];
 
-    let cityValues = $filteredLocationIds;
-    let selectedCategories = $filteredCategoryIds;
+    export let cityValues = $filteredLocationIds;
+    export let selectedCategories = $filteredCategoryIds;
 
     let promise = execute('categories', 'GET')
         .then((r) => r.json())
@@ -25,17 +22,10 @@
             selectedCategories.push(categoryId);
         }
     };
-
-    const setFilteredPosts = () => {
-        console.log(cityValues);
-        $filteredCategoryIds = selectedCategories;
-        $filteredLocationIds = cityValues;
-        modalCloser();
-    };
 </script>
 
 {#await promise then _}
-    <div class="flex flex-col z-20 w-full py-2 px-4 fixed items-center bg-ivory" transition:slide>
+    <div class="flex flex-col w-full py-2 px-4 items-center bg-green-mist" transition:slide>
         <div class="">
             {#each categories as category}
                 <SelectablePill
@@ -56,14 +46,5 @@
                 bind:selected={cityValues}
             />
         </div>
-        <div class="mb-2">
-            <Button class="px-10 py-1 mt-2" clickHandler={setFilteredPosts}>Filtruj</Button>
-        </div>
     </div>
 {/await}
-
-<style>
-    :global(.sv-content) {
-        overflow-x: scroll;
-    }
-</style>
