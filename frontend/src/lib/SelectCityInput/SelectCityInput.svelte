@@ -5,7 +5,7 @@
     export let placeholder;
     export let inputId;
     export let selected;
-    export let style;
+    export let style = '';
 
     let options;
 
@@ -55,5 +55,24 @@
 <style>
     .svelecte-select :global(.sv-content) {
         overflow-x: scroll;
+    }
+
+    .svelecte-select :global(.sv-control) {
+        border-color: var(--tea);
+        background-color: var(--white);
+        border-width: 2px;
+        padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+        color: var(--gray);
+        border-radius: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    .svelecte-select :global(.inputBox) {
+        height: 2rem;
+        color: var(--gray);
+    }
+
+    .svelecte-select :global(.inputBox) {
+        color: var(--cocoa);
     }
 </style>

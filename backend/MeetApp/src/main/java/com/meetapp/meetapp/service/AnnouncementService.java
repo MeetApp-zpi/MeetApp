@@ -152,8 +152,8 @@ public class AnnouncementService {
         List<Category> foundCategories = findCategories(newAnnouncement.getCategoryIds());
 
         Announcement announcementToSave =
-                new Announcement(foundClient, foundLocation, newAnnouncement.getDescription(),
-                        newAnnouncement.getTitle(), new HashSet<>(foundCategories));
+                new Announcement(foundClient, foundLocation, newAnnouncement.getTitle(),
+                        newAnnouncement.getDescription(), new HashSet<>(foundCategories));
 
         return announcementRepository.save(announcementToSave);
     }
