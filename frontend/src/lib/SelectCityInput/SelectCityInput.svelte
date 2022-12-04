@@ -5,7 +5,7 @@
     export let placeholder;
     export let inputId;
     export let selected;
-    export let style;
+    export let style = '';
 
     let options;
 
@@ -72,7 +72,7 @@
         color: var(--gray);
     }
 
-    .svelecte-select :global(.inputBox){
+    .svelecte-select :global(.inputBox) {
         color: var(--cocoa);
     }
 </style>

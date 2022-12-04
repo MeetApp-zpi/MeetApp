@@ -66,7 +66,7 @@
                     dateTimeErrorMessage.className += ' hidden';
                 }
 
-                date.setUTCHours(date.getUTCHours() + 1) // it's complicated
+                date.setUTCHours(date.getUTCHours() + 1); // it's complicated
                 isoDateTime = date.toISOString();
                 return true;
             }
@@ -88,8 +88,18 @@
         return true;
     };
 
+    const validatePeopleLimit = () => {
+        let errorMessage = document.getElementById('peopleLimitErrorMsg');
+        if (peopleLimitValue === null || peopleLimitValue <= 0) {
+            errorMessage.classList.remove('hidden');
+            return false;
+        }
+        errorMessage.className += ' hidden';
+        return true;
+    };
+
     const handleSubmit = () => {
-        if (title.getIsValid() && validateCategory() && validateCity() && validateDateTime() && validateDescription()) {
+        if (title.getIsValid() && validateCategory() && validateCity() && validateDateTime() && validatePeopleLimit() && validateDescription()) {
             let requestBody = {
                 locationId: cityValue.id,
                 title: title.getPostName(),
@@ -107,7 +117,7 @@
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
-            <PostNameInput postname="Nazwa spotkania" bind:this={title} maxLength="50" />
+            <PostNameInput placeholder="Nazwa spotkania" bind:this={title} maxLength={50} />
             <div class="mx-1.5 mt-2" id="categoryInputBox">
                 <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
             </div>
@@ -132,8 +142,9 @@
                 </div>
                 <p class="text-red-500 text-sm mx-2 hidden mb-2" bind:this={dateTimeErrorMessage}>Data musi być w przyszłości</p>
                 <PeopleLimitInput bind:value={peopleLimitValue} />
+                <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             </div>
-            <PostDescription bind:value={descriptionValue} maxLength="250" />
+            <PostDescription bind:value={descriptionValue} maxLength={250} />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
         </div>
         <div class="">
