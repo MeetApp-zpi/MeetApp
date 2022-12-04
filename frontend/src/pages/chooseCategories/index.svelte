@@ -41,7 +41,7 @@
     };
 </script>
 
-<div class="flex flex-col bg-ivory h-screen justify-between">
+<div class="flex flex-col bg-ivory h-screen justify-between lg:w-1/3 lg:mx-auto lg:py-10">
     <div class="flex flex-col items-center">
         {#if currentUser !== null}
             <div class="text-cocoa text-2xl py-4 uppercase">Cześć {currentUser.firstName}!</div>

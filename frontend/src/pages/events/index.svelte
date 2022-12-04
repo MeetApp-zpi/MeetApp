@@ -72,10 +72,14 @@
 <div class="h-screen">
     <Header />
     <SortFilterBanner {sortOptions} />
-    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
-        {#each data as item}
-            <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
-        {/each}
+    <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)] lg:flex lg:flex-row overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
+        <div class="hidden lg:block lg:w-1/3">Test</div>
+        <div class="flex flex-col lg:w-full">
+            {#each data as item}
+                <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
+            {/each}
+        </div>
+        <div class="hidden lg:block lg:w-1/3" />
     </div>
     {#if $userDetails !== null}
         <ShowInactiveButton class="bottom-36" />

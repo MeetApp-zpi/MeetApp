@@ -37,7 +37,7 @@
     };
 </script>
 
-<div class="flex justify-center bg-pickle h-8 text-ivory font-bold">
+<div class="flex justify-center bg-pickle h-8 text-ivory font-bold lg:hidden">
     <button on:click={switchFilterModal}>Filtry</button>
     <button on:click={switchSortModal} class="mx-4">Sortuj</button>
     <button on:click={switchSearchModal}>
