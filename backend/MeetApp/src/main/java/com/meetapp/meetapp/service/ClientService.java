@@ -11,7 +11,10 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Service
 public class ClientService {
@@ -118,22 +121,31 @@ public class ClientService {
         return clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
     }
 
-    public Client deleteClientAccount(Integer clientId, HttpSession session) {
+    public Client deleteClientAccount(HttpSession session) {
         String authenticatedEmail = SessionManager.retrieveEmailOrThrow(session);
-        Client foundClient = findClientOrThrow(clientId);
+        Client foundClient = findClientOrThrow(authenticatedEmail);
 
-        if (Objects.equals(foundClient.getEmail(), authenticatedEmail)) {
-            foundClient.setPosts(null);
-            foundClient.setInterests(null);
-            foundClient.setFirstName("Removed");
-            foundClient.setLastName("Removed");
-            foundClient.setEmail("Removed");
-            foundClient.setIsDeleted(true);
-            return clientRepository.save(foundClient);
-        } else {
-            throw new SecurityException(
-                    "A client with email: " + authenticatedEmail + " cannot delete user with id: " + clientId);
-        }
+        List<Post> enrolledInPosts = postRepository.findAllByEnrolleesContains(foundClient);
+        List<Post> foundActiveAuthoredPosts = postRepository.findAllByAuthorEmailIsAndIsActiveIs(authenticatedEmail, true);
+
+        enrolledInPosts.forEach((Post p) -> {
+            Integer enrolled = p.getEnrolled();
+            Set<Client> enrollees = p.getEnrollees();
+            enrollees.remove(foundClient);
+            p.setEnrollees(enrollees);
+            p.setEnrolled(enrolled - 1);
+        });
+
+        foundActiveAuthoredPosts.forEach((Post p) -> p.setIsActive(false));
+
+        postRepository.saveAll(enrolledInPosts);
+        postRepository.saveAll(foundActiveAuthoredPosts);
+
+        foundClient.setFirstName("Removed");
+        foundClient.setLastName("Removed");
+        foundClient.setEmail("removed@removed.com");
+        foundClient.setIsDeleted(true);
+        return clientRepository.save(foundClient);
     }
 
     public List<Category> retrieveClientCategories(HttpSession session) {
