@@ -152,6 +152,7 @@ public class EventService {
 
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
+        personQuotaPositiveOrThrow(newEvent.getPersonQuota());
 
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
@@ -174,6 +175,7 @@ public class EventService {
 
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
+        personQuotaPositiveOrThrow(updatedEvent.getPersonQuota());
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
@@ -248,6 +250,12 @@ public class EventService {
     public void timeInFutureOrThrow(Instant timeToCheck) {
         if (Instant.now().isAfter(timeToCheck)) {
             throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
+        }
+    }
+
+    public void personQuotaPositiveOrThrow(Integer personQuota) {
+        if (personQuota != null && personQuota <= 0) {
+            throw new IllegalArgumentException("Person quota cannot be less than or equal to 0");
         }
     }
 

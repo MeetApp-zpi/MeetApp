@@ -132,6 +132,7 @@ public class MeetingService {
         List<Category> foundCategories = findCategories(newMeeting.getCategoryIds());
 
         timeInFutureOrThrow(castedDate);
+        personQuotaPositiveOrThrow(newMeeting.getPersonQuota());
 
         Meeting meetingToSave = new Meeting(foundClient, foundLocation, newMeeting.getTitle(),
                 newMeeting.getDescription(), castedDate, new HashSet<>(foundCategories), newMeeting.getPersonQuota());
@@ -147,6 +148,7 @@ public class MeetingService {
         Instant parsedDate = parseDateOrThrow(updatedMeeting.getMeetingDate());
 
         timeInFutureOrThrow(parsedDate);
+        personQuotaPositiveOrThrow(updatedMeeting.getPersonQuota());
 
         if (foundMeeting.getAuthor().equals(supposedAuthor)) {
             foundMeeting.setTitle(updatedMeeting.getTitle());
@@ -202,6 +204,12 @@ public class MeetingService {
     public void timeInFutureOrThrow(Instant timeToCheck) {
         if (Instant.now().isAfter(timeToCheck)) {
             throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
+        }
+    }
+
+    public void personQuotaPositiveOrThrow(Integer personQuota) {
+        if (personQuota != null && personQuota <= 0) {
+            throw new IllegalArgumentException("Person quota cannot be less than or equal to 0");
         }
     }
 
