@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     export let placeholder = 'Nazwa posta';
     let isValidated = false;
 

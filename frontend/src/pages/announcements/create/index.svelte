@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { redirect } from '@roxi/routify';
     import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
 
     import Button from '../../../lib/Button/Button.svelte';
@@ -69,7 +70,7 @@
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
-            execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173/announcements'));
+            execute('announcements', 'POST', requestBody).then((r) => $redirect('/announcements'));
         }
     };
 </script>

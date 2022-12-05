@@ -6,6 +6,7 @@ import com.meetapp.meetapp.repository.*;
 import com.meetapp.meetapp.security.SessionManager;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.Instant;
 import java.time.LocalDate;
