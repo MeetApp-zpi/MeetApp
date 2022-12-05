@@ -47,54 +47,54 @@
     {/if}
     <div class="h-full bg-ivory text-pine p-4">
         <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
-            <div class="h-8 w-8 mr-2 text-cocoa">
+            <div class="h-8 w-8 mr-2 text-taupe">
                 <FaCalendarDay />
             </div>
-            <div class="text-cocoa">Wydarzenia</div>
+            <div class="text-taupe">Wydarzenia</div>
         </div>
         <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/announcements')} on:keydown={() => $goto('/announcements')}>
-            <div class="h-8 w-8 mr-2 text-cocoa">
+            <div class="h-8 w-8 mr-2 text-taupe">
                 <MdAnnouncement />
             </div>
-            <div class="text-cocoa">Ogłoszenia</div>
+            <div class="text-taupe">Ogłoszenia</div>
         </div>
         <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
-            <div class="h-8 w-8 mr-2 text-cocoa">
+            <div class="h-8 w-8 mr-2 text-taupe">
                 <MeetingSymbol />
             </div>
-            <div class="text-cocoa">Spotkania</div>
+            <div class="text-taupe">Spotkania</div>
         </div>
         {#if $userDetails !== null}
             <div class="h-px w-[90%] my-2 ml-auto mr-auto bg-black bg-opacity-10" />
             <div class="flex flex-row mb-2 items-center" on:click={() => $redirect('/profile')} on:keydown={() => $redirect('/profile')}>
-                <div class="h-8 w-8 mr-2 text-cocoa">
+                <div class="h-8 w-8 mr-2 text-taupe">
                     <MdPerson />
                 </div>
-                <div class="text-cocoa">Mój profil</div>
+                <div class="text-taupe">Mój profil</div>
             </div>
             <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/user/posts')} on:keydown={() => $goto('/user/posts')}>
-                <div class="h-6 w-8 mr-2 text-cocoa">
+                <div class="h-6 w-8 mr-2 text-taupe">
                     <FaCommentAlt />
                 </div>
-                <div class="text-cocoa">Moje posty</div>
+                <div class="text-taupe">Moje posty</div>
             </div>
             <div class="flex flex-row mb-2 items-center" on:click={myActivities} on:keydown={() => $goto('/myActivities')}>
-                <div class="h-8 w-8 mr-2 text-cocoa">
+                <div class="h-8 w-8 mr-2 text-taupe">
                     <FaHandsHelping />
                 </div>
-                <div class="text-cocoa">Biorę udział</div>
+                <div class="text-taupe">Biorę udział</div>
             </div>
             <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/chatrooms')} on:keydown={() => $goto('/chatrooms')}>
-                <div class="h-8 w-8 mr-2 text-cocoa">
+                <div class="h-8 w-8 mr-2 text-taupe">
                     <MdMessage />
                 </div>
-                <div class="text-cocoa">Wiadomości</div>
+                <div class="text-taupe">Wiadomości</div>
             </div>
             <div class="flex flex-row items-center" on:click={logout} on:keydown={logout}>
-                <div class="h-8 w-8 mr-2 text-cocoa">
+                <div class="h-8 w-8 mr-2 text-taupe">
                     <FaSignOutAlt />
                 </div>
-                <div class="text-cocoa">Wyloguj</div>
+                <div class="text-taupe">Wyloguj</div>
             </div>
         {/if}
     </div>
