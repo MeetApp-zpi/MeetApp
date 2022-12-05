@@ -9,6 +9,8 @@
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
 
+    export let announcementId: number;
+
     let title = null;
 
     let categoryValue = null;
@@ -17,9 +19,23 @@
 
     let categories = [];
 
+    $: console.log(cityValue);
+
     execute('categories', 'GET')
         .then((r) => r.json())
         .then((r) => (categories = r));
+
+    execute(`announcements/${announcementId}`, 'GET')
+        .then((r) => r.json())
+        .then((r) => {
+            descriptionValue = r.description;
+            cityValue = {
+                id: r.location.id,
+                city: r.location.city.name,
+                voivodeship: r.location.voivodeship.name
+            };
+            title = r.title;
+        });
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
@@ -69,7 +85,9 @@
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
-            execute('announcements', 'POST', requestBody).then((r) => (window.location.href = 'http://localhost:5173/announcements'));
+            execute(`announcements/${announcementId}`, 'PUT', requestBody).then(
+                (r) => (window.location.href = 'http://localhost:5173/announcements')
+            );
         }
     };
 </script>
