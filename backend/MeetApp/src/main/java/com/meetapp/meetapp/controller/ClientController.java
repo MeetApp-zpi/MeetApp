@@ -91,8 +91,7 @@ public class ClientController {
     @GetMapping("/users/createAccount")
     public void createUserAccount(HttpSession session, HttpServletResponse response) throws IOException {
         clientService.createClientAccount(session);
-        // TODO: change for prod
-        response.sendRedirect("http://localhost:5173");
+        response.sendRedirect("http://localhost:5173/chooseCategories");
     }
 
     @PutMapping("/users/categories")
