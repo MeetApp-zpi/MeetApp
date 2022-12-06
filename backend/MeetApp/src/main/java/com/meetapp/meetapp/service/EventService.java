@@ -154,6 +154,10 @@ public class EventService {
         timeInFutureOrThrow(endDate);
         personQuotaPositiveOrThrow(newEvent.getPersonQuota());
 
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
+
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
@@ -176,6 +180,10 @@ public class EventService {
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
         personQuotaPositiveOrThrow(updatedEvent.getPersonQuota());
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
@@ -210,10 +218,10 @@ public class EventService {
         try {
             LocalDateTime today = LocalDateTime.now();
             String datePath = today.getYear() + String.valueOf(today.getMonthValue());
-            Path fileNameAndPath = Paths.get("src/main/resources/public/pictures/" + datePath, picture.getOriginalFilename());
-            Files.createDirectories(Paths.get("src/main/resources/public/pictures/" + datePath));
+            Path fileNameAndPath = Paths.get("src/main/pictures/" + datePath, picture.getOriginalFilename());
+            Files.createDirectories(Paths.get("src/main/pictures/" + datePath));
             Files.write(fileNameAndPath, picture.getBytes());
-            return String.valueOf(Paths.get(datePath, picture.getOriginalFilename()));
+            return String.valueOf(Paths.get("pictures/", datePath, picture.getOriginalFilename()));
         } catch (IOException e) {
             throw new RuntimeException("Event photo with name: " + picture.getOriginalFilename() +
                     " could not be saved.");

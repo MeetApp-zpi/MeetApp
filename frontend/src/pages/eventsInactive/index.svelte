@@ -76,7 +76,7 @@
         <div class="hidden lg:block lg:w-1/3 lg:max-w-[33.3333%] lg:bg-green-mist overflow-auto">
             <SortFilterColumn {sortOptions} />
         </div>
-        <div class="flex flex-col lg:w-full overflow-auto">
+        <div class="flex flex-col h-full lg:w-full overflow-auto">
             {#each data as item}
                 <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
             {/each}

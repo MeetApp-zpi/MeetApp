@@ -1,6 +1,7 @@
 <script>
     export let value;
     export let maxLength = 0;
+    export let placeholder;
 
     $: {
         if (value !== null && value.length > maxLength) {
@@ -16,7 +17,7 @@
     px-2 py-3 text-2xl rounded-lg w-full block
     focus:outline-none focus:border-pickle focus:ring-1 focus:ring-pickle focus:text-cocoa"
         rows="7"
-        placeholder="Opis"
+        {placeholder}
         required
         bind:value
     />
