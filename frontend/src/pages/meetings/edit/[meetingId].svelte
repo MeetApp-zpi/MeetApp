@@ -34,7 +34,7 @@
     execute(`users/isAuthor/${meetingId}`, 'GET')
         .then((r) => r.text())
         .then((r) => {
-            r === 'false' ? $redirect('/announcements') : null;
+            r === 'false' ? $redirect('/meetings') : null;
         });
 
     let promise = execute(`meetings/${meetingId}`, 'GET')
@@ -54,8 +54,6 @@
         });
 
     execute('categories', 'GET').then(async (response) => (categories = await response.json()));
-
-    $: console.log(dateValue, timeValue);
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
@@ -180,7 +178,7 @@
                     <PeopleLimitInput bind:value={peopleLimitValue} />
                     <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
                 </div>
-                <PostDescription bind:value={descriptionValue} maxLength={250} />
+                <PostDescription bind:value={descriptionValue} maxLength={250} placeholder="Opis" />
                 <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
             </div>
             <div class="">
