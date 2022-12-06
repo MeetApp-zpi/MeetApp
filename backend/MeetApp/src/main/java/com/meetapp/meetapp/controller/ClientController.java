@@ -90,8 +90,10 @@ public class ClientController {
 
     @GetMapping("/users/createAccount")
     public void createUserAccount(HttpSession session, HttpServletResponse response) throws IOException {
-        clientService.createClientAccount(session);
-        // TODO: change for prod
+        Boolean isNewAccount = clientService.createClientAccount(session);
+        if (isNewAccount) {
+            response.sendRedirect("http://localhost:5173/chooseCategories");
+        }
         response.sendRedirect("http://localhost:5173");
     }
 
@@ -100,19 +102,14 @@ public class ClientController {
         return clientService.updateClientCategories(session, updatedCategories);
     }
 
-    @PostMapping("/users")
-    public Client createAccount(HttpSession session) {
-        return clientService.createClientAccount(session);
-    }
-
     @PostMapping("/logout")
     public void logoutClient(HttpSession session) {
         session.invalidate();
         return;
     }
 
-    @DeleteMapping("/users/{user_id}")
-    public Client deleteAccount(@PathVariable Integer user_id, HttpSession session) {
-        return clientService.deleteClientAccount(user_id, session);
+    @DeleteMapping("/users")
+    public Client deleteAccount(HttpSession session) {
+        return clientService.deleteClientAccount(session);
     }
 }

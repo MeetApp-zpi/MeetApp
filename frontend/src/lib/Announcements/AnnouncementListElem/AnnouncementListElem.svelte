@@ -42,12 +42,12 @@
             <div class="font-bold text-left text-cocoa">
                 {data.title}
             </div>
-            <div class="flex flex-row">
+            <div class="flex flex-row items-center">
                 <div class="w-6 mx-2 text-cocoa">
                     <FaMapMarkedAlt />
                 </div>
-                <div class="text-cocoa">
-                    {data.location.city.name}
+                <div class="text-cocoa text-left">
+                    {data.location.city.name}, {data.location.voivodeship.name}
                 </div>
             </div>
         </button>

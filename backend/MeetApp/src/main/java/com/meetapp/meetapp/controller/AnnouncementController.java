@@ -2,6 +2,7 @@ package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.SingleAnnouncementDTO;
 import com.meetapp.meetapp.model.Announcement;
 import com.meetapp.meetapp.service.AnnouncementService;
 import jakarta.servlet.http.HttpSession;
@@ -49,7 +50,7 @@ public class AnnouncementController {
     }
 
     @GetMapping("/announcements/{announcementId}")
-    public AnnouncementDTO getAnnouncement(@PathVariable Integer announcementId) {
+    public SingleAnnouncementDTO getAnnouncement(@PathVariable Integer announcementId) {
         return announcementService.retrieveAnnouncement(announcementId);
     }
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { redirect } from '@roxi/routify';
     import MdInfoOutline from 'svelte-icons/md/MdInfoOutline.svelte';
+    import { redirect } from '@roxi/routify';
 
     import Button from '../../../lib/Button/Button.svelte';
     import Header from '../../../lib/Header/Header.svelte';
@@ -10,7 +10,10 @@
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
 
+    export let announcementId: number;
+
     let title = null;
+    let initTitle: string;
 
     let categoryValue = null;
     let cityValue = null;
@@ -18,9 +21,28 @@
 
     let categories = [];
 
+    execute(`users/isAuthor/${announcementId}`, 'GET')
+        .then((r) => r.text())
+        .then((r) => {
+            r === 'false' ? $redirect('/announcements') : null;
+        });
+
     execute('categories', 'GET')
         .then((r) => r.json())
         .then((r) => (categories = r));
+
+    let promise = execute(`announcements/${announcementId}`, 'GET')
+        .then((r) => r.json())
+        .then((r) => {
+            descriptionValue = r.description;
+            categoryValue = r.categories.map((c) => c.id);
+            cityValue = {
+                id: r.location.id,
+                city: r.location.city.name,
+                voivodeship: r.location.voivodeship.name
+            };
+            initTitle = r.title;
+        });
 
     const validateCategory = () => {
         let errorMsg = document.getElementById('categoryErrorMsg');
@@ -70,42 +92,50 @@
                 description: descriptionValue,
                 categoryIds: categoryValue
             };
-            execute('announcements', 'POST', requestBody).then((r) => $redirect('/announcements'));
+            execute(`announcements/${announcementId}`, 'PUT', requestBody).then((r) => $redirect('/announcements'));
         }
     };
 </script>
 
 <div class="h-screen">
     <Header />
-    <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
-        <div class="w-full">
-            <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} maxLength={50} />
-            <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
-                <MultiselectCategoryInput style="" data={categories} placeholder="Kategoria" inputId="categorySelect" bind:selected={categoryValue} />
-            </div>
-            <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
-            <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
-                <SelectCityInput
-                    fetch="http://localhost:5173/api/locations?nameSearch=[query]"
-                    placeholder="Miasto"
-                    inputId="citySelect"
-                    bind:selected={cityValue}
-                />
-                <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
+    {#await promise then _}
+        <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
+            <div class="w-full">
+                <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} bind:postName={initTitle} maxLength={50} />
+                <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">
+                    <MultiselectCategoryInput
+                        style=""
+                        data={categories}
+                        placeholder="Kategoria"
+                        inputId="categorySelect"
+                        bind:selected={categoryValue}
+                    />
+                </div>
+                <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
+                <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
+                    <SelectCityInput
+                        fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                        placeholder="Miasto"
+                        inputId="citySelect"
+                        bind:selected={cityValue}
+                    />
+                    <p class="text-red-500 text-sm mx-4 hidden" id="cityErrorMsg">Musisz wybrać miasto</p>
+                </div>
+                <div class="">
+                    <PostDescription bind:value={descriptionValue} maxLength={200} />
+                    <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
+                </div>
+                <div class="flex flex-row text-cocoa items-center mx-8 my-4">
+                    <div class="w-10 mx-2">
+                        <MdInfoOutline />
+                    </div>
+                    <p class="text-sm">Twoje ogłoszenie wygaśnie miesiąc po opublikowaniu</p>
+                </div>
             </div>
             <div class="">
-                <PostDescription bind:value={descriptionValue} maxLength={200} />
-                <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
-            </div>
-            <div class="flex flex-row text-cocoa items-center mx-8 my-4">
-                <div class="w-10 mx-2">
-                    <MdInfoOutline />
-                </div>
-                <p class="text-sm">Twoje ogłoszenie wygaśnie miesiąc po opublikowaniu</p>
+                <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz ogłoszenie</Button>
             </div>
         </div>
-        <div class="">
-            <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz ogłoszenie</Button>
-        </div>
-    </div>
+    {/await}
 </div>

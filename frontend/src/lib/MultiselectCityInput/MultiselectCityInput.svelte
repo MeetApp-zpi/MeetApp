@@ -22,7 +22,7 @@
 
     addFormatter('city-render', cityRenderer);
 
-    config.i18n = {
+    const i18n = {
         empty: 'Brak miast',
         nomatch: 'Brak pasujących miast',
         max: (num) => `Maksymalna liczba miast ${num} została wybrana`,
@@ -50,6 +50,7 @@
         {inputId}
         multiple="true"
         bind:value={selected}
+        {i18n}
     />
 </div>
 

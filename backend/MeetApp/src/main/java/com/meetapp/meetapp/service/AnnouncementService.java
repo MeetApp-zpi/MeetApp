@@ -4,6 +4,7 @@ import com.meetapp.meetapp.configuration.Constants;
 import com.meetapp.meetapp.dto.AnnouncementCreationDTO;
 import com.meetapp.meetapp.dto.AnnouncementDTO;
 import com.meetapp.meetapp.dto.PostDTO;
+import com.meetapp.meetapp.dto.SingleAnnouncementDTO;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.AnnouncementRepository;
 import com.meetapp.meetapp.repository.CategoryRepository;
@@ -72,10 +73,10 @@ public class AnnouncementService {
         }
     }
 
-    public AnnouncementDTO retrieveAnnouncement(Integer announcementId) {
+    public SingleAnnouncementDTO retrieveAnnouncement(Integer announcementId) {
         val foundAnnouncement = findAnnouncementOrThrow(announcementId);
-        return new AnnouncementDTO(new PostDTO(foundAnnouncement), foundAnnouncement.getTitle(),
-                foundAnnouncement.getDescription(), foundAnnouncement.getEnrolled());
+        return new SingleAnnouncementDTO(new PostDTO(foundAnnouncement), foundAnnouncement.getTitle(),
+                foundAnnouncement.getDescription(), foundAnnouncement.getEnrolled(), foundAnnouncement.getCategories());
     }
 
     public Boolean isLoggedUserEnrolled(Integer announcementId, HttpSession session) {
@@ -152,8 +153,8 @@ public class AnnouncementService {
         List<Category> foundCategories = findCategories(newAnnouncement.getCategoryIds());
 
         Announcement announcementToSave =
-                new Announcement(foundClient, foundLocation, newAnnouncement.getDescription(),
-                        newAnnouncement.getTitle(), new HashSet<>(foundCategories));
+                new Announcement(foundClient, foundLocation, newAnnouncement.getTitle(),
+                        newAnnouncement.getDescription(), new HashSet<>(foundCategories));
 
         return announcementRepository.save(announcementToSave);
     }
