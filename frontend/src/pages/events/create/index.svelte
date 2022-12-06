@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { redirect } from '@roxi/routify';
+
     import Header from '../../../lib/Header/Header.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import execute from '../../../lib/fetchWrapper';
@@ -93,7 +95,7 @@
                         endDate.setUTCHours(endDate.getUTCHours() + 1); // it's complicated
                         endIsoDateTime = endDate.toISOString();
 
-                        if (endDate - startDate <= 0) {
+                        if (endDate.getMilliseconds() - startDate.getMilliseconds() <= 0) {
                             if (endDateAfterStartDateErrorMessage !== null) {
                                 endDateAfterStartDateErrorMessage.classList.remove('hidden');
                             }
@@ -175,26 +177,10 @@
             multipartImage.append('personQuota', peopleLimitValue);
             multipartImage.append('picture', blob);
 
-            // let requestBody = {
-            //     locationId: cityValue.id,
-            //     title: title.getPostName(),
-            //     description: descriptionValue,
-            //     schedule: scheduleValue,
-            //     categoryIds: categoryValue,
-            //     startDate: startIsoDateTime,
-            //     endDate: endIsoDateTime,
-            //     personQuota: peopleLimitValue,
-            //     picture: image
-            // };
-
-            // console.log(multipartImage.getAll());
             await fetch(`http://localhost:5173/api/events`, {
                 method: 'POST',
-                // headers: {
-                //     'Content-Type': 'application/json'
-                // },
                 body: multipartImage
-            });
+            }).then(() => $redirect('/events'));
         }
     };
 
@@ -209,20 +195,9 @@
             reader.onload = (e) => {
                 image = e.target.result;
             };
-            // eslint-disable-next-line no-empty
-        } catch (e) {}
-    };
-
-    const base64ToBlob = (base64String) => {
-        // Convert the base64 string to a byte array
-        let byteArray = new Uint8Array(
-            atob(base64String)
-                .split('')
-                .map((char) => char.charCodeAt(0))
-        );
-
-        // Create a blob object from the byte array
-        return new Blob([byteArray], { type: 'application/octet-stream' });
+        } catch (e) {
+            console.error(e);
+        }
     };
 </script>
 

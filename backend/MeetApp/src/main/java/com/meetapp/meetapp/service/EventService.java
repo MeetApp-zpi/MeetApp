@@ -211,7 +211,7 @@ public class EventService {
             Path fileNameAndPath = Paths.get("src/main/pictures/" + datePath, picture.getOriginalFilename());
             Files.createDirectories(Paths.get("src/main/pictures/" + datePath));
             Files.write(fileNameAndPath, picture.getBytes());
-            return String.valueOf(Paths.get(datePath, picture.getOriginalFilename()));
+            return String.valueOf(Paths.get("pictures/", datePath, picture.getOriginalFilename()));
         } catch (IOException e) {
             throw new RuntimeException("Event photo with name: " + picture.getOriginalFilename() +
                     " could not be saved.");
