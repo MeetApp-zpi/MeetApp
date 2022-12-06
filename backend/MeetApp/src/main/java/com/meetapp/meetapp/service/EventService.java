@@ -1,10 +1,7 @@
 package com.meetapp.meetapp.service;
 
 import com.meetapp.meetapp.configuration.Constants;
-import com.meetapp.meetapp.dto.DateTimeDTO;
-import com.meetapp.meetapp.dto.EventCreationDTO;
-import com.meetapp.meetapp.dto.EventDTO;
-import com.meetapp.meetapp.dto.PostDTO;
+import com.meetapp.meetapp.dto.*;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -96,6 +93,14 @@ public class EventService {
                 foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
                 new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()),
                 foundEvent.getPicture());
+    }
+
+    public EditEventDTO retrieveEditDetails(Integer eventId) {
+        val foundEvent = findEventOrThrow(eventId);
+        return new EditEventDTO(new PostDTO(foundEvent), foundEvent.getTitle(), foundEvent.getDescription(),
+                foundEvent.getEnrolled(), foundEvent.getPersonQuota(), foundEvent.getSchedule(),
+                new DateTimeDTO(foundEvent.getStartDate()), new DateTimeDTO(foundEvent.getEndDate()),
+                foundEvent.getPicture(), foundEvent.getCategories());
     }
 
     public Boolean isLoggedUserEnrolled(Integer eventId, HttpSession session) {

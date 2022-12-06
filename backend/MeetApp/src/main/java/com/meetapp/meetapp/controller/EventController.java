@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.AnnouncementDTO;
+import com.meetapp.meetapp.dto.EditEventDTO;
 import com.meetapp.meetapp.dto.EventCreationDTO;
 import com.meetapp.meetapp.dto.EventDTO;
 import com.meetapp.meetapp.model.Event;
@@ -64,6 +65,9 @@ public class EventController {
     public EventDTO getEvent(@PathVariable Integer eventId) {
         return eventService.retrieveEvent(eventId);
     }
+
+    @GetMapping("/events/editDetails/{eventId}")
+    public EditEventDTO getEditDetails(@PathVariable Integer eventId) { return eventService.retrieveEditDetails(eventId); }
 
     @GetMapping("/events/isEnrolled/{eventId}")
     public Boolean isLoggedUserEnrolled(@PathVariable Integer eventId, HttpSession session) {

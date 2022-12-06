@@ -144,7 +144,7 @@
                 <PeopleLimitInput bind:value={peopleLimitValue} />
                 <p class="hidden peer-invalid:block text-red-500 text-sm my-2" id="peopleLimitErrorMsg">Limit osób musi być dodatni</p>
             </div>
-            <PostDescription bind:value={descriptionValue} maxLength={250} />
+            <PostDescription bind:value={descriptionValue} maxLength={250} placeholder="Opis" />
             <p class="hidden peer-invalid:block text-red-500 text-sm mx-8 mb-2" id="descriptionErrorMsg">Opis nie może być pusty</p>
         </div>
         <div class="">
