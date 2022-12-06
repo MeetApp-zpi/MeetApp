@@ -1,10 +1,7 @@
 package com.meetapp.meetapp.service;
 
 import com.meetapp.meetapp.configuration.Constants;
-import com.meetapp.meetapp.dto.DateTimeDTO;
-import com.meetapp.meetapp.dto.MeetingCreationDTO;
-import com.meetapp.meetapp.dto.MeetingDTO;
-import com.meetapp.meetapp.dto.PostDTO;
+import com.meetapp.meetapp.dto.*;
 import com.meetapp.meetapp.model.*;
 import com.meetapp.meetapp.repository.CategoryRepository;
 import com.meetapp.meetapp.repository.ClientRepository;
@@ -75,11 +72,11 @@ public class MeetingService {
         }
     }
 
-    public MeetingDTO retrieveMeeting(Integer meetingId) {
+    public SingleMeetingDTO retrieveMeeting(Integer meetingId) {
         val foundMeeting = findMeetingOrThrow(meetingId);
-        return new MeetingDTO(new PostDTO(foundMeeting), foundMeeting.getTitle(), foundMeeting.getDescription(),
+        return new SingleMeetingDTO(new PostDTO(foundMeeting), foundMeeting.getTitle(), foundMeeting.getDescription(),
                 foundMeeting.getEnrolled(), foundMeeting.getPersonQuota(),
-                new DateTimeDTO(foundMeeting.getMeetingDate()));
+                new DateTimeDTO(foundMeeting.getMeetingDate()), foundMeeting.getCategories());
     }
 
     public Boolean isLoggedUserEnrolled(Integer meetingId, HttpSession session) {
