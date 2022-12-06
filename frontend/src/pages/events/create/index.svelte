@@ -95,7 +95,7 @@
                         endDate.setUTCHours(endDate.getUTCHours() + 1); // it's complicated
                         endIsoDateTime = endDate.toISOString();
 
-                        if (endDate.getMilliseconds() - startDate.getMilliseconds() <= 0) {
+                        if (endDate.getTime() - startDate.getTime() <= 0) {
                             if (endDateAfterStartDateErrorMessage !== null) {
                                 endDateAfterStartDateErrorMessage.classList.remove('hidden');
                             }
