@@ -153,6 +153,10 @@ public class EventService {
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
 
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
+
         List<Category> foundCategories = findCategories(newEvent.getCategoryIds());
 
         Event eventToSave =
@@ -174,6 +178,10 @@ public class EventService {
 
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
+
+        if (startDate.isAfter(endDate)) {
+            throw new IllegalArgumentException("The start date must be before the end date.");
+        }
 
         if (foundEvent.getAuthor().equals(supposedAuthor)) {
             foundEvent.setDescription(updatedEvent.getDescription());
