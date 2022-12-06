@@ -11,11 +11,11 @@
 
 <div class="h-screen">
     <Header />
-    <div class="flex flex-col h-[90%] overflow-auto">
+    <div class="flex flex-col h-[90%] overflow-auto lg:flex-row lg:justify-around">
         <a
             href={$url('/events')}
-            class="p-8 mx-10 my-4 h-1/3 text-pine border-2 rounded-2xl flex flex-col items-center justify-center
-            hover:bg-pine hover:text-ivory transition ease-in-out delay-100"
+            class="p-8 mx-10 my-4 h-1/2 text-pine border-2 rounded-2xl flex flex-col items-center justify-center
+            hover:bg-pine hover:text-ivory transition ease-in-out delay-100 lg:h-1/2 lg:self-center lg:w-1/4"
         >
             <div class="w-10">
                 <FaCalendarDay />
@@ -24,8 +24,8 @@
         </a>
         <a
             href={$url('/announcements')}
-            class="p-8 mx-10 my-4 h-1/3 text-grass border-2 rounded-2xl flex flex-col text-center items-center justify-center
-            hover:bg-grass hover:text-ivory transition ease-in-out delay-100"
+            class="p-8 mx-10 my-4 h-1/2 text-grass border-2 rounded-2xl flex flex-col text-center items-center justify-center
+            hover:bg-grass hover:text-ivory transition ease-in-out delay-100 lg:h-1/2 lg:self-center lg:w-1/4"
         >
             <div class="w-10">
                 <MdAnnouncement />
@@ -34,8 +34,8 @@
         </a>
         <a
             href={$url('/meetings')}
-            class="p-8 mx-10 my-4 h-1/3 text-pickle border-2 rounded-2xl flex flex-col text-center items-center justify-center
-            hover:bg-pickle hover:text-ivory transition ease-in-out delay-100"
+            class="p-8 mx-10 my-4 h-1/2 text-pickle border-2 rounded-2xl flex flex-col text-center items-center justify-center
+            hover:bg-pickle hover:text-ivory transition ease-in-out delay-100 lg:h-1/2 lg:self-center lg:w-1/4"
         >
             <div class="w-10">
                 <MeetingSymbol />

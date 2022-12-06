@@ -35,7 +35,7 @@
 
 <div class="h-screen">
     <Header />
-    <div on:scroll={infiniteScroll} id="usersContainer">
+    <div on:scroll={infiniteScroll} id="usersContainer" class="lg:w-1/3 lg:mx-auto">
         {#await promise then _}
             {#each users as user}
                 <UserPill data={user} />

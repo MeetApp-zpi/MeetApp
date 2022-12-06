@@ -57,7 +57,7 @@
 
 <div class="h-screen">
     <Header />
-    <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-14rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
+    <div class="h-[calc(100%-8rem)] lg:h-[calc(100%-4rem)] lg:w-1/2 lg:mx-auto overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#each userPosts as post}
             {#if retrievePostType(post) === 'events'}
                 <EventListElem data={post} clickHandler={() => $goto(`/events/${post.id}`)} />

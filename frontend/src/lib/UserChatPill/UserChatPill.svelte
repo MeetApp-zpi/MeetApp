@@ -6,7 +6,7 @@
 </script>
 
 <div
-    class="rounded-2xl m-2 p-2 justify-around flex flex-row bg-olive text-cocoa items-center"
+    class="rounded-2xl m-2 p-2 justify-around flex flex-row bg-olive text-cocoa items-center hover:cursor-pointer"
     on:click={$goto(`/chat/${chatroomId}`)}
     on:keydown={$goto(`/chat/${chatroomId}`)}
 >

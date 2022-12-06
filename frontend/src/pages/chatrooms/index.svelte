@@ -15,9 +15,11 @@
 
 <div class="h-screen">
     <Header />
-    {#await promise then _}
-        {#each chatrooms as chatroom}
-            <UserChatPill data={chatroom.chatPartner} chatroomId={chatroom.id} />
-        {/each}
-    {/await}
+    <div class="lg:w-1/3 lg:mx-auto">
+        {#await promise then _}
+            {#each chatrooms as chatroom}
+                <UserChatPill data={chatroom.chatPartner} chatroomId={chatroom.id} />
+            {/each}
+        {/await}
+    </div>
 </div>

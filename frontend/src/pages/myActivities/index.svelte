@@ -40,7 +40,7 @@
 
 <div class="h-screen">
     <Header />
-    <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-10rem)] overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
+    <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)] lg:w-1/2 lg:mx-auto overflow-auto" on:scroll={infiniteScroll} id="postsContainer">
         {#each posts as post}
             {#if Object.hasOwn(post, 'meetingDateTime')}
                 <MeetingListElem data={post} areDetailsShown={selected === post.id} clickHandler={() => clickBubble(post.id)} />
