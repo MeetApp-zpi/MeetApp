@@ -108,17 +108,18 @@ public class ClientService {
         return foundPost.getEnrollees().stream().skip(page * Constants.PAGE_SIZE).limit(Constants.PAGE_SIZE).toList();
     }
 
-    public Client createClientAccount(HttpSession session) {
+    public Boolean createClientAccount(HttpSession session) {
         String email = SessionManager.retrieveEmailOrThrow(session);
         String givenName = SessionManager.retrieveGivenNameOrThrow(session);
         String familyName = SessionManager.retrieveFamilyNameOrThrow(session);
         String pictureUrl = SessionManager.retrievePictureOrThrow(session);
 
         if (clientRepository.existsByEmail(email)) {
-            return findClientOrThrow(email);
+            return false;
         }
 
-        return clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
+        clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
+        return true;
     }
 
     public Client deleteClientAccount(HttpSession session) {
