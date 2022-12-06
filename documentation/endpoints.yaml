@@ -1,0 +1,921 @@
+openapi: "3.0.3"
+info:
+  title: "MeetApp API"
+  description: "MeetApp API"
+  version: "1.0.0"
+
+paths:
+  /api/verifyTokenBearer:
+    get:
+      tags:
+        - "Authentication"
+      summary: "GET api/verifyTokenBearer"
+      operationId: "verifyTokenBearer"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "string"
+  /api/meetings:
+    get:
+      tags:
+        - "Meetings"
+      summary: "GET api/meetings"
+      operationId: "getMeetings"
+      parameters:
+        - name: "categoryIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int32"
+        - name: "locationIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int32"
+        - name: "sortOption"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "nameSearch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+    post:
+      tags:
+        - "Meetings"
+      summary: "POST api/meetings"
+      operationId: "createMeeting"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/meetings/enroll/{meetingId}:
+    get:
+      tags:
+        - "Meetings"
+      summary: "GET api/meetings/enroll/{meetingId}"
+      operationId: "enrollMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/meetings/isEnrolled/{meetingId}:
+    get:
+      tags:
+        - "Meetings"
+      summary: "GET api/meetings/isEnrolled/{meetingId}"
+      operationId: "isLoggedUserEnrolledToMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/meetings/unenroll/{meetingId}:
+    get:
+      tags:
+        - "Meetings"
+      summary: "GET api/meetings/unenroll/{meetingId}"
+      operationId: "unenrollMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/meetings/{meetingId}:
+    get:
+      tags:
+        - "Meetings"
+      summary: "GET api/meetings/{meetingId}"
+      operationId: "getMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    put:
+      tags:
+        - "Meetings"
+      summary: "PUT api/meetings/{meetingId}"
+      operationId: "updateMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    delete:
+      tags:
+        - "Meetings"
+      summary: "DELETE api/meetings/{meetingId}"
+      operationId: "deleteMeeting"
+      parameters:
+        - name: "meetingId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/announcements:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements"
+      operationId: "getAnnouncements"
+      parameters:
+        - name: "categoryIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int32"
+        - name: "locationIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+            items:
+              type: "integer"
+              format: "int32"
+        - name: "sortOption"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "nameSearch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+                items:
+                  type: "object"
+    post:
+      tags:
+        - "Announcements"
+      summary: "POST api/announcements"
+      operationId: "createAnnouncement"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/announcements/activate/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/activate/{announcementId}"
+      operationId: "activateAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/announcements/deactivate/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/deactivate/{announcementId}"
+      operationId: "deactivateAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/announcements/enroll/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/enroll/{announcementId}"
+      operationId: "enrollAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/announcements/isEnrolled/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/isEnrolled/{announcementId}"
+      operationId: "isLoggedUserEnrolledToAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/announcements/unenroll/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/unenroll/{announcementId}"
+      operationId: "unenrollAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/announcements/{announcementId}:
+    get:
+      tags:
+        - "Announcements"
+      summary: "GET api/announcements/{announcementId}"
+      operationId: "getAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    put:
+      tags:
+        - "Announcements"
+      summary: "PUT api/announcements/{announcementId}"
+      operationId: "updateAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    delete:
+      tags:
+        - "Announcements"
+      summary: "DELETE api/announcements/{announcementId}"
+      operationId: "deleteAnnouncement"
+      parameters:
+        - name: "announcementId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/events:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/events"
+      operationId: "getEvents"
+      parameters:
+        - name: "categoryIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+        - name: "locationIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+        - name: "sortOption"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "nameSearch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+    post:
+      tags:
+        - "Events"
+      summary: "POST api/events"
+      operationId: "createEvent"
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/events/enroll/{eventId}:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/events/enroll/{eventId}"
+      operationId: "enrollEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/events/isEnrolled/{eventId}:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/events/isEnrolled/{eventId}"
+      operationId: "isLoggedUserEnrolledToEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/events/unenroll/{eventId}:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/events/unenroll/{eventId}"
+      operationId: "unenrollEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/events/{eventId}:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/events/{eventId}"
+      operationId: "getEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    put:
+      tags:
+        - "Events"
+      summary: "PUT api/events/{eventId}"
+      operationId: "updateEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+    delete:
+      tags:
+        - "Events"
+      summary: "DELETE api/events/{eventId}"
+      operationId: "deleteEvent"
+      parameters:
+        - name: "eventId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/eventsInactive:
+    get:
+      tags:
+        - "Events"
+      summary: "GET api/eventsInactive"
+      operationId: "getInactiveEvents"
+      parameters:
+        - name: "categoryIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+        - name: "locationIds"
+          in: "query"
+          required: false
+          schema:
+            type: "array"
+        - name: "sortOption"
+          in: "query"
+          required: false
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "nameSearch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+  /api/categories:
+    get:
+      tags:
+        - "Categories"
+      summary: "GET api/categories"
+      operationId: "getCategories"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+  /api/locations:
+    get:
+      tags:
+        - "Locations"
+      summary: "GET api/locations"
+      operationId: "getLocations"
+      parameters:
+        - name: "nameSearch"
+          in: "query"
+          required: false
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+  /api/chatrooms/clientOf/{chatroomId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/clientOf/{chatroomId}"
+      operationId: "retrieveOtherClient"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/chatrooms/exists/{anotherClientEmail}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/exists/{anotherClientEmail}"
+      operationId: "existsChatroomBetweenClients"
+      parameters:
+        - name: "anotherClientEmail"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/chatrooms/existsById/{chatroomId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/existsById/{chatroomId}"
+      operationId: "existsChatroom"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/chatrooms/forClient:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/forClient"
+      operationId: "retrieveChatroomsForLoggedInClient"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+  /api/chatrooms/haveUnreadMessage:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/haveUnreadMessage"
+      operationId: "haveUnreadMessage"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "boolean"
+  /api/chatrooms/markAsRead/{chatroomId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/markAsRead/{chatroomId}"
+      operationId: "markChatroomAsRead"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/chatrooms/markAsUnread/{chatroomId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/markAsUnread/{chatroomId}"
+      operationId: "markChatroomAsUnread"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+  /api/chatrooms/with/{anotherClientId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/chatrooms/with/{anotherClientId}"
+      operationId: "retrieveChatroomWithClient"
+      parameters:
+        - name: "anotherClientId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/chatrooms/{anotherClientEmail}:
+    post:
+      tags:
+        - "Chat"
+      summary: "POST api/chatrooms/{anotherClientEmail}"
+      operationId: "createChatroom"
+      parameters:
+        - name: "anotherClientEmail"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/messages/{chatroomId}:
+    get:
+      tags:
+        - "Chat"
+      summary: "GET api/messages/{chatroomId}"
+      operationId: "retrieveChatroomMessages"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+        - name: "page"
+          in: "query"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "array"
+    post:
+      tags:
+        - "Chat"
+      summary: "POST api/messages/{chatroomId}"
+      operationId: "createMessage"
+      parameters:
+        - name: "chatroomId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+        required: true
+      responses:
+        "201":
+          description: "Created"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/posts/activate/{postId}:
+    get:
+      tags:
+        - "Posts"
+      summary: "GET api/posts/activate/{postId}"
+      operationId: "activatePost"
+      parameters:
+        - name: "postId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
+  /api/posts/deactivate/{postId}:
+    get:
+      tags:
+        - "Posts"
+      summary: "GET api/posts/deactivate/{postId}"
+      operationId: "deactivatePost"
+      parameters:
+        - name: "postId"
+          in: "path"
+          required: true
+          schema:
+            type: "integer"
+            format: "int32"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                type: "object"
