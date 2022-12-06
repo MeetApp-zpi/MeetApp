@@ -2,23 +2,20 @@
     import { fade } from 'svelte/transition';
     import { goto, redirect, isActive } from '@roxi/routify';
 
-    import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
-    import FaCommentAlt from 'svelte-icons/fa/FaCommentAlt.svelte';
-    import FaHandsHelping from 'svelte-icons/fa/FaHandsHelping.svelte';
     import FaUserCircle from 'svelte-icons/fa/FaUserCircle.svelte';
     import FaSignOutAlt from 'svelte-icons/fa/FaSignOutAlt.svelte';
-    import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
     import MdMessage from 'svelte-icons/md/MdMessage.svelte';
     import MdPerson from 'svelte-icons/md/MdPerson.svelte';
     import MdMenu from 'svelte-icons/md/MdMenu.svelte';
-    import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
 
     import BurgerMenu from '../BurgerMenu/BurgerMenu.svelte';
-    import HeaderTooltip from '../HeaderTooltip/HeaderTooltip.svelte';
     import execute from '../fetchWrapper';
     import { userDetails } from '../stores';
+    import type { PageType } from '../Footer/types';
 
-    let isBurgerOpen: boolean = false;
+    export let pageType: PageType = 'main';
+
+    let isBurgerOpen = false;
 
     const switchBurger = () => {
         isBurgerOpen = !isBurgerOpen;
@@ -30,10 +27,6 @@
 
     const logout = () => {
         execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
-    };
-
-    const myActivities = () => {
-        $isActive('/myActivities') ? (window.location.href = window.location.href) : $goto('/myActivities');
     };
 
     let showDropdown = false;
@@ -50,22 +43,29 @@
     </div>
     <div class="justify-between lg:justify-between lg:flex lg:flex-row h-full lg:w-1/5">
         <img alt="MeetApp logo" src="/logo.png" class="h-full hover:cursor-pointer" on:click={() => $goto('/')} on:keydown={() => $goto('/')} />
-
     </div>
 
     <div class="hidden lg:block lg:flex lg:flex-row lg:w-full lg:justify-center lg:items-center">
         <div
-                class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-                on:click={() => $goto('/announcements')}
-                on:keydown={() => $goto('/announcements')}
+            class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
+            on:click={() => $goto('/announcements')}
+            on:keydown={() => $goto('/announcements')}
         >
-            Ogłoszenia
+            <span class={pageType === 'announcements' ? 'text-ivory' : 'text-cocoa'}> Ogłoszenia </span>
         </div>
-        <div class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
-            Spotkania
+        <div
+            class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
+            on:click={() => $goto('/meetings')}
+            on:keydown={() => $goto('/meetings')}
+        >
+            <span class={pageType === 'meetings' ? 'text-ivory' : 'text-cocoa'}>Spotkania</span>
         </div>
-        <div class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
-            Wydarzenia
+        <div
+            class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
+            on:click={() => $goto('/events')}
+            on:keydown={() => $goto('/events')}
+        >
+            <span class={pageType === 'events' ? 'text-ivory' : 'text-cocoa'}>Wydarzenia</span>
         </div>
     </div>
 
