@@ -58,9 +58,7 @@
     }
 
     .svelecte-select :global(.sv-control) {
-        border-color: var(--tea);
         background-color: var(--white);
-        border-width: 2px;
         padding: 0.5rem 0.5rem 0.5rem 0.5rem;
         color: var(--gray);
         border-radius: 0.5rem;
