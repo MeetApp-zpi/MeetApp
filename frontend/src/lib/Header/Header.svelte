@@ -35,6 +35,8 @@
     const myActivities = () => {
         $isActive('/myActivities') ? (window.location.href = window.location.href) : $goto('/myActivities');
     };
+
+    let showDropdown = false;
 </script>
 
 <header class="flex justify-between bg-grass p-2 h-16 align-middle">
@@ -46,56 +48,69 @@
     >
         <MdMenu />
     </div>
-    <div class="justify-between lg:w-1/4 lg:justify-between lg:flex lg:flex-row h-full">
+    <div class="justify-between lg:justify-between lg:flex lg:flex-row h-full lg:w-1/5">
         <img alt="MeetApp logo" src="/logo.png" class="h-full hover:cursor-pointer" on:click={() => $goto('/')} on:keydown={() => $goto('/')} />
+
+    </div>
+
+    <div class="hidden lg:block lg:flex lg:flex-row lg:w-full lg:justify-center lg:items-center">
         <div
-            class="hidden lg:block group hover:cursor-pointer text-taupe"
-            on:click={() => $goto('/announcements')}
-            on:keydown={() => $goto('/announcements')}
+                class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
+                on:click={() => $goto('/announcements')}
+                on:keydown={() => $goto('/announcements')}
         >
-            <MdAnnouncement />
-            <HeaderTooltip tooltipText="Ogłoszenia" />
+            Ogłoszenia
         </div>
-        <div class="hidden lg:block group hover:cursor-pointer text-taupe" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
-            <MeetingSymbol />
-            <HeaderTooltip tooltipText="Spotkania" />
+        <div class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
+            Spotkania
         </div>
-        <div class="hidden lg:block group hover:cursor-pointer text-taupe" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
-            <FaCalendarDay />
-            <HeaderTooltip tooltipText="Wydarzenia" />
+        <div class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
+            Wydarzenia
         </div>
     </div>
-    <div class="block lg:hidden w-12" />
-    <div class="hidden lg:flex lg:flex-row lg:w-1/3 {$userDetails !== null ? 'lg:justify-between' : 'lg:justify-end'}">
+
+    <div class="relative lg:flex lg:flex-row lg:justify-end lg:w-1/5">
         {#if $userDetails !== null}
-            <div class="group hover:cursor-pointer text-taupe" on:click={() => $redirect('/profile')} on:keydown={() => $redirect('/profile')}>
-                <MdPerson />
-                <HeaderTooltip tooltipText="Profil" />
-            </div>
-            <div class="group hover:cursor-pointer text-taupe" on:click={() => $goto('/user/posts')} on:keydown={() => $goto('/user/posts')}>
-                <FaCommentAlt />
-                <HeaderTooltip tooltipText="Moje posty" />
-            </div>
-            <div class="group hover:cursor-pointer text-taupe" on:click={myActivities} on:keydown={() => $goto('/myActivities')}>
-                <FaHandsHelping />
-                <HeaderTooltip tooltipText="Biorę udział" />
-            </div>
-            <div class="group hover:cursor-pointer text-taupe" on:click={() => $goto('/chatrooms')} on:keydown={() => $goto('/chatrooms')}>
-                <MdMessage />
-                <HeaderTooltip tooltipText="Wiadomości" />
-            </div>
-            <div class="group hover:cursor-pointer text-taupe" on:click={logout} on:keydown={logout}>
-                <FaSignOutAlt />
-                <HeaderTooltip tooltipText="Wyloguj" />
-            </div>
             <img
                 class="rounded-full mx-2 mb-2 h-12 w-12 hover:cursor-pointer"
                 src={$userDetails.profilePicture}
                 alt="Profile avatar"
                 referrerpolicy="no-referrer"
-                on:click={() => $goto('/profile')}
-                on:keydown={() => $goto('/profile')}
+                on:click={() => (showDropdown = !showDropdown)}
             />
+            {#if showDropdown}
+                <div class="absolute right-0 mt-14 py-2 bg-[#e5e7eb] rounded-md shadow-xl z-10">
+                    <div class="px-4 py-2">
+                        <div
+                            class="group hover:cursor-pointer text-taupe flex flex-row items-center"
+                            on:click={() => $goto('/profile')}
+                            on:keydown={() => $goto('/profile')}
+                        >
+                            <div class="h-8 w-8">
+                                <MdPerson />
+                            </div>
+                            <span class="pl-2">Mój Profil</span>
+                        </div>
+                        <div
+                            class="group hover:cursor-pointer text-taupe flex flex-row items-center"
+                            on:click={() => $goto('/chatrooms')}
+                            on:keydown={() => $goto('/chatrooms')}
+                        >
+                            <div class="h-8 w-8">
+                                <MdMessage />
+                            </div>
+                            <span class="pl-2">Wiadomości</span>
+                        </div>
+                        <hr class="mx-auto my-4" />
+                        <div class="group hover:cursor-pointer text-taupe flex flex-row items-center" on:click={logout} on:keydown={logout}>
+                            <div class="h-8 w-8">
+                                <FaSignOutAlt />
+                            </div>
+                            <span class="pl-2">Wyloguj</span>
+                        </div>
+                    </div>
+                </div>
+            {/if}
         {:else}
             <div class="hover:cursor-pointer text-taupe" on:click={() => $redirect('/login')} on:keydown={() => $redirect('/login')}>
                 <FaUserCircle />
