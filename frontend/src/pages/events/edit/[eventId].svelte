@@ -210,8 +210,8 @@
             multipartImage.append('personQuota', peopleLimitValue);
             multipartImage.append('picture', blob);
 
-            await fetch(`http://localhost:5173/api/events`, {
-                method: 'POST',
+            await fetch(`http://localhost:5173/api/events/${eventId}`, {
+                method: 'PUT',
                 body: multipartImage
             }).then(() => $redirect('/events'));
         }
