@@ -49,7 +49,7 @@
 <div class="h-screen">
     <Header />
     {#if data !== null}
-        <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-8rem)] overflow-auto">
+        <div class="h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)] lg:mx-auto lg:w-1/3 overflow-auto">
             <div class="flex flex-col">
                 <div class="relative m-4 self-stretch">
                     {#if data.picture !== null}

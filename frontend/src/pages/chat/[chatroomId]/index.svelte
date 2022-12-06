@@ -138,7 +138,7 @@
 
 <div class="h-screen">
     <Header />
-    <div class="flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-10rem)]">
+    <div class="flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto">
         <div class="h-16 mx-2 mt-2 flex-none">
             {#await fetchPartner() then partner}
                 <div class="rounded-2xl py-2 justify-around flex flex-row bg-olive text-cocoa items-center">

@@ -152,6 +152,7 @@ public class EventService {
 
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
+        personQuotaPositiveOrThrow(newEvent.getPersonQuota());
 
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("The start date must be before the end date.");
@@ -178,6 +179,7 @@ public class EventService {
 
         timeInFutureOrThrow(startDate);
         timeInFutureOrThrow(endDate);
+        personQuotaPositiveOrThrow(updatedEvent.getPersonQuota());
 
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("The start date must be before the end date.");
@@ -256,6 +258,12 @@ public class EventService {
     public void timeInFutureOrThrow(Instant timeToCheck) {
         if (Instant.now().isAfter(timeToCheck)) {
             throw new IllegalArgumentException("Time '" + timeToCheck + "' is not a future time");
+        }
+    }
+
+    public void personQuotaPositiveOrThrow(Integer personQuota) {
+        if (personQuota != null && personQuota <= 0) {
+            throw new IllegalArgumentException("Person quota cannot be less than or equal to 0");
         }
     }
 
