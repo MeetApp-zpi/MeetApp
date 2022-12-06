@@ -13,7 +13,6 @@ public class ResourceHandler implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String currPath = Paths.get("src/main/pictures/").toAbsolutePath().toString();
         String location = "file:/" + currPath.replace("\\", "/") + "/";
-        System.out.println(location);
         registry.addResourceHandler("/pictures/**")
                 .addResourceLocations(location)
                 .setCachePeriod(0)
