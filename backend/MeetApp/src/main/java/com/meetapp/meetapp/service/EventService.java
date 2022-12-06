@@ -208,8 +208,8 @@ public class EventService {
         try {
             LocalDateTime today = LocalDateTime.now();
             String datePath = today.getYear() + String.valueOf(today.getMonthValue());
-            Path fileNameAndPath = Paths.get("src/main/resources/public/pictures/" + datePath, picture.getOriginalFilename());
-            Files.createDirectories(Paths.get("src/main/resources/public/pictures/" + datePath));
+            Path fileNameAndPath = Paths.get("src/main/pictures/" + datePath, picture.getOriginalFilename());
+            Files.createDirectories(Paths.get("src/main/pictures/" + datePath));
             Files.write(fileNameAndPath, picture.getBytes());
             return String.valueOf(Paths.get(datePath, picture.getOriginalFilename()));
         } catch (IOException e) {
