@@ -9,9 +9,6 @@
     import Button from '../lib/Button/Button.svelte';
     import {userDetails} from "../lib/stores";
 
-    if ($userDetails === null) {
-        $redirect('/login');
-    }
 </script>
 
 <div class="h-screen">
