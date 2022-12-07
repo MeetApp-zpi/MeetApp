@@ -1,6 +1,7 @@
 package com.meetapp.meetapp.controller;
 
 import com.meetapp.meetapp.dto.CategoryListDTO;
+import com.meetapp.meetapp.dto.ClientDetailsDTO;
 import com.meetapp.meetapp.model.Category;
 import com.meetapp.meetapp.model.Client;
 import com.meetapp.meetapp.service.ClientService;
@@ -39,7 +40,7 @@ public class ClientController {
     }
 
     @GetMapping("/users/details")
-    public Client getUserDetails(HttpSession session) {
+    public ClientDetailsDTO getUserDetails(HttpSession session) {
         return clientService.retrieveClientDetails(session);
     }
 

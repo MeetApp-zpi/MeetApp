@@ -5,7 +5,7 @@
     import MultiselectCityInput from '../../MultiselectCityInput/MultiselectCityInput.svelte';
     import SelectablePill from '../../Pill/SelectablePill.svelte';
     import execute from '../../../lib/fetchWrapper';
-    import { filteredCategoryIds, filteredLocationIds } from '../../stores';
+    import { filteredCategoryIds, filteredLocationIds, userDetails } from '../../stores';
 
     export let modalCloser;
 
@@ -17,6 +17,10 @@
     let promise = execute('categories', 'GET')
         .then((r) => r.json())
         .then((r) => (categories = r));
+
+    const setUserInterests = () => {
+        selectedCategories = $userDetails.interests.map((i) => i.id);
+    };
 
     const clickedCategory = (categoryId: number) => {
         if (selectedCategories.includes(categoryId)) {
@@ -36,6 +40,11 @@
 
 {#await promise then _}
     <div class="flex flex-col z-20 w-full py-2 px-4 fixed items-center bg-ivory" transition:slide>
+        <div class="mb-2">
+            <div on:click={setUserInterests} on:keydown={setUserInterests} class="hover:cursor-pointer text-pine font-bold px-4 py-1 mt-2">
+                Zaznacz moje zainteresowania
+            </div>
+        </div>
         <div class="">
             {#each categories as category}
                 <SelectablePill
