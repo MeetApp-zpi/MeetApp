@@ -53,7 +53,11 @@
         </div>
     {/if}
     <div class="h-full bg-ivory text-pine p-4">
-        <div class="flex flex-row mb-2 items-center hover:cursor-pointer" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
+        <div
+            class="flex flex-row mb-2 items-center hover:cursor-pointer"
+            on:click={() => (window.location.href = 'http://localhost:5173/events')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/events')}
+        >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <FaCalendarDay />
             </div>
@@ -61,15 +65,19 @@
         </div>
         <div
             class="flex flex-row mb-2 items-center hover:cursor-pointer"
-            on:click={() => $goto('/announcements')}
-            on:keydown={() => $goto('/announcements')}
+            on:click={() => (window.location.href = 'http://localhost:5173/announcements')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/announements')}
         >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <MdAnnouncement />
             </div>
             <div class="text-taupe">Ogłoszenia</div>
         </div>
-        <div class="flex flex-row mb-2 items-center hover:cursor-pointer" on:click={() => $goto('/meetings')} on:keydown={() => $goto('/meetings')}>
+        <div
+            class="flex flex-row mb-2 items-center hover:cursor-pointer"
+            on:click={() => (window.location.href = 'http://localhost:5173/meetings')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/meetings')}
+        >
             <div class="h-8 w-8 mr-2 text-taupe">
                 <MeetingSymbol />
             </div>
@@ -120,10 +128,10 @@
                 <div class="h-8 w-8 mr-2 text-taupe">
                     <FaHandshake />
                 </div>
-                <div class="text-cocoa">Regulamin</div>
+                <div class="text-taupe">Regulamin</div>
             </div>
             <div class="flex flex-row items-center hover:cursor-pointer" on:click={logout} on:keydown={logout}>
-                <div class="h-8 w-8 mr-2 text-cocoa">
+                <div class="h-8 w-8 mr-2 text-taupe">
                     <FaSignOutAlt />
                 </div>
                 <div class="text-taupe">Wyloguj</div>

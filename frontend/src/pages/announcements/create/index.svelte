@@ -9,7 +9,7 @@
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
-    import {userDetails} from "../../../lib/stores";
+    import { userDetails } from '../../../lib/stores';
 
     let title = null;
 
@@ -82,7 +82,7 @@
 
 <div class="h-screen">
     <Header />
-    <div class="flex flex-col h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
+    <div class="flex flex-col lg:w-1/3 lg:mx-auto h-[calc(100%-4rem)] overflow-auto justify-between items-center bg-ivory">
         <div class="w-full">
             <PostNameInput placeholder="Nazwa ogłoszenia" bind:this={title} maxLength={50} />
             <div class="mx-1.5 mt-2 categorySvelecteBox" id="categoryInputBox">

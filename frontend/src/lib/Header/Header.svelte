@@ -48,22 +48,22 @@
     <div class="hidden lg:block lg:flex lg:flex-row lg:w-full lg:justify-center lg:items-center">
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => $goto('/announcements')}
-            on:keydown={() => $goto('/announcements')}
+            on:click={() => (window.location.href = 'http://localhost:5173/announcements')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/announcements')}
         >
             <span class={pageType === 'announcements' ? 'text-ivory' : 'text-cocoa'}> Ogłoszenia </span>
         </div>
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => $goto('/meetings')}
-            on:keydown={() => $goto('/meetings')}
+            on:click={() => (window.location.href = 'http://localhost:5173/meetings')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/meetings')}
         >
             <span class={pageType === 'meetings' ? 'text-ivory' : 'text-cocoa'}>Spotkania</span>
         </div>
         <div
             class="hidden lg:block group hover:cursor-pointer text-taupe px-4 text-xl"
-            on:click={() => $goto('/events')}
-            on:keydown={() => $goto('/events')}
+            on:click={() => (window.location.href = 'http://localhost:5173/events')}
+            on:keydown={() => (window.location.href = 'http://localhost:5173/events')}
         >
             <span class={pageType === 'events' ? 'text-ivory' : 'text-cocoa'}>Wydarzenia</span>
         </div>
