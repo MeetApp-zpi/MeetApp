@@ -9,6 +9,8 @@
     import Button from '../../../lib/Button/Button.svelte';
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
+    import {userDetails} from "../../../lib/stores";
+    import {redirect} from "@roxi/routify";
 
     let title;
 
@@ -26,6 +28,10 @@
 
     let peopleLimitValue = null;
 
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
+    
     execute('categories', 'GET').then(async (response) => (categories = await response.json()));
 
     const validateCategory = () => {

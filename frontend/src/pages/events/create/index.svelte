@@ -12,6 +12,7 @@
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import MdAdd from 'svelte-icons/md/MdAdd.svelte';
+    import {userDetails} from "../../../lib/stores";
 
     let title;
 
@@ -37,6 +38,10 @@
 
     let peopleLimitValue = null;
 
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
+    
     execute('categories', 'GET').then(async (response) => (categories = await response.json()));
 
     const validateCategory = () => {

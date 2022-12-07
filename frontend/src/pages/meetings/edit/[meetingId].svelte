@@ -11,6 +11,7 @@
     import Button from '../../../lib/Button/Button.svelte';
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
+    import { userDetails } from '../../../lib/stores';
 
     export let meetingId: number;
 
@@ -30,6 +31,10 @@
     let isoDateTime = null;
 
     let peopleLimitValue = null;
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     execute(`users/isAuthor/${meetingId}`, 'GET')
         .then((r) => r.text())
