@@ -68,8 +68,8 @@
             <span class={pageType === 'events' ? 'text-ivory' : 'text-cocoa'}>Wydarzenia</span>
         </div>
     </div>
-
-    <div class="relative lg:flex lg:flex-row lg:justify-end lg:w-1/5">
+    <div class="block lg:hidden w-12" />
+    <div class="hidden lg:block lg:relative lg:flex lg:flex-row lg:justify-end lg:w-1/5">
         {#if $userDetails !== null}
             <img
                 class="rounded-full mx-2 mb-2 h-12 w-12 hover:cursor-pointer"
