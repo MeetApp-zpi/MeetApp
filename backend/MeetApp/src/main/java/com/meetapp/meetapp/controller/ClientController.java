@@ -93,8 +93,9 @@ public class ClientController {
         Boolean isNewAccount = clientService.createClientAccount(session);
         if (isNewAccount) {
             response.sendRedirect("http://localhost:5173/chooseCategories");
+        } else {
+            response.sendRedirect("http://localhost:5173");
         }
-        response.sendRedirect("http://localhost:5173");
     }
 
     @PutMapping("/users/categories")

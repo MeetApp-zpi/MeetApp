@@ -6,7 +6,7 @@
     import Header from '../../../lib/Header/Header.svelte';
     import MdSend from 'svelte-icons/md/MdSend.svelte';
     import { autoresize } from 'svelte-textarea-autoresize';
-    import { userDetails } from '../../../lib/stores.js';
+    import { userDetails, haveUnreadMessage } from '../../../lib/stores.js';
 
     export let chatroomId: number;
 
@@ -18,6 +18,14 @@
     let messagesContainer;
     let tickCalled: number = 0;
     let previousScrollHeight: number = 0;
+
+    execute(`chatrooms/markAsRead/${chatroomId}`, 'GET').then((_) =>
+        execute('chatrooms/haveUnreadMessage', 'GET')
+            .then((r) => r.json())
+            .then((r) => {
+                $haveUnreadMessage = r;
+            })
+    );
 
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))

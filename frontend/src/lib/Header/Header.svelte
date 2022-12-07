@@ -10,7 +10,7 @@
 
     import BurgerMenu from '../BurgerMenu/BurgerMenu.svelte';
     import execute from '../fetchWrapper';
-    import { userDetails } from '../stores';
+    import { userDetails, haveUnreadMessage } from '../stores';
     import type { PageType } from '../Footer/types';
 
     export let pageType: PageType = 'main';
@@ -92,13 +92,16 @@
                             <span class="pl-2">Mój Profil</span>
                         </div>
                         <div
-                            class="group hover:cursor-pointer text-taupe flex flex-row items-center"
+                            class="group hover:cursor-pointer text-taupe flex flex-row items-center relative"
                             on:click={() => $goto('/chatrooms')}
                             on:keydown={() => $goto('/chatrooms')}
                         >
                             <div class="h-8 w-8">
                                 <MdMessage />
                             </div>
+                            {#if $haveUnreadMessage}
+                                <div class="absolute h-4 w-4 bg-orange rounded-full left-5 -top-1" />
+                            {/if}
                             <span class="pl-2">Wiadomości</span>
                         </div>
                         <hr class="mx-auto my-4" />

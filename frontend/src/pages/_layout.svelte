@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { TabsTransition } from '@roxi/routify/decorators';
-
+    import { afterPageLoad } from '@roxi/routify';
     import execute from '../lib/fetchWrapper';
-    import { userDetails } from '../lib/stores';
+    import { userDetails, haveUnreadMessage } from '../lib/stores';
 
     execute('users/details', 'GET')
         .then((r) => (r.status === 200 ? r.json() : null))
@@ -11,6 +10,15 @@
                 $userDetails = r;
             }
         });
+
+    $afterPageLoad((p) => {
+        execute('chatrooms/haveUnreadMessage', 'GET')
+            .then((r) => r.json())
+            .then((r) => {
+                $haveUnreadMessage = r;
+                console.log(r);
+            });
+    });
 </script>
 
 <slot />
