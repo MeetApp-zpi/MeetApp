@@ -53,7 +53,11 @@
             <div class="flex flex-col">
                 <div class="relative m-4 self-stretch">
                     {#if data.picture !== null}
-                        <img class="rounded-lg object-fill w-full" src="http://localhost:8080/{data.picture}" alt="Event poster" />
+                        <img
+                            class="rounded-lg object-fill w-full"
+                            src="http://meetapp.eastus.cloudapp.azure.com:8080/{data.picture}"
+                            alt="Event poster"
+                        />
                         <div class="absolute bottom-0 left-0 right-0 px-4 py-2 opacity-40 bg-ivory">
                             <h2 class="font-bold text-xl text-cocoa">
                                 {data.title}

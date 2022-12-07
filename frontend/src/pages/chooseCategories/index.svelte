@@ -39,7 +39,7 @@
     const submitChanges = () => {
         execute('users/categories', 'PUT', {
             categories: selectedCategories
-        }).then((r) => (window.location.href = 'http://localhost:5173'));
+        }).then((r) => (window.location.href = 'http://meetapp.eastus.cloudapp.azure.com:8080'));
     };
 
     const waitForUser = async () => {
@@ -77,7 +77,7 @@
             <div class="">
                 <Button clickHandler={submitChanges} class="px-10 py-1">Gotowe!</Button>
             </div>
-            <button on:click={() => (window.location.href = 'http://localhost:5173/')}>
+            <button on:click={() => (window.location.href = 'http://meetapp.eastus.cloudapp.azure.com:8080/')}>
                 <div class="text-sm text-sage px-16 text-center py-2">Wybiorę zainteresowania następnym razem</div>
             </button>
         </div>

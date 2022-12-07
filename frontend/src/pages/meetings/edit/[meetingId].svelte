@@ -164,7 +164,7 @@
                 <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                     <div id="cityInputBox">
                         <SelectCityInput
-                            fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                            fetch="http://meetapp.eastus.cloudapp.azure.com:8080/api/locations?nameSearch=[query]"
                             placeholder="Miasto"
                             inputId="citySelect"
                             bind:selected={cityValue}

@@ -9,7 +9,7 @@
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
-    import {userDetails} from "../../../lib/stores";
+    import { userDetails } from '../../../lib/stores';
 
     let title = null;
 
@@ -91,7 +91,7 @@
             <p class="text-red-500 text-sm mt-1 mx-4 hidden" id="categoryErrorMsg">Musisz wybrać kategorię</p>
             <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg rounded-xl" id="cityInputBox">
                 <SelectCityInput
-                    fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                    fetch="http://meetapp.eastus.cloudapp.azure.com:8080/api/locations?nameSearch=[query]"
                     placeholder="Miasto"
                     inputId="citySelect"
                     bind:selected={cityValue}

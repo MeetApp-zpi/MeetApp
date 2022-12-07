@@ -12,7 +12,7 @@
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import MdAdd from 'svelte-icons/md/MdAdd.svelte';
-    import {userDetails} from "../../../lib/stores";
+    import { userDetails } from '../../../lib/stores';
 
     let title;
 
@@ -41,7 +41,7 @@
     if ($userDetails === null) {
         $redirect('/login');
     }
-    
+
     execute('categories', 'GET').then(async (response) => (categories = await response.json()));
 
     const validateCategory = () => {
@@ -182,7 +182,7 @@
             multipartImage.append('personQuota', peopleLimitValue);
             multipartImage.append('picture', blob);
 
-            await fetch(`http://localhost:5173/api/events`, {
+            await fetch(`http://meetapp.eastus.cloudapp.azure.com:8080/api/events`, {
                 method: 'POST',
                 body: multipartImage
             }).then(() => $redirect('/events'));
@@ -251,7 +251,7 @@
             <div class="bg-tea mx-1.5 my-4 p-2 rounded-lg">
                 <div id="cityInputBox" class="pb-2">
                     <SelectCityInput
-                        fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                        fetch="http://meetapp.eastus.cloudapp.azure.com:8080/api/locations?nameSearch=[query]"
                         placeholder="Miasto"
                         inputId="citySelect"
                         bind:selected={cityValue}

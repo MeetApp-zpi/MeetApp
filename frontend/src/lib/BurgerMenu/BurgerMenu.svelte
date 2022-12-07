@@ -16,7 +16,7 @@
     import execute from '../fetchWrapper';
 
     const logout = () => {
-        execute('logout', 'POST').then((_) => (window.location.href = 'http://localhost:5173'));
+        execute('logout', 'POST').then((_) => (window.location.href = 'http://meetapp.eastus.cloudapp.azure.com:8080'));
     };
 
     const myActivities = () => {

@@ -40,7 +40,7 @@
         <div class="my-4 py-3 rounded-lg w-full bg-olive">
             <MultiselectCityInput
                 style="margin-left: 1rem; margin-right: 1rem"
-                fetch="http://localhost:5173/api/locations?nameSearch=[query]"
+                fetch="http://meetapp.eastus.cloudapp.azure.com:8080/api/locations?nameSearch=[query]"
                 placeholder="Miasto"
                 inputId="citySelect"
                 bind:selected={cityValues}
