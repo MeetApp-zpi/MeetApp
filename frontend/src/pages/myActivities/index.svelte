@@ -1,15 +1,20 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import {goto, redirect} from '@roxi/routify';
 
     import Header from '../../lib/Header/Header.svelte';
     import execute from '../../lib/fetchWrapper';
     import AnnouncementListElem from '../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import EventListElem from '../../lib/Events/EventListElem.svelte';
     import MeetingListElem from '../../lib/Meetings/MeetingListElem.svelte';
+    import {userDetails} from "../../lib/stores";
 
     let posts = [];
     let selected: number | null = null;
     let page: number = 0;
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     const retrieveActivities = (page: number) => {
         execute(`users/activities?page=${page}`, 'GET')

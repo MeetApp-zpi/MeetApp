@@ -4,12 +4,17 @@
     import Header from '../../lib/Header/Header.svelte';
     import UserPill from '../../lib/UserPill/UserPill.svelte';
     import execute from '../../lib/fetchWrapper';
+    import {userDetails} from "../../lib/stores";
 
     export let postId: number;
 
     let users = [];
     let page: number = 0;
 
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
+    
     let promise = execute(`users/isAuthor/${postId}`, 'GET')
         .then((r) => r.text())
         .then((r) => (r === 'false' ? $redirect('/') : null));

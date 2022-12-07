@@ -12,6 +12,7 @@
     import MultiselectCategoryInput from '../../../lib/MultiselectCategoryInput/MultiselectCategoryInput.svelte';
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import MdAdd from 'svelte-icons/md/MdAdd.svelte';
+    import {userDetails} from "../../../lib/stores";
 
     export let eventId: number;
 
@@ -42,6 +43,10 @@
 
     let image, fileInput;
     let blob;
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     execute(`users/isAuthor/${eventId}`, 'GET')
         .then((r) => r.text())

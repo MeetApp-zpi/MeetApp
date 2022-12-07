@@ -9,6 +9,7 @@
     import SelectCityInput from '../../../lib/SelectCityInput/SelectCityInput.svelte';
     import PostNameInput from '../../../lib/PostNameInput/PostNameInput.svelte';
     import PostDescription from '../../../lib/PostDescription/PostDescription.svelte';
+    import {userDetails} from "../../../lib/stores";
 
     export let announcementId: number;
 
@@ -20,6 +21,10 @@
     let descriptionValue = null;
 
     let categories = [];
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     execute(`users/isAuthor/${announcementId}`, 'GET')
         .then((r) => r.text())

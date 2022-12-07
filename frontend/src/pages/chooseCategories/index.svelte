@@ -2,11 +2,17 @@
     import Button from '../../lib/Button/Button.svelte';
     import SelectablePill from '../../lib/Pill/SelectablePill.svelte';
     import execute from '../../lib/fetchWrapper';
+    import { userDetails } from '../../lib/stores';
+    import { redirect } from '@roxi/routify';
 
     let currentUser = null;
     let categories = null;
     let userExistingInterests = null;
     let selectedCategories = [];
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     execute('categories', 'GET')
         .then((r) => r.json())

@@ -2,11 +2,16 @@
     import FaCalendarDay from 'svelte-icons/fa/FaCalendarDay.svelte';
     import MdAnnouncement from 'svelte-icons/md/MdAnnouncement.svelte';
     import MeetingSymbol from '../assets/MeetingSymbol.svelte';
-    import { url } from '@roxi/routify';
+    import {redirect, url} from '@roxi/routify';
 
     import Footer from '../lib/Footer/Footer.svelte';
     import Header from '../lib/Header/Header.svelte';
     import Button from '../lib/Button/Button.svelte';
+    import {userDetails} from "../lib/stores";
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 </script>
 
 <div class="h-screen">
