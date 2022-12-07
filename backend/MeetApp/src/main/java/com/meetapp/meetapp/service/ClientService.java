@@ -46,8 +46,11 @@ public class ClientService {
         }
     }
 
-    public Client retrieveClientDetails(HttpSession session) {
-        return findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+    public ClientDetailsDTO retrieveClientDetails(HttpSession session) {
+        Client foundClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
+        return new ClientDetailsDTO(foundClient.getId(), foundClient.getEmail(), foundClient.getFirstName(),
+                foundClient.getLastName(), foundClient.getProfilePicture(), foundClient.getIsDeleted(),
+                foundClient.getInterests());
     }
 
     public List<Record> retrieveClientPosts(Integer clientId, Integer page) {

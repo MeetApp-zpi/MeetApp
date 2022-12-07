@@ -73,10 +73,10 @@
     <Header />
     <SortFilterBanner {sortOptions} />
     <div class="h-[calc(100%-10rem)] lg:h-[calc(100%-4rem)]  lg:flex lg:flex-row" on:scroll={infiniteScroll} id="postsContainer">
-        <div class="hidden lg:block lg:w-1/3 lg:max-w-[33.3333%] lg:bg-green-mist overflow-auto">
+        <div class="hidden lg:block lg:w-1/3 lg:bg-green-mist overflow-auto">
             <SortFilterColumn {sortOptions} />
         </div>
-        <div class="flex flex-col h-full lg:w-full overflow-auto">
+        <div class="flex flex-col h-full lg:w-2/3 overflow-auto">
             {#each data as item}
                 <EventListElem data={item} clickHandler={() => viewDetails(item.id)} />
             {/each}

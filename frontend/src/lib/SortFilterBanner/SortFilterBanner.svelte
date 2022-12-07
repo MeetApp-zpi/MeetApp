@@ -2,15 +2,19 @@
     import { fade } from 'svelte/transition';
 
     import FaSearch from 'svelte-icons/fa/FaSearch.svelte';
+    import MdDelete from 'svelte-icons/md/MdDelete.svelte';
+
     import FilterModal from './FilterModal/FilterModal.svelte';
     import SearchModal from './SearchModal/SearchModal.svelte';
     import SortModal from './SortModal/SortModal.svelte';
+    import { filteredCategoryIds, filteredLocationIds, sortingOption, nameSearchParam, clearFilters } from '../stores';
 
     export let sortOptions;
 
     let isFilterOpen: boolean = false;
     let isSortOpen: boolean = false;
     let isSearchOpen: boolean = false;
+    let isAnyFiltering: boolean = false;
 
     const switchFilterModal = () => {
         isFilterOpen = !isFilterOpen;
@@ -35,6 +39,14 @@
         isSortOpen = false;
         isSearchOpen = false;
     };
+
+    $: {
+        if ($filteredCategoryIds.length > 0 || $filteredLocationIds.length > 0 || $sortingOption !== 1 || $nameSearchParam !== null) {
+            isAnyFiltering = true;
+        } else {
+            isAnyFiltering = false;
+        }
+    }
 </script>
 
 <div class="flex justify-center bg-pickle h-8 text-ivory font-bold lg:hidden">
@@ -45,6 +57,13 @@
             <FaSearch />
         </div>
     </button>
+    {#if isAnyFiltering}
+        <button on:click={clearFilters}>
+            <div class="ml-2 w-6">
+                <MdDelete />
+            </div>
+        </button>
+    {/if}
 </div>
 {#if isFilterOpen}
     <div class="">
