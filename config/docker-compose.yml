@@ -7,3 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: meetapp
+  meet-app-redis:
+    image: redis:latest
+    ports:
+     - 6379:6379
