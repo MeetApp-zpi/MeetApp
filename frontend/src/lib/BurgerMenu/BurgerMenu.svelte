@@ -111,7 +111,7 @@
                 <div class="h-8 w-8 mr-2 text-taupe">
                     <MdMessage />
                 </div>
-                {#if haveUnreadMessage}
+                {#if $haveUnreadMessage}
                     <div class="absolute h-4 w-4 bg-orange rounded-full left-5 -top-1" />
                 {/if}
                 <div class="text-taupe">Wiadomości</div>

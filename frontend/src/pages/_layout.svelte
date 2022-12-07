@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { afterPageLoad } from '@roxi/routify';
     import execute from '../lib/fetchWrapper';
     import { userDetails, haveUnreadMessage } from '../lib/stores';
 
@@ -10,9 +11,14 @@
             }
         });
 
-    execute('chatrooms/haveUnreadMessage', 'GET')
-        .then((r) => r.json())
-        .then((r) => ($haveUnreadMessage = r));
+    $afterPageLoad((p) => {
+        execute('chatrooms/haveUnreadMessage', 'GET')
+            .then((r) => r.json())
+            .then((r) => {
+                $haveUnreadMessage = r;
+                console.log(r);
+            });
+    });
 </script>
 
 <slot />
