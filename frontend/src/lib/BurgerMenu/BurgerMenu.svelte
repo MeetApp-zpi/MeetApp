@@ -11,7 +11,7 @@
     import MdPerson from 'svelte-icons/md/MdPerson.svelte';
 
     import { horizontalSlide } from './horizontalSlide';
-    import { userDetails } from '../stores';
+    import { userDetails, haveUnreadMessage } from '../stores';
     import MeetingSymbol from '../../assets/MeetingSymbol.svelte';
     import execute from '../fetchWrapper';
 
@@ -53,7 +53,6 @@
         </div>
     {/if}
     <div class="h-full bg-ivory text-pine p-4">
-
         <div class="flex flex-row mb-2 items-center hover:cursor-pointer" on:click={() => $goto('/events')} on:keydown={() => $goto('/events')}>
             <div class="h-8 w-8 mr-2 text-taupe">
                 <FaCalendarDay />
@@ -105,13 +104,16 @@
                 <div class="text-taupe">Biorę udział</div>
             </div>
             <div
-                class="flex flex-row mb-2 items-center hover:cursor-pointer"
+                class="flex flex-row mb-2 items-center hover:cursor-pointer relative"
                 on:click={() => $goto('/chatrooms')}
                 on:keydown={() => $goto('/chatrooms')}
             >
                 <div class="h-8 w-8 mr-2 text-taupe">
                     <MdMessage />
                 </div>
+                {#if haveUnreadMessage}
+                    <div class="absolute h-4 w-4 bg-orange rounded-full left-5 -top-1" />
+                {/if}
                 <div class="text-taupe">Wiadomości</div>
             </div>
             <div class="flex flex-row mb-2 items-center" on:click={() => $goto('/termsOfUse')} on:keydown={() => $goto('/chatrooms')}>

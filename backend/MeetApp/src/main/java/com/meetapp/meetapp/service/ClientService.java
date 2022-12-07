@@ -116,10 +116,10 @@ public class ClientService {
 
         if (clientRepository.existsByEmail(email)) {
             return false;
+        } else {
+            clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
+            return true;
         }
-
-        clientRepository.save(new Client(email, givenName, familyName, pictureUrl));
-        return true;
     }
 
     public Client deleteClientAccount(HttpSession session) {

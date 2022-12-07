@@ -98,10 +98,10 @@ public class ChatroomService {
         Chatroom foundChatroom = findChatroomOrThrow(chatroomId);
 
         if (foundChatroom.getFirstClient().equals(foundClient)) {
-            foundChatroom.setHasSecondClientRead(true);
+            foundChatroom.setHasFirstClientRead(true);
             chatroomRepository.save(foundChatroom);
         } else if (foundChatroom.getSecondClient().equals(foundClient)) {
-            foundChatroom.setHasFirstClientRead(true);
+            foundChatroom.setHasSecondClientRead(true);
             chatroomRepository.save(foundChatroom);
         }
     }

@@ -19,6 +19,8 @@
     let tickCalled: number = 0;
     let previousScrollHeight: number = 0;
 
+    execute(`chatrooms/markAsRead/${chatroomId}`, 'GET');
+
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
         .then((r) => (r.status === 500 ? $goto('/') : r.json()))
         .then((r) => (r === false ? $goto('/') : null))
