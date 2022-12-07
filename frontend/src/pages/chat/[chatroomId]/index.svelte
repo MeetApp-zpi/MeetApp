@@ -1,6 +1,6 @@
 <script lang="ts">
     import io from 'socket.io-client';
-    import { goto, node } from '@roxi/routify';
+    import { goto, node, redirect } from '@roxi/routify';
     import { tick } from 'svelte';
     import execute from '../../../lib/fetchWrapper';
     import Header from '../../../lib/Header/Header.svelte';
@@ -147,8 +147,12 @@
 <div class="h-screen">
     <Header />
     <div class="flex flex-col h-[calc(100%-4rem)] lg:h-[calc(100%-4rem)] lg:w-1/3 lg:mx-auto">
-        <div class="h-16 mx-2 mt-2 flex-none">
-            {#await fetchPartner() then partner}
+        {#await fetchPartner() then partner}
+            <div
+                class="h-16 mx-2 mt-2 flex-none"
+                on:click={() => $redirect(`/profile/${partner.id}`)}
+                on:keydown={() => $redirect(`/profile/${partner.id}`)}
+            >
                 <div class="rounded-2xl py-2 justify-around flex flex-row bg-olive text-cocoa items-center">
                     <div class="h-full w-12">
                         <img class="rounded-full" src={partner.profilePicture} alt="User avatar" referrerpolicy="no-referrer" />
@@ -158,8 +162,8 @@
                         <div class="flex-1 w-52 overflow-auto">{partner.email}</div>
                     </div>
                 </div>
-            {/await}
-        </div>
+            </div>
+        {/await}
         <div class="flex-auto overflow-auto mx-5 mt-5" on:scroll={infiniteScroll} id="messagesContainer" bind:this={messagesContainer}>
             {#await promise then _}
                 {#each chatMessages as chatMessage}

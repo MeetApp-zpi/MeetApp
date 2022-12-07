@@ -59,8 +59,8 @@
     <Header />
     {#await fetchUserInterests() then [userDetails, userInterests]}
         <div class="flex flex-col items-center px-6 overflow-scroll h-[calc(100%-4rem)]">
-            <div class="w-64 h-64 mr-2">
-                <img class="rounded-full" src={userDetails.profilePicture} alt="Profile avatar" />
+            <div class="w-64 h-64 mr-2 flex-none">
+                <img class="rounded-full w-64 h-64" src={userDetails.profilePicture} alt="Profile avatar" />
             </div>
 
             <div class="text-cocoa text-3xl font-bold pb-12 text-center">{userDetails.firstName} {userDetails.lastName}</div>

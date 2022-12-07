@@ -51,7 +51,12 @@ public class ChatroomService {
         Client firstClient = findClientOrThrow(SessionManager.retrieveEmailOrThrow(session));
         Client secondClient = findClientOrThrow(anotherClientId);
 
-        return chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
+        val chatroomAsFirstClient = chatroomRepository.findChatroomByFirstClientAndSecondClient(firstClient, secondClient);
+        if (chatroomAsFirstClient == null) { // kinda cringe
+            return chatroomRepository.findChatroomByFirstClientAndSecondClient(secondClient, firstClient);
+        }
+
+        return chatroomAsFirstClient;
     }
 
     public Client retrieveOtherClient(HttpSession session, Integer chatroomId) {
