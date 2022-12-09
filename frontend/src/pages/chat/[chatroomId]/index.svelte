@@ -28,9 +28,9 @@
     );
 
     let promise = execute(`chatrooms/existsById/${chatroomId}`, 'GET')
-        .then((r) => (r.status === 500 ? $goto('/') : r.json()))
-        .then((r) => (r === false ? $goto('/') : null))
-        .catch((err) => $goto('/'));
+        .then((r) => (r.status === 500 ? $goto('/login') : r.json()))
+        .then((r) => (r === false ? $goto('/login') : null))
+        .catch((err) => $goto('/login'));
 
     const retrieveMessages = (pageNum: number) => {
         execute(`messages/${chatroomId}?page=${pageNum}`, 'GET')

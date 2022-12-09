@@ -3,43 +3,43 @@
 
 describe('Browse unauthorized', () => {
   it('Visit home page', () => {
-    cy.visit('http://localhost:5173');
+    cy.visit('/');
   })
 
   it('Visit announcements page', () => {
-    cy.visit('http://localhost:5173/announcements');
+    cy.visit('/announcements');
   });
 
   it('Visit meetings page', () => {
-    cy.visit('http://localhost:5173/meetings');
+    cy.visit('/meetings');
   });
 
   it('Visit events page', () => {
-    cy.visit('http://localhost:5173/events');
+    cy.visit('/events');
   });
 
   it('Visit eventsInactive page', () => {
-    cy.visit('http://localhost:5173/eventsInactive');
+    cy.visit('/eventsInactive');
   });
 
   it('Visit login page', () => {
-    cy.visit('http://localhost:5173/login');
+    cy.visit('/login');
   });
 
   it('Visit terms of use page', () => {
-    cy.visit('http://localhost:5173/termsOfUse');
+    cy.visit('/termsOfUse');
   });
 
   it('Visit others profile', () => {
-    cy.visit('http://localhost:5173/profile/1');
+    cy.visit('/profile/1');
   });
 
   it('Visit other users posts', () => {
-    cy.visit('http://localhost:5173/user/1/posts');
+    cy.visit('/user/1/posts');
   });
 
   it('Visit chat', () => {
-    cy.visit('http://localhost:5173/chat/1');
+    cy.visit('/chat/1');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -47,7 +47,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit chatrooms', () => {
-    cy.visit('http://localhost:5173/chatrooms');
+    cy.visit('/chatrooms');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -55,7 +55,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit chooseCategories', () => {
-    cy.visit('http://localhost:5173/chooseCategories');
+    cy.visit('/chooseCategories');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -63,7 +63,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit enrolled', () => {
-    cy.visit('http://localhost:5173/enrolled/1');
+    cy.visit('/enrolled/1');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -71,7 +71,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit myActivities', () => {
-    cy.visit('http://localhost:5173/myActivities');
+    cy.visit('/myActivities');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -79,7 +79,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit my profile', () => {
-    cy.visit('http://localhost:5173/profile');
+    cy.visit('/profile');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -87,7 +87,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit my posts', () => {
-    cy.visit('http://localhost:5173/user/posts');
+    cy.visit('/user/posts');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
@@ -95,7 +95,7 @@ describe('Browse unauthorized', () => {
   });
 
   it('Visit my inactive posts', () => {
-    cy.visit('http://localhost:5173/user/postsInactive');
+    cy.visit('/user/postsInactive');
 
     cy.on('uncaught:exception', (_err, _) => { return false });
 
