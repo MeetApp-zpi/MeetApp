@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '@roxi/routify';
+    import { goto, redirect } from '@roxi/routify';
 
     import AnnouncementListElem from '../../../lib/Announcements/AnnouncementListElem/AnnouncementListElem.svelte';
     import EventListElem from '../../../lib/Events/EventListElem.svelte';
@@ -9,10 +9,15 @@
     import PostToolbar from '../../../lib/PostToolbar/PostToolbar.svelte';
 
     import execute from '../../../lib/fetchWrapper';
+    import { userDetails } from '../../../lib/stores';
 
     let userPosts = [];
     let selected: number | null = null;
     let page: number = 0;
+
+    if ($userDetails === null) {
+        $redirect('/login');
+    }
 
     const viewDetails = (postId) => {
         if (selected !== postId) {

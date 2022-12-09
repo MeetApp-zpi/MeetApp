@@ -14,13 +14,24 @@
          */
         "allowJs": true,
         "checkJs": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "types": [
+            "cypress"
+        ]
     },
-    "include": ["src/**/*.d.ts", "src/**/*.ts", "src/**/*.js", "src/**/*.svelte"],
+    "include": [
+        "src/**/*.d.ts",
+        "src/**/*.ts",
+        "src/**/*.js",
+        "src/**/*.svelte"
+    ],
     "references": [
         {
             "path": "./tsconfig.node.json"
         }
     ],
-    "exclude": ["./.routify/routes.js"]
+    "exclude": [
+        "./.routify/routes.js",
+        "./cypress"
+    ]
 }

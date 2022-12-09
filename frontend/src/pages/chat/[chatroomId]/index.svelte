@@ -41,7 +41,8 @@
                     chatMessages = [...r, ...chatMessages];
                 }
             })
-            .then((_) => scrollAfterLoading());
+            .then((_) => scrollAfterLoading())
+            .catch((e) => console.error(e));
     };
 
     const infiniteScroll = () => {

@@ -43,10 +43,10 @@
     };
 
     const waitForUser = async () => {
-        const result = await execute('users/details', 'GET');
-        const data = await result.json();
+        const result = await execute('users/details', 'GET').catch((e) => null);
+        const data = await result;
 
-        if (data === null) {
+        if (data.ok === false) {
             $redirect('/login');
         }
     };
