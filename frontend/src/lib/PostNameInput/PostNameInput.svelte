@@ -48,6 +48,7 @@
         {placeholder}
         required
         bind:value={postName}
+        data-cy="titleInput"
     />
     <p class="hidden peer-invalid:block text-red-500 text-sm mx-4" id="titleErrorMsg" bind:this={errorMessage}>Nazwa musi mieć minimum 5 znaków</p>
 </div>

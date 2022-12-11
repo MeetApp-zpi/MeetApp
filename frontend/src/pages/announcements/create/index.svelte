@@ -109,7 +109,7 @@
                 <p class="text-sm">Twoje ogłoszenie wygaśnie miesiąc po opublikowaniu</p>
             </div>
         </div>
-        <div class="">
+        <div class="" data-cy="submitAnn">
             <Button class="px-6 py-1 mt-2 mb-4 text-xl" clickHandler={handleSubmit}>Stwórz ogłoszenie</Button>
         </div>
     </div>
