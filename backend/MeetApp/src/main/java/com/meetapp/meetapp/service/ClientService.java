@@ -30,7 +30,7 @@ public class ClientService {
         this.postRepository = postRepository;
     }
 
-    private static Record postToDto(Post post) {
+    public static Record postToDto(Post post) {
         if (post instanceof Announcement casted) {
             return new AnnouncementDTO(new PostDTO(post), casted.getTitle(), casted.getDescription(),
                     casted.getEnrolled());
